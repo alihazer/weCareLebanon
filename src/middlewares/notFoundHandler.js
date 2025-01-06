@@ -1,14 +1,14 @@
 const notFoundHandler = (req, res, next) => {
     const err = new Error('Not Found');
     err.status = 404;
-    if (req.accepts('json')) {
+    if (req.originalUrl.startsWith('/api')) {
       return res.status(404).json({
         error: {
           message: 'Not Found',
         },
       });
     }
-    res.status(404).render('404', {
+    return res.status(404).render('pages/404', {
       message: 'Page Not Found',
     });
 };

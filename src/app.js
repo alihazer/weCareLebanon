@@ -10,6 +10,8 @@ import dotenv from 'dotenv';
 import connectToDatabase from './config/database.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import globalErrorHandler from './middlewares/globalErrorHandler.js';
+import userRoutes from './routes/user.routes.js';
+import authRoutes from './routes/auth.routes.js';
 
 dotenv.config();
 
@@ -35,6 +37,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
+app.use('/users', userRoutes);
+app.use('/login', authRoutes)
+
 
 // Error handling middlewares
 app.use(notFoundHandler);
