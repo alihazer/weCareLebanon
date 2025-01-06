@@ -1,5 +1,5 @@
 const globalErrorHandler = (err, req, res, next) => {
-    console.error("test");
+    console.log(err);
     const isDev = process.env.NODE_ENV === 'development';
     if (req.originalUrl.startsWith('/api')) {
         return res.status(err.status || 500).json({

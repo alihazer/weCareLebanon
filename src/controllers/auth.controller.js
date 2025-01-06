@@ -20,14 +20,18 @@ const login = asyncHandler(async (req, res) => {
         throw new Error("Invalid credentials");
     }
     const token = createToken(user._id);
-    res.status(200).json({
-        messasge: "User logged in successfully",
-        user: {
-            id: user._id,
-            username: user.username,
-        },
-        token
-    })
+    const isDevEnv = process.env.NODE_ENV === 'development';
+    const options = {
+        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000), // 30 days,
+        httpOnly: true,
+        secure: !isDevEnv,
+    };
+    res.cookie('token', token, options);
+    console.log("Cookie set");
+    return res.status(200).json({
+        message: "Login successful",
+        token,
+    });
 });
 
 // @desc get login form

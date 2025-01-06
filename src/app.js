@@ -12,6 +12,8 @@ import notFoundHandler from './middlewares/notFoundHandler.js';
 import globalErrorHandler from './middlewares/globalErrorHandler.js';
 import userRoutes from './routes/user.routes.js';
 import authRoutes from './routes/auth.routes.js';
+import cookieParser from 'cookie-parser';
+import webRoutes from './routes/web.routes.js';
 
 dotenv.config();
 
@@ -28,6 +30,8 @@ connectToDatabase();
 // Middlewares
 app.use(cors()); 
 app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(cookieParser());
+
 
 // EJS 
 app.set('view engine', 'ejs');
@@ -38,7 +42,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.use('/users', userRoutes);
-app.use('/login', authRoutes)
+app.use('/api/auth', authRoutes);
+app.use('/', webRoutes);
 
 
 // Error handling middlewares
