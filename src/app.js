@@ -8,6 +8,8 @@ import cors from 'cors';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import connectToDatabase from './config/database.js';
+import notFoundHandler from './middlewares/notFoundHandler.js';
+import globalErrorHandler from './middlewares/globalErrorHandler.js';
 
 dotenv.config();
 
@@ -35,5 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes
 
 // Error handling middlewares
+app.use(notFoundHandler);
+app.use(globalErrorHandler);
 
 export default app;
