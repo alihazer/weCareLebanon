@@ -1,1 +1,193 @@
-<h1>Add Product</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>add products</title>
+    <style>
+        .AddProductTitle{
+            color: red;
+            margin-left: 13%;
+            font-size: 40px;
+        }
+        .infoProduct{
+            background: #f3f4f4;
+            width: 70%;
+            margin: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .layers{
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+        .field{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 40%;
+        }
+        .inputs{
+            padding: 6px;
+            border-radius: 12px;
+
+        }
+
+        .add {
+        background-color: #1899D6;
+        border: solid transparent;
+        border-radius: 16px;
+        border-width: 0 0 4px;
+        box-sizing: border-box;
+        color: #FFFFFF;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: .8px;
+        line-height: 20px;
+        margin: 0;
+        outline: none;
+        overflow: visible;
+        padding: 13px 19px;
+        text-align: center;
+        text-transform: uppercase;
+        touch-action: manipulation;
+        transform: translateZ(0);
+        transition: filter .2s;
+        user-select: none;
+        -webkit-user-select: none;
+        vertical-align: middle;
+        white-space: nowrap;
+        width: 50%;
+        margin: auto;
+        }
+
+        .add:after {
+        background-clip: padding-box;
+        background-color: #1CB0F6;
+        border: solid transparent;
+        border-radius: 16px;
+        border-width: 0 0 4px;
+        bottom: -4px;
+        content: "";
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: -1;
+        }
+
+        .add:main, .add:focus {
+        user-select: auto;
+        }
+
+        .add:hover:not(:disabled) {
+        filter: brightness(1.1);
+        }
+
+        .add:active:after {
+        border-width: 0 0 0px;
+        }
+
+        .add:active {
+             padding-bottom: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1 class="AddProductTitle">Add Products</h1>
+
+    <form action="" class="infoProduct">
+        
+       <div class="layers">
+
+        <div class="field">
+            <label for="name" class="labels">Name</label>
+            <input type="text" name="name" id="name" class="inputs">
+        </div>
+
+        <div class="field">
+            <label for="details" class="labels">Details</label>
+            <input type="text" name="details" id="details" class="inputs">
+        </div>
+
+       </div>
+
+       <div class="layers">
+
+        <div class="field">
+           <label for="code" class="labels">Code</label>
+           <input type="text" name="code" id="code" class="inputs">
+        </div>
+
+        <div class="field">
+            <label for="quantity" class="labels">Quantity</label>
+            <input type="number" name="quantity" id="quantity" class="inputs">
+        </div>
+
+       </div>
+
+       <div class="layers">
+
+        <div class="field">
+            <label for="purchasePrice" class="labels">Purchase Price(سعر الشراء)$</label>
+            <input type="number" name="purchasePrice" id="purchasePrice" class="inputs">
+        </div>
+
+        <div class="field">
+            <label for="wholeSalePrice" class="labels">WholeSale Price(سعر الجملة)$</label>
+            <input type="number" name="wholeSalePrice" id="wholeSalePrice" class="inputs">
+        </div>
+
+       </div>
+
+       <div class="layers">
+
+        <div class="field">
+            <label for="singlePrice" class="labels">Single Price(سعر المفرق)$</label>
+            <input type="number" name="singlePrice" id="singlePrice" class="inputs">
+        </div>
+
+        <div class="field">
+            <label for="image" class="labels">Image</label>
+            <input type="file" name="image" id="image" class="inputs">
+        </div>
+
+       </div>
+
+       <div class="layers">
+
+        <div class="field">
+            <label for="category_id" class="labels">Category</label>
+            <select id="category_id" name="category_id" class="inputs" >
+                <option value="" disabled selected>Select a category</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="supplierId" class="labels">Supplier</label>
+            <select id="supplierId" name="supplierId" class="inputs" >
+                <option value="" disabled selected>Select a supplier</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+            </select>
+        </div>
+
+       </div>
+
+       <button type="submit" class="add">Add Product</button>
+
+
+    </form>
+    
+</body>
+</html>

@@ -4,7 +4,7 @@ import { isLoggedIn } from '../middlewares/isLoggedIn.js';
 
 const router = express.Router();
 
-router.get('/home', isLoggedIn ,(req, res)=>{
+router.get('/', /*isLoggedIn ,*/(req, res)=>{
     res.render('pages/home');
 })
 
@@ -20,7 +20,7 @@ router.get('/products', isLoggedIn ,(req, res)=>{
     res.render('pages/products');
 });
 
-router.get('/products/add', isLoggedIn ,(req, res)=>{
+router.get('/products/add', /*isLoggedIn ,*/(req, res)=>{
     res.render('pages/add-product');
 });
 
