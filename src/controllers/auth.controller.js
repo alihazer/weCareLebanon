@@ -22,15 +22,17 @@ const login = asyncHandler(async (req, res) => {
     const token = createToken(user._id);
     const isDevEnv = process.env.NODE_ENV === 'development';
     const options = {
-        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000), // 30 days,
-        httpOnly: true,
+        expires: new Date(Date.now() + (30 * 24 * 60 * 60 * 1000)), // 30 days,
+        httpOnly: !isDevEnv,
         secure: !isDevEnv,
+        sameSite: isDevEnv ? 'lax' : 'none',
     };
     res.cookie('token', token, options);
     console.log("Cookie set");
     return res.status(200).json({
+        status: true,
         message: "Login successful",
-        token,
+        // token,
     });
 });
 

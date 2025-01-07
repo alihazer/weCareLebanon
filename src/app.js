@@ -14,6 +14,8 @@ import userRoutes from './routes/user.routes.js';
 import authRoutes from './routes/auth.routes.js';
 import cookieParser from 'cookie-parser';
 import webRoutes from './routes/web.routes.js';
+import productsRoutes from './routes/products.routes.js';
+import categoryRoutes from './routes/category.routes.js';
 
 dotenv.config();
 
@@ -31,6 +33,7 @@ connectToDatabase();
 app.use(cors()); 
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(cookieParser());
+app.use(express.json());
 
 
 // EJS 
@@ -43,6 +46,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes
 app.use('/users', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productsRoutes);
+app.use('/api/categories', categoryRoutes);
 app.use('/', webRoutes);
 
 
