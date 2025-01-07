@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="/css/products.css">
 </head>
 <body>
+
+    <%- include('../partials/header') %>
+
+
     <h1 class="AddProductTitle">Add Products</h1>
 
     <form class="infoProduct">
@@ -42,12 +46,12 @@
        <div class="layers">
 
         <div class="field">
-            <label for="purchasePrice" class="labels">Purchase Price(سعر الشراء)$</label>
+            <label for="purchasePrice" class="labelprices">Purchase Price(سعر الشراء)$</label>
             <input type="number" name="purchasePrice" id="purchasePrice" class="inputs">
         </div>
 
         <div class="field">
-            <label for="wholeSalePrice" class="labels">WholeSale Price(سعر الجملة)$</label>
+            <label for="wholeSalePrice" class="labelprices">WholeSale Price(سعر الجملة)$</label>
             <input type="number" name="wholeSalePrice" id="wholeSalePrice" class="inputs">
         </div>
 
@@ -56,7 +60,7 @@
        <div class="layers">
 
         <div class="field">
-            <label for="singlePrice" class="labels">Single Price(سعر المفرق)$</label>
+            <label for="singlePrice" class="labelprices">Single Price(سعر المفرق)$</label>
             <input type="number" name="singlePrice" id="singlePrice" class="inputs">
         </div>
 
@@ -92,7 +96,6 @@
        </div>
 
        <button type="submit" class="add">Add Product</button>
-
 
     </form>
     

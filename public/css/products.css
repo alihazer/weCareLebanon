@@ -1,16 +1,25 @@
+:root{
+    --main-color:#D1E2F2;
+    --second-color:#17526B;
+}
+body{
+    background-color: var(--main-color);
+    color: var(--second-color);
+}
 .AddProductTitle{
-    color: rgb(29, 26, 26);
-    margin-left: 13%;
-    font-size: 40px;
+    margin-left: 15%;
+    font-size: 45px;
 }
 .infoProduct{
-    background: #f3f4f4;
+    background: #A1CBDD;
     width: 70%;
     margin: auto;
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 25px;
+    margin-bottom: 50px;
+    border-radius: 25px;
 }
 .layers{
     display: flex;
@@ -23,19 +32,26 @@
     gap: 10px;
     width: 40%;
 }
+.labels{
+    font-size: 23px;
+}
+.labelprices{
+    font-size: 18px;
+}
 .inputs{
     padding: 6px;
     border-radius: 12px;
-    border: 1px solid #bdbbbb;
-
+    border: 1px solid var(--second-color);
+    background-color: transparent;
+    color:var(--second-color);
 }
-
 .inputs:focus{
     outline: none;
-    border: 1px solid #1899D6;
+    border: 1px solid var(--main-color);
 }
+
 .add {
-    background-color: #1899D6;
+    background-color: var(--second-color);
     border: solid transparent;
     border-radius: 16px;
     border-width: 0 0 4px;
@@ -66,7 +82,7 @@
 
 .add:after {
     background-clip: padding-box;
-    background-color: #1CB0F6;
+    background-color: var(--second-color);
     border: solid transparent;
     border-radius: 16px;
     border-width: 0 0 4px;
@@ -90,7 +106,113 @@ filter: brightness(1.1);
 .add:active:after {
 border-width: 0 0 0px;
 }
-
 .add:active {
      padding-bottom: 10px;
+}
+
+
+
+@media screen and (max-width: 810px){
+    .AddProductTitle{
+        margin-left: 7.5%;
+        font-size: 40px;
+    }
+    .infoProduct{
+        width: 85%;
+    }
+    .layers{
+        justify-content: space-around;
+    }
+    .field{
+        width: 45%;
+    }
+}
+
+@media screen and (max-width: 600px){
+    .AddProductTitle{
+        margin-left: 5%;
+        font-size: 38px;
+    }
+    .infoProduct{
+        width: 90%;
+        padding: 20px 16px;
+    }
+    .layers{
+        justify-content: space-between;
+    }
+    .field{
+        width: 48%;
+    }
+    .labels{
+        font-size: 21px;
+    }
+    .labelprices{
+        font-size: 16px;
+    }
+}
+
+
+@media screen and (max-width: 500px){
+    .AddProductTitle{
+        margin-left: 4.5%;
+        font-size: 31px;
+    }
+    .infoProduct{
+        width: 91%;
+        padding: 20px 12px;
+    }
+    .field{
+        width: 48%;
+    }
+    .labels{
+        font-size: 18px;
+    }
+    .labelprices{
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 400px){
+    .AddProductTitle{
+        font-size: 30px;
+    }
+    .infoProduct{
+        width: 91%;
+        padding: 20px 10px;
+    }
+    .field{
+        width: 48.5%;
+    }
+    .labels{
+        font-size: 16px;
+    }
+    .labelprices{
+        font-size: 13px;
+    }
+}
+@media screen and (max-width: 370px){
+    .AddProductTitle{
+        font-size: 28px;
+    }
+    .infoProduct{
+        width: 90%;
+        padding: 20px 10px;
+        gap: 15px;
+    }
+    .layers{
+        flex-direction: column;
+        gap: 15px;
+    }
+    .field{
+        width: 85%;
+    }
+    .labels{
+        font-size: 19px;
+    }
+    .labelprices{
+        font-size: 15px;
+    }
+    .add{
+        font-size: 13px;
+    }
 }
