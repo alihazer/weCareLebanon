@@ -8,7 +8,7 @@ const globalErrorHandler = (err, req, res, next) => {
             stack: isDev ? err.stack : undefined,
           },
         });
-    }
+  }
 
     return res.status(err.status || 500).render('error', {
           message: isDev ? err.message : 'Something went wrong, please try again later.',

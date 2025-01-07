@@ -16,6 +16,7 @@ import cookieParser from 'cookie-parser';
 import webRoutes from './routes/web.routes.js';
 import productsRoutes from './routes/products.routes.js';
 import categoryRoutes from './routes/category.routes.js';
+import expressLayouts from 'express-ejs-layouts';
 
 dotenv.config();
 
@@ -34,11 +35,13 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(cookieParser());
 app.use(express.json());
+app.use(expressLayouts);
 
 
 // EJS 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.set('layout', 'layouts/main');
 
 // set the public folder, the public is outside the src folder
 app.use(express.static(path.join(__dirname, '../public')));
