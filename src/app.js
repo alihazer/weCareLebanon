@@ -40,8 +40,9 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// set the public folder
-app.use(express.static(path.join(__dirname, 'public')));
+// set the public folder, the public is outside the src folder
+app.use(express.static(path.join(__dirname, '../public')));
+
 
 // Routes
 app.use('/users', userRoutes);
