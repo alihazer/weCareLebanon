@@ -10,6 +10,7 @@ const notFoundHandler = (req, res, next) => {
     }
     return res.status(404).render('pages/404', {
       message: 'Page Not Found',
+      title: '404',
     });
 };
 

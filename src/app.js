@@ -17,6 +17,7 @@ import webRoutes from './routes/web.routes.js';
 import productsRoutes from './routes/products.routes.js';
 import categoryRoutes from './routes/category.routes.js';
 import expressLayouts from 'express-ejs-layouts';
+import supplierRoutes from './routes/supplier.routes.js';
 
 dotenv.config();
 
@@ -52,6 +53,7 @@ app.use('/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productsRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/suppliers', supplierRoutes);
 app.use('/', webRoutes);
 
 

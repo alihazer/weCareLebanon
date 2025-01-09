@@ -10,9 +10,10 @@ const globalErrorHandler = (err, req, res, next) => {
         });
   }
 
-    return res.status(err.status || 500).render('error', {
+    return res.status(err.status || 500).render('pages/error', {
           message: isDev ? err.message : 'Something went wrong, please try again later.',
           error: isDev ? err : {},
+          title: 'Error',
         });
 
 };
