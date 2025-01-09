@@ -69,5 +69,66 @@ const createProduct = asyncHandler(async (req, res) => {
         });
     }
 });
+
+const editProduct = asyncHandler(async (req, res) => {
+    const { name, category_id, code, details, purchasePrice, wholeSalePrice, singlePrice, supplierId, quantity, image } = req.body;
   
-export {createProduct, getProducts, getProduct};
+    try {
+        const product = await Product.findById(req.params.id);
+        if(!product){
+            res.status(404);
+            throw new Error("Product not found");
+        }
+        product.name = name;
+        product.category_id = category_id;
+        product.code = code;
+        product.details = details;
+        product.purchasePrice = purchasePrice;
+        product.wholeSalePrice = wholeSalePrice;
+        product.singlePrice = singlePrice;
+        product.supplierId = supplierId;
+        product.quantity = quantity;
+
+        await product.save();
+
+        res.status(200).json({
+            status: true,
+            message: "Product updated successfully",
+            data: product,
+        });
+    } catch (error) {
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({
+                message: "Validation error",
+                errors: error.errors,
+            });
+        }
+        res.status(500).json({
+            message: "An error occurred while updating the product",
+            error: error.message,
+        });
+    }
+});
+
+
+const deleteProduct = asyncHandler(async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if(!product){
+            res.status(404);
+            throw new Error("Product not found");
+        }
+        await Product.findByIdAndDelete(req.params.id);
+        res.status(200).json({
+            status: true,
+            message: "Product deleted successfully",
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "An error occurred while deleting the product",
+            error: error.message,
+        });
+    }
+});
+  
+export {createProduct, getProducts, getProduct, editProduct, deleteProduct};

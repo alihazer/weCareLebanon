@@ -63,4 +63,53 @@ const createCategory = asyncHandler(async (req, res) => {
     }
 });
 
-export { getCategories, getCategory, createCategory };
+const editCategory = asyncHandler(async (req, res) => {
+    const { name } = req.body;
+  
+    try {
+        const category = await Category.findById(req.params.id);
+  
+        if (!category) {
+            res.status(404);
+            throw new Error('Category not found');
+        }
+  
+        category.name = name;
+  
+        await category.save();
+  
+        res.status(200).json({
+            message: 'Category updated successfully',
+            category: category,
+        });
+    } catch (error) {
+        if (error.name === 'ValidationError') {
+            res.status(400);
+            throw new Error('Validation Error');
+        } else {
+            res.status(500);
+            throw new Error('Server Error');
+        }
+    }
+});
+
+const deleteCategory = asyncHandler(async (req, res) => {
+    try {
+        const category = await Category.findById(req.params.id);
+        if (!category) {
+            res.status(404);
+            throw new Error('Category not found');
+        }
+  
+        await category.remove();
+  
+        res.status(200).json({
+            message: 'Category deleted successfully',
+        });
+    } catch (error) {
+        res.status(500);
+        throw new Error('Server Error');
+    }
+});
+
+export { getCategories, getCategory, createCategory, editCategory, deleteCategory };
