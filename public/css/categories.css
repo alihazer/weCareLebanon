@@ -1,0 +1,128 @@
+.catContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 70%;
+    margin:0 auto;
+    margin-top: 135px;
+}
+.cats{
+    width: 70%;
+    margin: 0 auto;
+    margin-bottom: 50px;
+}
+.cats .titles{
+    width: 100%;
+}
+
+.cats .name{
+    width: 80%;
+    padding:0 10px;
+}
+.cats .actions{
+    padding: 0 10px;
+}
+
+
+
+
+
+
+/* add categories page */
+.namelabel{
+    text-align: center;
+    font-size: 25px;
+    margin-top: 15px;
+}
+
+.inputname{
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid var(--second-color);
+    background-color: transparent;
+    color:var(--second-color);
+    width: 60%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+.inputname:focus{
+    outline: none;
+    border: 1px solid var(--main-color);
+}
+
+
+
+@media screen and (max-width: 950px){
+    .catContainer{
+        width: 80%;
+    }
+    .cats{
+        width: 80%;
+    }
+
+    
+}
+@media screen and (max-width: 850px){
+    .catContainer{
+        width: 90%;
+    }
+    .cats{
+        width: 90%;
+    }
+
+    .cats .name{
+        width: 80%;
+    }
+    .cats .actions{
+        width: 20%;
+    }
+    
+}
+@media screen and (max-width: 600px){
+    .catContainer{
+        width: 96%;
+    }
+    .cats{
+        width: 96%;
+    }
+
+
+    .cats .actions{
+        width: 20%;
+    }
+    .cats .actions .edits{
+        margin-right: 5px;
+    }
+
+    .inputname{
+        width: 70%;
+    }
+}
+@media screen and (max-width: 470px){
+    .cats .name{
+        width: 67%;
+    }
+    .cats .actions{
+        width: 23%;
+    }
+    .cats .actions .edits{
+        margin-right: 5px;
+    }
+    .inputname{
+        width: 80%;
+    }
+}
+@media screen and (max-width: 340px){
+    .cats .name{
+        width: 65%;
+    }
+    .cats .actions{
+        width: 25%;
+    }
+    .cats .actions .edits{
+        margin-right: 2px;
+    }
+    .add{
+        width: 65%;
+    }
+}

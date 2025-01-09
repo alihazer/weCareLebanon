@@ -6,9 +6,17 @@ body{
     background-color: var(--main-color);
     color: var(--second-color);
 }
-.AddProductTitle{
-    margin-left: 15%;
-    font-size: 45px;
+/* add products page */
+.Maindiv{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 68%;
+    margin:0 auto;
+    margin-top: 135px;
+}
+.titleaddproducts{
+    font-size: 42px;
 }
 .infoProduct{
     background: #A1CBDD;
@@ -112,10 +120,101 @@ border-width: 0 0 0px;
 
 
 
+
+
+/* get products page */
+.Maincontainer{
+    margin-top: 135px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 86%;
+    margin-left: 7%;
+}
+.ProductsTitile{
+    font-size: 45px;
+}
+.toaddProduct{
+    background:var(--second-color);
+    color: var(--main-color);
+    padding: 17px;
+    border-radius: 10px;
+    font-size: 21px;
+    text-decoration: none;
+}
+.products{
+    width: 90%;
+    margin: 0 5%;
+    margin-bottom: 50px;
+    max-height: 500px;
+    overflow: auto;
+}
+.products::-webkit-scrollbar {
+    width: 10px; 
+    height: 10px;
+}
+.products::-webkit-scrollbar-track {
+    background: #f0f0f0; 
+    border-radius: 5px;
+}
+.products::-webkit-scrollbar-thumb {
+    background-color: var(--second-color);
+    border-radius: 5px;        
+    border: 2px solid #f0f0f0; 
+}
+.titles{
+    border-bottom: 2px solid var(--second-color);
+    display: flex;
+    align-items: center;
+    width: 1800px;
+}
+#title{
+    width: 190px;
+    padding: 10px;
+}
+.images{
+    min-width: 120px;
+    padding: 10px;
+}
+.quantity , .code{
+    min-width: 150px;
+    padding: 10px;
+}
+.purchasePrice ,.wholeSalePrice,.singlePrice{
+    min-width: 170px;
+    padding: 10px;
+
+}
+.image{
+    background-color: red;
+    width: 110px;
+    height:100px
+}
+.edit ,.delete{
+    width: 35px;
+}
+.edits{
+    margin-right: 10px;
+    height: 35px;
+    display: inline-flex;
+}
+@media screen and (max-width: 1000px){
+    .products{
+        width: 96%;
+        margin: 0 2%;
+    }
+    .Maincontainer{
+        width: 94%;
+        margin-left: 3%;
+    }
+}
+
 @media screen and (max-width: 810px){
-    .AddProductTitle{
-        margin-left: 7.5%;
-        font-size: 40px;
+    .Maindiv{
+        width: 83%;
+    }
+    .titleaddproducts{
+        font-size: 38px;
     }
     .infoProduct{
         width: 85%;
@@ -126,12 +225,17 @@ border-width: 0 0 0px;
     .field{
         width: 45%;
     }
+
+
+
+    .ProductsTitile{
+        font-size: 40px;
+    }
 }
 
 @media screen and (max-width: 600px){
-    .AddProductTitle{
-        margin-left: 5%;
-        font-size: 38px;
+    .titleaddproducts{
+        font-size: 33px;
     }
     .infoProduct{
         width: 90%;
@@ -149,13 +253,18 @@ border-width: 0 0 0px;
     .labelprices{
         font-size: 16px;
     }
+
+
+    .toaddProduct{
+        padding: 15px;
+        font-size: 18px;
+     }
 }
 
 
 @media screen and (max-width: 500px){
-    .AddProductTitle{
-        margin-left: 4.5%;
-        font-size: 31px;
+    .titleaddproducts{
+        font-size: 30px;
     }
     .infoProduct{
         width: 91%;
@@ -170,11 +279,16 @@ border-width: 0 0 0px;
     .labelprices{
         font-size: 14px;
     }
+
+
+    .ProductsTitile{
+        font-size: 35px;
+    }
 }
 
 @media screen and (max-width: 400px){
-    .AddProductTitle{
-        font-size: 30px;
+    .titleaddproducts{
+        font-size: 27px;
     }
     .infoProduct{
         width: 91%;
@@ -189,10 +303,22 @@ border-width: 0 0 0px;
     .labelprices{
         font-size: 13px;
     }
+
+
+    .ProductsTitile{
+        font-size: 30px;
+    }
+    .toaddProduct{
+        padding: 13px;
+        font-size: 16px;
+    }
+    .edit ,.delete{
+        width: 32px;
+    }
 }
 @media screen and (max-width: 370px){
-    .AddProductTitle{
-        font-size: 28px;
+    .titleaddproducts{
+        font-size: 25px;
     }
     .infoProduct{
         width: 90%;
@@ -214,5 +340,8 @@ border-width: 0 0 0px;
     }
     .add{
         font-size: 13px;
+        width: 60%;
     }
+
+
 }

@@ -4,8 +4,8 @@ import { isLoggedIn } from '../middlewares/isLoggedIn.js';
 
 const router = express.Router();
 
-router.get('/', isLoggedIn ,getCategories);
+router.get('/', /*isLoggedIn ,*/getCategories);
 router.get('/:id', isLoggedIn ,getCategory);
-router.post('/add', isLoggedIn ,createCategory);
+router.post('/add', /*isLoggedIn ,*/createCategory);
 
 export default router;

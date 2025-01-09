@@ -16,16 +16,30 @@ router.get('/add-user', isLoggedIn ,(req, res)=>{
     res.render('pages/add-user', { title: 'Add User' });
 });
 
-router.get('/products', isLoggedIn ,(req, res)=>{
-    res.render('pages/products', { title: 'Products' });
+
+// Products pages
+router.get('/products', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/Products/products', { title: 'Products' });
 });
 
 router.get('/products/add', /*isLoggedIn ,*/(req, res)=>{
-    res.render('pages/add-product', { title: 'Add Product' });
+    res.render('pages/Products/add-product', { title: 'Add Product' });
 });
 
-router.get('/products/edit/:id',isLoggedIn , (req, res)=>{
-    res.render('pages/edit-product', { id: req.params.id, title: 'Edit Product' });
+router.get('/products/edit/:id',/*isLoggedIn , */(req, res)=>{
+    res.render('pages/Products/edit-product', { id: req.params.id, title: 'Edit Product' });
+});
+
+
+// Categories pages
+router.get('/categories', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/Categories/categories', { title: 'Categories' });
+});
+router.get('/categories/add', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/Categories/add-categories', { title: 'Add Category' });
+});
+router.get('/categories/edit/:id', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/Categories/edit-category', { title: 'edit Category' });
 });
 
 export default router;

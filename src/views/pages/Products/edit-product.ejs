@@ -1,0 +1,91 @@
+
+<div class="Maindiv">
+    <h1 class="titleaddproducts">Edit Product</h1>
+    <a href="/products" class="toaddProduct">product</a>
+</div>
+
+<form class="infoProduct">
+        
+       <div class="layers">
+
+        <div class="field">
+            <label for="name" class="labels">Name</label>
+            <input type="text" name="name" id="name" class="inputs">
+        </div>
+
+        <div class="field">
+            <label for="details" class="labels">Details</label>
+            <input type="text" name="details" id="details" class="inputs">
+        </div>
+
+       </div>
+
+       <div class="layers">
+
+        <div class="field">
+           <label for="code" class="labels">Code</label>
+           <input type="text" name="code" id="code" class="inputs">
+        </div>
+
+        <div class="field">
+            <label for="quantity" class="labels">Quantity</label>
+            <input type="number" name="quantity" id="quantity" class="inputs">
+        </div>
+
+       </div>
+
+       <div class="layers">
+
+        <div class="field">
+            <label for="purchasePrice" class="labelprices">Purchase Price(سعر الشراء)$</label>
+            <input type="number" name="purchasePrice" id="purchasePrice" class="inputs">
+        </div>
+
+        <div class="field">
+            <label for="wholeSalePrice" class="labelprices">WholeSale Price(سعر الجملة)$</label>
+            <input type="number" name="wholeSalePrice" id="wholeSalePrice" class="inputs">
+        </div>
+
+       </div>
+
+       <div class="layers">
+
+        <div class="field">
+            <label for="singlePrice" class="labelprices">Single Price(سعر المفرق)$</label>
+            <input type="number" name="singlePrice" id="singlePrice" class="inputs">
+        </div>
+
+        <div class="field">
+            <label for="image" class="labels">Image</label>
+            <input type="file" name="image" id="image" class="inputs">
+        </div>
+
+       </div>
+
+       <div class="layers">
+
+        <div class="field">
+            <label for="category_id" class="labels">Category</label>
+            <select id="category_id" name="category_id" class="inputs" >
+                <option value="" disabled selected>Select a category</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="supplierId" class="labels">Supplier</label>
+            <select id="supplierId" name="supplierId" class="inputs" >
+                <option value="" disabled selected>Select a supplier</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+            </select>
+        </div>
+
+       </div>
+
+       <button type="submit" class="add">Update</button>
+
+</form>
