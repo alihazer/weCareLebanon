@@ -4,7 +4,7 @@
     <a href="/suppliers" class="toaddProduct">suppliers</a>
 </div>
 
-<form class="infoProduct" id="addsup" method="put">
+<form class="infoProduct" id="editsup" method="put">
         
 
         <div class="containerfields">
@@ -14,7 +14,7 @@
 
         <div class="containerfields">
             <label for="details" class="labels">Phone</label>
-            <input type="number" name="phone" id="phone" class="inputs">
+            <input type="text" name="phone" id="phone" class="inputs">
         </div>
 
         <div class="containerfields">
@@ -25,3 +25,9 @@
        <button type="submit" class="add">Update</button>
 
 </form>
+
+
+<div class="addAlerts" id="messagesaddsup" >
+    <p id="messagesup"></p>
+    <button onclick="handlesupok()" class="ok" >ok</button>
+</div>

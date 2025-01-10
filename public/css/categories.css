@@ -80,8 +80,38 @@
     font-size: 17px;
     border: none;
     padding: 9px;
-    border-radius: 10px
+    border-radius: 10px;
+    cursor: pointer;
 }
+
+.addAlerts{
+    background: white;
+    width: 70%;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    position: fixed;
+    top: 35%;
+    left: calc(15% - 10px);
+    bottom: 40px;
+    padding: 0 10px;
+    text-align: center;
+    display: none;
+    margin-bottom: 40px;
+}
+.ok{
+    background-color: var(--second-color);
+    color: var(--main-color);
+    font-size: 18px;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
 
 
 @media screen and (max-width: 950px){
@@ -129,6 +159,9 @@
     .inputname{
         width: 70%;
     }
+    .addAlerts{
+        font-size: 18px;
+    }
 }
 @media screen and (max-width: 470px){
     .cats .name{
@@ -142,6 +175,11 @@
     }
     .inputname{
         width: 80%;
+    }
+
+
+    .addAlerts{
+        font-size: 18px;
     }
 }
 @media screen and (max-width: 340px){

@@ -26,43 +26,50 @@ async function Categories() {
 }
 if (window.location.pathname=="/categories") {
     Categories();
-}
 
-// delete a category
-let deleteId = null; 
-function confirmDelete(id) {
-    deleteId = id; 
-    document.getElementById('customAlert').style.display = 'flex';
-}
-
-async function handleYes() {
-    if (deleteId !== null) {
-        await deleteCategory(deleteId);
-        deleteId = null;
+    // delete a category
+    let deleteId = null; 
+    function confirmDelete(id) {
+        deleteId = id; 
+        document.getElementById('customAlert').style.display = 'flex';
     }
-    document.getElementById('customAlert').style.display = 'none';
-}
-
-function handleNo() {
-    deleteId = null; 
-    document.getElementById('customAlert').style.display = 'none';
-}
-async function deleteCategory(id) {
-        try {
-            const response = await fetch(`/api/categories/delete/${id}`, { method: 'DELETE' });
-            const result = await response.json();
-            console.log(result);
-            if (result.message=="Category deleted successfully") {
-                Categories();
-            } else {
-                alert('Failed to delete category');
-            }
-        } catch (error) {
-            console.error('Error deleting category:', error);
+    function handleYes() {
+        if (deleteId !== null) {
+            deleteCategory(deleteId);
+            deleteId = null;
         }
+        document.getElementById('customAlert').style.display = 'none';
+    }
+    function handleNo() {
+        deleteId = null; 
+        document.getElementById('customAlert').style.display = 'none';
+    }
+    async function deleteCategory(id) {
+            try {
+                const response = await fetch(`/api/categories/delete/${id}`, { method: 'DELETE' });
+                const result = await response.json();
+                if (result.message=="Category deleted successfully") {
+                    Categories();
+                } else {
+                    alert('Failed to delete category');
+                }
+            } catch (error) {
+                console.error('Error deleting category:', error);
+            }
+    }
+
 }
 
 
+
+
+
+
+
+
+function handleok() {
+    document.getElementById('messagesadd').style.display = 'none';
+}
 
 // add category
 if (window.location.pathname.startsWith("/categories/add")) {
@@ -72,11 +79,15 @@ if (window.location.pathname.startsWith("/categories/add")) {
         const name = document.getElementById('name').value;
     
         if (!name) {
-            alert('Please enter a name');
+            document.getElementById('messagesadd').style.display = 'flex';
+            const warningText = document.getElementById('message');
+            warningText.textContent = 'Please enter a name';
             return;
         }
         else if (name.length < 3) {
-            alert('Name must be at least 3 characters');
+            document.getElementById('messagesadd').style.display = 'flex';
+            const warningText = document.getElementById('message');
+            warningText.textContent = 'Name must be at least 3 characters';
             return;
         } 
             const response = await fetch('/api/categories/add', {
@@ -89,10 +100,14 @@ if (window.location.pathname.startsWith("/categories/add")) {
     
             const result = await response.json();
             if (response.ok) {
-                alert(result.message);
+                document.getElementById('messagesadd').style.display = 'flex';
+                const warningText = document.getElementById('message');
+                warningText.textContent =result.message;
                 document.getElementById('name').value = '';
             } else {
-                alert(result.message);
+                document.getElementById('messagesadd').style.display = 'flex';
+                const warningText = document.getElementById('message');
+                warningText.textContent =result.error.message;
             }
     });
 }
