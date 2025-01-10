@@ -42,4 +42,15 @@ router.get('/categories/edit/:id', /*isLoggedIn ,*/(req, res)=>{
     res.render('pages/Categories/edit-category', { title: 'edit Category' });
 });
 
+
+// Suppliers pages
+router.get('/suppliers', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/Supplier/supplier', { title: 'Suppliers' });
+});
+router.get('/suppliers/add', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/Supplier/add-supplier', { title: 'Add Supplier' });
+});
+router.get('/suppliers/edit/:id', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/Supplier/edit-supplier', { title: 'edit Supplier' });
+});
 export default router;

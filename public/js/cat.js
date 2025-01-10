@@ -49,9 +49,10 @@ function handleNo() {
 }
 async function deleteCategory(id) {
         try {
-            const response = await fetch(`/api/categories/${id}`, { method: 'DELETE' });
+            const response = await fetch(`/api/categories/delete/${id}`, { method: 'DELETE' });
             const result = await response.json();
-            if (result.success) {
+            console.log(result);
+            if (result.message=="Category deleted successfully") {
                 Categories();
             } else {
                 alert('Failed to delete category');
@@ -100,26 +101,19 @@ if (window.location.pathname.startsWith("/categories/add")) {
 
 
 
+// get a category and edit category
 async function getCategory() {
     try {
         const urlPath = window.location.pathname;
         const segments = urlPath.split('/');
         const categoryId = segments[segments.length - 1]; 
 
-        if (!categoryId) {
-            console.error('No category ID found in the URL');
-            return;
-        }
-
-        // Fetch the category data from the API
         const response = await fetch(`/api/categories/${categoryId}`);
         const category = await response.json();
 
-        // Check if the category exists
         if (category && category.data) {
-            // Prefill the form input with the category name
-            const nameInput = document.getElementById('name');
-            nameInput.value = category.data.name; // Set the input value to the category name
+            const nameInput = document.getElementById('nameinput');
+            nameInput.value = category.data.name; 
         } else {
             console.error('Category not found');
         }
@@ -128,7 +122,46 @@ async function getCategory() {
     }
 }
 
-if (window.location.pathname.startsWith("/categories/edit/")) {
+if (window.location.pathname.startsWith("/categories/edit")) {
     getCategory();
+    document.getElementById('editCategoryForm').addEventListener('submit', async function (e) {
+        e.preventDefault(); 
+    
+        const urlPath = window.location.pathname;
+        const segments = urlPath.split('/');
+        const categoryId = segments[segments.length - 1]; 
+    
+        const name = document.getElementById('nameinput').value;
+    
+        if (!name) {
+            alert('Please enter a name');
+            return;
+        } else if (name.length < 3) {
+            alert('Name must be at least 3 characters');
+            return;
+        }
+    
+        try {
+            const response = await fetch(`/api/categories/edit/${categoryId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name })
+            });
+    
+            const result = await response.json();
+    
+            if (response.ok) {
+                alert('Category updated successfully');
+            } else {
+                alert(result.message);
+            }
+        } catch (error) {
+            console.error('Error updating category:', error);
+        }
+    });
 }
+
+
 

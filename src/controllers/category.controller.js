@@ -1,5 +1,5 @@
-import Category from '../models/category.model.js';
 import asyncHandler from 'express-async-handler';
+import Category from '../models/category.model.js';
 
 // @desc get all categories
 const getCategories = asyncHandler(async (req, res) => {
@@ -101,7 +101,7 @@ const deleteCategory = asyncHandler(async (req, res) => {
             throw new Error('Category not found');
         }
   
-        await category.remove();
+        await Category.findByIdAndDelete(req.params.id);
   
         res.status(200).json({
             message: 'Category deleted successfully',
@@ -112,4 +112,4 @@ const deleteCategory = asyncHandler(async (req, res) => {
     }
 });
 
-export { getCategories, getCategory, createCategory, editCategory, deleteCategory };
+export { createCategory, deleteCategory, editCategory, getCategories, getCategory };

@@ -1,0 +1,30 @@
+.containerfields{
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width:60%
+}
+
+.rows{
+    border-bottom: 2px solid var(--second-color);
+    display: flex;
+    align-items: center;
+    min-width: 700px;
+}
+.columns{
+    flex-grow: 1;
+    padding: 10px;
+}
+
+@media screen and (max-width: 600px){
+    .containerfields{
+        width: 70%;
+    }
+}
+@media screen and (max-width: 470px){
+    .containerfields{
+        width: 80%;
+    }
+}

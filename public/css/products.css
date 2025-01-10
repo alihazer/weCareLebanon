@@ -47,7 +47,7 @@ body{
     font-size: 18px;
 }
 .inputs{
-    padding: 6px;
+    padding: 8px;
     border-radius: 12px;
     border: 1px solid var(--second-color);
     background-color: transparent;
@@ -55,7 +55,8 @@ body{
 }
 .inputs:focus{
     outline: none;
-    border: 1px solid var(--main-color);
+    border: 1px solid rgb(0, 54, 101);
+    box-shadow: rgba(2, 0, 58, 0.24) 0px 3px 8px;
 }
 
 .add {
@@ -144,7 +145,7 @@ border-width: 0 0 0px;
 }
 .products{
     width: 90%;
-    margin: 0 5%;
+    margin: 0 auto;
     margin-bottom: 50px;
     max-height: 550px;
     overflow: auto;
@@ -198,6 +199,10 @@ border-width: 0 0 0px;
     height: 35px;
     display: inline-flex;
 }
+.actions{
+    width: 85px;
+}
+
 @media screen and (max-width: 1000px){
     .products{
         width: 96%;

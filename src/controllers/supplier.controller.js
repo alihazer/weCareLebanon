@@ -35,9 +35,9 @@ const getSupplier = asyncHandler(async (req, res) => {
 
 // @desc add supplier
 const createSupplier = asyncHandler(async (req, res) => {
-    const { name, email, phone, address } = req.body;
+    const { name,phone, address } = req.body;
 
-    if(!name || !email || !phone ){
+    if(!name || !phone || !address){
         res.status(400);
         throw new Error("Please provide all fields");
     }
