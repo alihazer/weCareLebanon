@@ -67,5 +67,15 @@ router.get('/customers/edit/:id', /*isLoggedIn ,*/(req, res)=>{
 });
 
 
+// users pages
+router.get('/users', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/Users/users', { title: 'Users' });
+});
+router.get('/users/adduser', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/Users/add-user', { title: 'Add user' });
+});
+router.get('/users/edit/:id', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/Users/edit-user', { title: 'edit user' });
+});
 
 export default router;

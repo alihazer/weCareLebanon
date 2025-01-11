@@ -103,7 +103,7 @@ const deleteCustomer = asyncHandler(async (req, res) => {
     try {
         const customer = await Customer.findById(req.params.id);
         if (customer) {
-            await customer.remove();
+            await Customer.findByIdAndDelete(req.params.id);
             return res.status(200).json({
                 status: true,
                 message: "Customer deleted successfully",

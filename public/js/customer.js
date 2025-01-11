@@ -1,3 +1,4 @@
+// add a customer
 if (window.location.pathname=="/customers/add") {
     document.getElementById('addcustomer').addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -62,7 +63,7 @@ if (window.location.pathname=="/customers/add") {
     });
 }
 
-
+// get all customers
 async function Customers() {
 
     try {
@@ -80,7 +81,7 @@ async function Customers() {
                 <p class="columns" >${customer.phone}</p>
                 <p class="columns">${customer.address}</p>
                 <div class="actions">
-                    <a href="/suppliers/edit/${customer._id}" class="edits">
+                    <a href="/customers/edit/${customer._id}" class="edits">
                         <img src="/images/edit.png" class="edit" alt="edit">
                     </a>
                     <img src="/images/delete.png" class="delete" alt="delete" onclick="confirmDelete('${customer._id}')" />
@@ -98,44 +99,136 @@ async function Customers() {
 if (window.location.pathname=="/customers"){
     Customers();
 
-    // delete a supplier
-    // let deleteId = null; 
+    // delete a customer
+    let deleteId = null; 
     function confirmDelete(id) {
         deleteId = id; 
-        // document.getElementById('customAlert').style.display = 'flex';
+        document.getElementById('customAlert').style.display = 'flex';
     }
-    // function handleYes() {
-    //     if (deleteId !== null) {
-    //         deletesupplier(deleteId);
-    //         deleteId = null;
-    //     }
-    //     document.getElementById('customAlert').style.display = 'none';
-    // }
-    // function handleNo() {
-    //     deleteId = null; 
-    //     document.getElementById('customAlert').style.display = 'none';
-    // }
-    // async function deletesupplier(id) {
-    //         try {
-    //             const response = await fetch(`/api/suppliers/delete/${id}`, { method: 'DELETE' });
-    //             const result = await response.json();
+    function handleYes() {
+        if (deleteId !== null) {
+            deletecustomer(deleteId);
+            deleteId = null;
+        }
+        document.getElementById('customAlert').style.display = 'none';
+    }
+    function handleNo() {
+        deleteId = null; 
+        document.getElementById('customAlert').style.display = 'none';
+    }
+    async function deletecustomer(id) {
+            try {
+                const response = await fetch(`/api/customers/delete/${id}`, { method: 'DELETE' });
+                const result = await response.json();
                 
-    //             if (result.message=="Supplier deleted successfully") {
-    //                 Suppliers();
-    //             } else {
-    //                 alert('Failed to delete supplier');
-    //             }
-    //         } catch (error) {
-    //             console.error('Error deleting category:', error);
-    //         }
-    // }
+                if (result.message=="Customer deleted successfully") {
+                    Customers();
+                } else {
+                    alert('Failed to delete customer');
+                }
+            } catch (error) {
+                console.error('Error deleting customer:', error);
+            }
+    }
 
 }
 
 
+// get a customer
+async function getCustomer() {
+    try {
+        const urlPath = window.location.pathname;
+        const segments = urlPath.split('/');
+        const cusid = segments[segments.length - 1]; 
+
+        const response = await fetch(`/api/customers/${cusid}`);
+        const customer = await response.json();
+        
+        if (customer && customer.data) {
+            const nameInput = document.getElementById('name');
+            nameInput.value = customer.data.name; 
+
+            const phone = document.getElementById('phone');
+            phone.value = customer.data.phone;    
+
+            const address = document.getElementById('address');
+            address.value = customer.data.address; 
+        } else {
+            console.error('supplier not found');
+        }
+    } catch (error) {
+        console.error('Error fetching the supplier:', error);
+    }
+}
+// edit supplier
+if (window.location.pathname.startsWith("/customers/edit")) {
+    getCustomer();
+
+    document.getElementById('editcustomer').addEventListener('submit', async function (e) {
+        e.preventDefault(); 
+    
+        const urlPath = window.location.pathname;
+        const segments = urlPath.split('/');
+        const cusid = segments[segments.length - 1]; 
+    
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const address = document.getElementById('address').value;
+    
+
+        if (!name || !phone || !address) {
+            document.getElementById('messagesaddcus').style.display = 'flex';
+            const warningText = document.getElementById('messagecus');
+            warningText.textContent = 'All fields are required!';
+            return;
+        }
+        else if (name.length<3) {
+            document.getElementById('messagesaddcus').style.display = 'flex';
+            const warningText = document.getElementById('messagecus');
+            warningText.textContent = 'name must be at least 3 digits';
+            return;
+        }
+        else if (phone.length!=8) {
+            document.getElementById('messagesaddcus').style.display = 'flex';
+            const warningText = document.getElementById('messagecus');
+            warningText.textContent = 'phone must be 8 digits';
+            return;
+        }
+        else if (address.length<6) {
+            document.getElementById('messagesaddcus').style.display = 'flex';
+            const warningText = document.getElementById('messagecus');
+            warningText.textContent = 'address must be at least 6 characters';
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/customers/edit/${cusid}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name , phone, address }),
+            });
+    
+            const result = await response.json();
+    
+            if (response.ok) {
+                document.getElementById('messagesaddcus').style.display = 'flex';
+                const warningText = document.getElementById('messagecus');
+                warningText.textContent = result.message;
+            } else {
+                document.getElementById('messagesaddcus').style.display = 'flex';
+                const warningText = document.getElementById('messagecus');
+                warningText.textContent = result.error.message;
+            }
+        } catch (error) {
+            console.error('Error updating customer:', error);
+        }
+    });
+}
 
 
 // add alerts
-function handlesupok() {
+function handlecusok() {
     document.getElementById('messagesaddcus').style.display = 'none';
 }

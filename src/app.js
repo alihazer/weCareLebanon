@@ -17,6 +17,7 @@ import productsRoutes from './routes/products.routes.js';
 import supplierRoutes from './routes/supplier.routes.js';
 import userRoutes from './routes/user.routes.js';
 import customerRoutes from './routes/customer.routes.js';
+import usersRoutes from './routes/user.routes.js';
 import webRoutes from './routes/web.routes.js';
 
 dotenv.config();
@@ -55,6 +56,7 @@ app.use('/api/products', productsRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/suppliers', supplierRoutes);
 app.use('/api/customers', customerRoutes);
+app.use('/api/users', usersRoutes);
 app.use('/', webRoutes);
 
 

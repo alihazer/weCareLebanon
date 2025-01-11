@@ -3,11 +3,10 @@ import asyncHandler from "express-async-handler";
 import bcrypt from "bcrypt";
 import createToken from "../services/createToken.js";
 
-
 // @desc getAddUserForm
-const getAddUserForm = (req, res) => {
-    res.render('pages/addUser');
-};
+// const getAddUserForm = asyncHandler(async(req, res) => {
+
+// });
 
 
 // @desc add user
@@ -48,4 +47,4 @@ const addUser = asyncHandler(async (req, res) => {
 
 
 
-export { getAddUserForm, addUser };
+export { addUser };

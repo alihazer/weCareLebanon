@@ -218,7 +218,7 @@ if (window.location.pathname.startsWith("/suppliers/edit")) {
                 warningText.textContent = result.error.message;
             }
         } catch (error) {
-            console.error('Error updating category:', error);
+            console.error('Error updating supplier:', error);
         }
     });
 }
