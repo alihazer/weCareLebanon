@@ -4,7 +4,7 @@
     <a href="/products" class="toaddProduct">products</a>
 </div>
 
-<form class="infoProduct" id="addProduct">
+<form class="infoProduct" id="addProduct" >
         
        <div class="layers">
 
@@ -29,7 +29,7 @@
 
         <div class="field">
             <label for="quantity" class="labels">Quantity</label>
-            <input type="number" name="quantity" id="quantity" class="inputs">
+            <input type="number" name="quantity" min="1" id="quantity" class="inputs">
         </div>
 
        </div>
@@ -38,12 +38,12 @@
 
         <div class="field">
             <label for="purchasePrice" class="labelprices">Purchase Price(سعر الشراء)$</label>
-            <input type="number" name="purchasePrice" id="purchasePrice" class="inputs">
+            <input type="number" name="purchasePrice" id="purchasePrice" min="0" class="inputs">
         </div>
 
         <div class="field">
             <label for="wholeSalePrice" class="labelprices">WholeSale Price(سعر الجملة)$</label>
-            <input type="number" name="wholeSalePrice" id="wholeSalePrice" class="inputs">
+            <input type="number" name="wholeSalePrice" id="wholeSalePrice" min="0" class="inputs">
         </div>
 
        </div>
@@ -52,7 +52,7 @@
 
         <div class="field">
             <label for="singlePrice" class="labelprices">Single Price(سعر المفرق)$</label>
-            <input type="number" name="singlePrice" id="singlePrice" class="inputs">
+            <input type="number" name="singlePrice" id="singlePrice" min="0" class="inputs">
         </div>
 
         <div class="field">
@@ -85,7 +85,7 @@
 </form>
 
 
-<!-- <div class="addAlerts" id="messagesadd" >
+<div class="addAlerts" id="messageproduct" >
      <p id="message"></p>
      <button onclick="handleok()" class="ok" >ok</button>
-</div> -->
+</div>
