@@ -53,4 +53,19 @@ router.get('/suppliers/add', /*isLoggedIn ,*/(req, res)=>{
 router.get('/suppliers/edit/:id', /*isLoggedIn ,*/(req, res)=>{
     res.render('pages/Supplier/edit-supplier', { title: 'edit Supplier' });
 });
+
+
+// customers pages
+router.get('/customers', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/Customers/customers', { title: 'Customers' });
+});
+router.get('/customers/add', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/Customers/add-customer', { title: 'Add Customer' });
+});
+router.get('/customers/edit/:id', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/Customers/edit-customer', { title: 'edit Customer' });
+});
+
+
+
 export default router;

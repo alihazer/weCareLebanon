@@ -90,6 +90,7 @@ if (window.location.pathname.startsWith("/categories/add")) {
             warningText.textContent = 'Name must be at least 3 characters';
             return;
         } 
+
             const response = await fetch('/api/categories/add', {
                 method: 'POST',
                 headers: {
@@ -138,7 +139,9 @@ async function getCategory() {
 }
 
 if (window.location.pathname.startsWith("/categories/edit")) {
+
     getCategory();
+
     document.getElementById('editCategoryForm').addEventListener('submit', async function (e) {
         e.preventDefault(); 
     
@@ -147,15 +150,20 @@ if (window.location.pathname.startsWith("/categories/edit")) {
         const categoryId = segments[segments.length - 1]; 
     
         const name = document.getElementById('nameinput').value;
-    
+
         if (!name) {
-            alert('Please enter a name');
-            return;
-        } else if (name.length < 3) {
-            alert('Name must be at least 3 characters');
+            document.getElementById('messagesadd').style.display = 'flex';
+            const warningText = document.getElementById('message');
+            warningText.textContent = 'Please enter a name';
             return;
         }
-    
+        else if (name.length < 3) {
+            document.getElementById('messagesadd').style.display = 'flex';
+            const warningText = document.getElementById('message');
+            warningText.textContent = 'Name must be at least 3 characters';
+            return;
+        } 
+
         try {
             const response = await fetch(`/api/categories/edit/${categoryId}`, {
                 method: 'PUT',
@@ -168,9 +176,13 @@ if (window.location.pathname.startsWith("/categories/edit")) {
             const result = await response.json();
     
             if (response.ok) {
-                alert('Category updated successfully');
+                document.getElementById('messagesadd').style.display = 'flex';
+                const warningText = document.getElementById('message');
+                warningText.textContent =result.message;
             } else {
-                alert(result.message);
+                document.getElementById('messagesadd').style.display = 'flex';
+                const warningText = document.getElementById('message');
+                warningText.textContent =result.error.message;
             }
         } catch (error) {
             console.error('Error updating category:', error);

@@ -64,61 +64,18 @@ body{
     border: solid transparent;
     border-radius: 16px;
     border-width: 0 0 4px;
-    box-sizing: border-box;
     color: #FFFFFF;
     cursor: pointer;
-    display: inline-block;
     font-size: 15px;
     font-weight: 700;
-    letter-spacing: .8px;
-    line-height: 20px;
-    margin: 0;
-    outline: none;
-    overflow: visible;
+    letter-spacing: .5px;
     padding: 13px 19px;
-    text-align: center;
-    text-transform: uppercase;
-    touch-action: manipulation;
-    transform: translateZ(0);
-    transition: filter .2s;
-    user-select: none;
-    -webkit-user-select: none;
-    vertical-align: middle;
-    white-space: nowrap;
     width: 50%;
     margin: auto;
-    z-index: 0;
+    text-transform: uppercase;
+
 }
 
-.add:after {
-    background-clip: padding-box;
-    background-color: var(--second-color);
-    border: solid transparent;
-    border-radius: 16px;
-    border-width: 0 0 4px;
-    bottom: -4px;
-    content: "";
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    z-index: -1;
-}
-
-.add:main, .add:focus {
-user-select: auto;
-}
-
-.add:hover:not(:disabled) {
-filter: brightness(1.1);
-}
-
-.add:active:after {
-border-width: 0 0 0px;
-}
-.add:active {
-     padding-bottom: 10px;
-}
 
 
 

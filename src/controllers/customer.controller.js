@@ -6,17 +6,18 @@ import Customer from '../models/customer.model.js';
 
 const getCustomers = asyncHandler(async (req, res) => {
     try {
-        const customers = await Customer.find();
+        const customers = await Customer.find({});
         return res.status(200).json({
             status: true,
-            message: "Customers retrieved successfully",
             data: customers
-        })
+        });
     } catch (error) {
-        res.status = 500;
+        res.status(500);
+        console.log(error);
         throw new Error(error.message);
     }
 });
+
 
 // @desc    Fetch single customer
 // @route   GET /api/customers/:id
