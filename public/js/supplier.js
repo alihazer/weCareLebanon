@@ -67,7 +67,7 @@ async function Suppliers() {
     try {
         const response = await fetch('/api/suppliers');
         const suppliers = await response.json();
-        const productsContainer = document.querySelector('.products');
+        const productsContainer = document.getElementById('getsuppliers');
         productsContainer.innerHTML = '';
 
         suppliers.data.forEach(supplier => {

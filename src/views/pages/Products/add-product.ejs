@@ -4,7 +4,7 @@
     <a href="/products" class="toaddProduct">products</a>
 </div>
 
-<form class="infoProduct">
+<form class="infoProduct" id="addProduct">
         
        <div class="layers">
 
@@ -68,9 +68,6 @@
             <label for="category_id" class="labels">Category</label>
             <select id="category_id" name="category_id" class="inputs" >
                 <option value="" disabled selected>Select a category</option>
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
             </select>
         </div>
 
@@ -78,9 +75,6 @@
             <label for="supplierId" class="labels">Supplier</label>
             <select id="supplierId" name="supplierId" class="inputs" >
                 <option value="" disabled selected>Select a supplier</option>
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
             </select>
         </div>
 
@@ -89,3 +83,9 @@
        <button type="submit" class="add">Add Product</button>
 
 </form>
+
+
+<!-- <div class="addAlerts" id="messagesadd" >
+     <p id="message"></p>
+     <button onclick="handleok()" class="ok" >ok</button>
+</div> -->
