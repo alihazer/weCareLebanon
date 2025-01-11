@@ -41,6 +41,11 @@ const createSupplier = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("Please provide all fields");
     }
+    const alreadyExists = await Supplier.findOne({ phone });
+    if(alreadyExists){
+        res.status(400);
+        throw new Error("Phone number already exists");
+    }
   
     try {
         const newSupplier = new Supplier({

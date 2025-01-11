@@ -67,7 +67,7 @@ if (window.location.pathname=="/categories") {
 
 
 
-function handleok() {
+function handleokcat() {
     document.getElementById('messagesadd').style.display = 'none';
 }
 

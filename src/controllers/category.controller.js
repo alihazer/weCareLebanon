@@ -40,6 +40,12 @@ const createCategory = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("Please provide category name");
     }
+
+    const alreadyExists = await Category.findOne({ name });
+    if(alreadyExists){
+        res.status(400);
+        throw new Error("Category already exists");
+    }
   
     try {
         const newCategory = new Category({

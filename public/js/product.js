@@ -49,7 +49,7 @@ async function getsupplier() {
 }
 
 function handleok() {
-    document.getElementById('messageproduct').style.display = 'none';
+    document.getElementById('messagesadd').style.display = 'none';
 }
 
 if (window.location.pathname=="/products/add") {
