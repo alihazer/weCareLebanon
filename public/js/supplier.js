@@ -79,6 +79,9 @@ async function Suppliers() {
                 <p class="columns" >${supplier.phone}</p>
                 <p class="columns">${supplier.address}</p>
                 <div class="actions">
+                    <a href="/suppliers/${supplier._id}" class="edits">
+                        <img src="/images/view.png" class="edit" alt="view">
+                    </a>
                     <a href="/suppliers/edit/${supplier._id}" class="edits">
                         <img src="/images/edit.png" class="edit" alt="edit">
                     </a>

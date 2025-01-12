@@ -11,7 +11,8 @@
     border-bottom: 2px solid var(--second-color);
     display: flex;
     align-items: center;
-    min-width: 700px;
+    min-width: 760px;
+
 }
 .userrow{
     border-bottom: 2px solid var(--second-color);
