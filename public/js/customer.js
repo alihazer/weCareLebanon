@@ -81,6 +81,9 @@ async function Customers() {
                 <p class="columns" >${customer.phone}</p>
                 <p class="columns">${customer.address}</p>
                 <div class="actions">
+                    <a href="/customers/${customer._id}" class="edits">
+                        <img src="/images/view.png" class="edit" alt="view">
+                    </a>
                     <a href="/customers/edit/${customer._id}" class="edits">
                         <img src="/images/edit.png" class="edit" alt="edit">
                     </a>

@@ -11,7 +11,7 @@ async function Categories() {
                 categoryDiv.classList.add('titles');
                 categoryDiv.innerHTML = `
                     <p class="name">${category.name}</p>
-                    <div class="actions">
+                    <div class="actioncat">
                         <a href="/categories/edit/${category._id}" class="edits">
                             <img src="/images/edit.png" class="edit" alt="edit">
                         </a>

@@ -12,8 +12,8 @@ router.get('/login',isLoggedIn , (req, res)=>{
     res.render('pages/login', { title: 'Login' });
 })
 
-router.get('/add-user', isLoggedIn ,(req, res)=>{
-    res.render('pages/add-user', { title: 'Add User' });
+router.get('/statistics', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/statistics', { title: 'Statistics' });
 });
 
 
@@ -21,15 +21,15 @@ router.get('/add-user', isLoggedIn ,(req, res)=>{
 router.get('/products', /*isLoggedIn ,*/(req, res)=>{
     res.render('pages/Products/products', { title: 'Products' });
 });
-
 router.get('/products/add', /*isLoggedIn ,*/(req, res)=>{
     res.render('pages/Products/add-product', { title: 'Add Product' });
 });
-
 router.get('/products/edit/:id',/*isLoggedIn , */(req, res)=>{
     res.render('pages/Products/edit-product', { id: req.params.id, title: 'Edit Product' });
 });
-
+router.get('/products/:id',/*isLoggedIn , */(req, res)=>{
+    res.render('pages/Products/aproduct', { id: req.params.id, title: 'A Product' });
+});
 
 // Categories pages
 router.get('/categories', /*isLoggedIn ,*/(req, res)=>{
@@ -53,6 +53,9 @@ router.get('/suppliers/add', /*isLoggedIn ,*/(req, res)=>{
 router.get('/suppliers/edit/:id', /*isLoggedIn ,*/(req, res)=>{
     res.render('pages/Supplier/edit-supplier', { title: 'edit Supplier' });
 });
+router.get('/suppliers/:id', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/Supplier/asupplier', { title: 'A Supplier' });
+});
 
 
 // customers pages
@@ -65,7 +68,9 @@ router.get('/customers/add', /*isLoggedIn ,*/(req, res)=>{
 router.get('/customers/edit/:id', /*isLoggedIn ,*/(req, res)=>{
     res.render('pages/Customers/edit-customer', { title: 'edit Customer' });
 });
-
+router.get('/customers/:id', /*isLoggedIn ,*/(req, res)=>{
+    res.render('pages/Customers/acustomer', { title: 'A Customer' });
+});
 
 // users pages
 router.get('/users', /*isLoggedIn ,*/(req, res)=>{

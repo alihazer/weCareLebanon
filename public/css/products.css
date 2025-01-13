@@ -125,7 +125,7 @@ body{
     border-bottom: 2px solid var(--second-color);
     display: flex;
     align-items: center;
-    width: 1800px;
+    width: 1835px;
 }
 #title{
     width: 190px;
@@ -153,12 +153,12 @@ body{
     width: 35px;
 }
 .edits{
-    margin-right: 10px;
+    margin-right: 5px;
     height: 35px;
     display: inline-flex;
 }
 .actions{
-    width: 85px;
+    width: 128px;
 }
 
 @media screen and (max-width: 1000px){
