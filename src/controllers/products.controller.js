@@ -1,5 +1,6 @@
 import Product from '../models/product.model.js';
 import asyncHandler from 'express-async-handler';
+import { v2 as cloudinary } from 'cloudinary';
 
 // @desc get all products
 const getProducts = asyncHandler(async (req, res) => {
@@ -35,7 +36,30 @@ const getProduct = asyncHandler(async (req, res) => {
 // @desc add product
 const createProduct = asyncHandler(async (req, res) => {
     const { name, category_id, code, details, purchasePrice, wholeSalePrice, singlePrice, supplierId, quantity, image } = req.body;
+    cloudinary.config({
+        cloud_name: process.env.cloudinary_cloud_name,
+        api_key: process.env.cloudinary_api_key,
+        api_secret: process.env.cloudinary_api_secret,
+    });
+
+    const uploadFromBuffer = (buffer) =>
+        new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: 'products' },
+            (error, result) => {
+              if (error) {
+                reject(error);
+              } else {
+                resolve(result);
+              }
+            }
+          );
+          stream.end(buffer);
+        });
   
+      const result = await uploadFromBuffer(req.file.buffer);
+
+    
     try {
         const newProduct = new Product({
             name,
@@ -47,7 +71,7 @@ const createProduct = asyncHandler(async (req, res) => {
             singlePrice,
             supplierId,
             quantity,
-            image,
+            image: result.secure_url,
         });
   
       await newProduct.save();
@@ -63,10 +87,8 @@ const createProduct = asyncHandler(async (req, res) => {
                 errors: error.errors,
             });
         }
-        res.status(500).json({
-            message: "An error occurred while creating the product",
-            error: error.message,
-        });
+        res.status(500);
+        throw new Error(error.message);
     }
 });
 

@@ -48,8 +48,8 @@ async function getsupplier() {
     }
 }
 
-function handleok() {
-    document.getElementById('messagesadd').style.display = 'none';
+function handleokprod() {
+    document.getElementById('messageproduct').style.display = 'none';
 }
 
 if (window.location.pathname=="/products/add") {
@@ -100,12 +100,21 @@ if (window.location.pathname=="/products/add") {
 
 
             try {
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('details', details);
+                formData.append('code', code);
+                formData.append('quantity', quantity);
+                formData.append('purchasePrice', purchasePrice);
+                formData.append('wholeSalePrice', wholeSalePrice);
+                formData.append('singlePrice', singlePrice);
+                formData.append('category_id', category_id);
+                formData.append('supplierId', supplierId);
+                formData.append('image', image); // Append the image file
+        
                 const response = await fetch('/api/products/add', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ name, category_id, code, details, purchasePrice, wholeSalePrice, singlePrice, supplierId, quantity, image  }),
+                    body: formData, // Send FormData directly
                 });
                 
                 const result = await response.json();
