@@ -83,12 +83,12 @@ body{
 
 /* get products page */
 .Maincontainer{
+    margin: 0 auto;
     margin-top: 135px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 86%;
-    margin-left: 7%;
 }
 .ProductsTitile{
     font-size: 45px;
@@ -145,9 +145,13 @@ body{
 
 }
 .image{
-    background-color: red;
+    background-color: var(--second-color);
     width: 110px;
-    height:100px
+    height:100px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border-radius: 10px;
 }
 .edit ,.delete{
     width: 35px;
@@ -161,14 +165,32 @@ body{
     width: 128px;
 }
 
+
+
+.aboutimage{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 40%;
+}
+#displayImage{
+    width: 70px;
+    height: 70px;
+    background-color: var(--second-color);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+#imagefileds{
+    width: 65%;
+}
+
 @media screen and (max-width: 1000px){
     .products{
         width: 96%;
-        margin: 0 2%;
     }
     .Maincontainer{
         width: 94%;
-        margin-left: 3%;
     }
 }
 
@@ -188,8 +210,9 @@ body{
     .field{
         width: 45%;
     }
-
-
+    .aboutimage{
+        width: 45%;
+    }
 
     .ProductsTitile{
         font-size: 40px;
@@ -216,7 +239,9 @@ body{
     .labelprices{
         font-size: 16px;
     }
-
+    .aboutimage{
+        width: 48%;
+    }
 
     .toaddProduct{
         padding: 15px;
@@ -232,9 +257,6 @@ body{
     .infoProduct{
         width: 91%;
         padding: 20px 12px;
-    }
-    .field{
-        width: 48%;
     }
     .labels{
         font-size: 18px;
@@ -293,6 +315,9 @@ body{
         gap: 15px;
     }
     .field{
+        width: 85%;
+    }
+    .aboutimage{
         width: 85%;
     }
     .labels{

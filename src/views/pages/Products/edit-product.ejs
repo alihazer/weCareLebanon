@@ -4,7 +4,7 @@
     <a href="/products" class="toaddProduct">product</a>
 </div>
 
-<form class="infoProduct">
+<form class="infoProduct"  id="editProduct">
         
        <div class="layers">
 
@@ -55,9 +55,12 @@
             <input type="number" name="singlePrice" id="singlePrice" class="inputs">
         </div>
 
-        <div class="field">
-            <label for="image" class="labels">Image</label>
-            <input type="file" name="image" id="image" class="inputs">
+        <div class="aboutimage">
+            <div class="field" id="imagefileds">
+                <label for="image" class="labels">Image</label>
+                <input type="file" name="image" id="image" class="inputs">
+            </div>
+            <div id="displayImage" ></div>
         </div>
 
        </div>
@@ -68,9 +71,6 @@
             <label for="category_id" class="labels">Category</label>
             <select id="category_id" name="category_id" class="inputs" >
                 <option value="" disabled selected>Select a category</option>
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
             </select>
         </div>
 
@@ -78,9 +78,6 @@
             <label for="supplierId" class="labels">Supplier</label>
             <select id="supplierId" name="supplierId" class="inputs" >
                 <option value="" disabled selected>Select a supplier</option>
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
             </select>
         </div>
 
@@ -89,3 +86,9 @@
        <button type="submit" class="add">Update</button>
 
 </form>
+
+
+<div class="addAlerts" id="messageproduct" >
+    <p id="message"></p>
+    <button onclick="handleokprod()" class="ok" >ok</button>
+</div>

@@ -5,7 +5,7 @@ import { v2 as cloudinary } from 'cloudinary';
 // @desc get all products
 const getProducts = asyncHandler(async (req, res) => {
     try {
-        const products = await Product.find({});
+        const products = await Product.find({}).populate('supplierId', 'name');;
         return res.status(200).json({
             status: true,
             data: products
@@ -93,14 +93,15 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 const editProduct = asyncHandler(async (req, res) => {
-    const { name, category_id, code, details, purchasePrice, wholeSalePrice, singlePrice, supplierId, quantity, image } = req.body;
-  
+    const { name, category_id, code, details, purchasePrice, wholeSalePrice, singlePrice, supplierId, quantity } = req.body;
+
     try {
         const product = await Product.findById(req.params.id);
-        if(!product){
+        if (!product) {
             res.status(404);
             throw new Error("Product not found");
         }
+
         product.name = name;
         product.category_id = category_id;
         product.code = code;
@@ -110,6 +111,32 @@ const editProduct = asyncHandler(async (req, res) => {
         product.singlePrice = singlePrice;
         product.supplierId = supplierId;
         product.quantity = quantity;
+
+        if (req.file) {
+            cloudinary.config({
+                cloud_name: process.env.cloudinary_cloud_name,
+                api_key: process.env.cloudinary_api_key,
+                api_secret: process.env.cloudinary_api_secret,
+            });
+
+            const uploadFromBuffer = (buffer) =>
+                new Promise((resolve, reject) => {
+                    const stream = cloudinary.uploader.upload_stream(
+                        { folder: 'products' },
+                        (error, result) => {
+                            if (error) {
+                                reject(error);
+                            } else {
+                                resolve(result);
+                            }
+                        }
+                    );
+                    stream.end(buffer);
+                });
+
+            const result = await uploadFromBuffer(req.file.buffer);
+            product.image = result.secure_url;
+        }
 
         await product.save();
 

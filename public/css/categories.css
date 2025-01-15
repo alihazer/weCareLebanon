@@ -53,7 +53,7 @@
 
 
 /* alert */
-#customAlert{
+#customAlert ,#productAlert{
     background: white;
     width: 70%;
     height: 250px;
