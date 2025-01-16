@@ -6,12 +6,18 @@
     <title>Add user</title>
 </head>
 <body>
-    <form method="post" action="/api/auth/login">
-        <label for="username">username</label>
-        <input type="text" name="username" id="username">
-        <label for="password">password</label>
-        <input type="password" name="password" id="password">
-        <button type="submit">Login</button>
-    </form>
+    <div class="loginPage">
+        <img src="/images/logo.jpg" alt="logo" class="loginImg">
+        <form class="loginform" >
+
+            <h2 class="welcome">Welcome</h2>
+
+            <label for="username" >username</label>
+            <input type="text" name="username" id="username" class="inputslogin">
+            <label for="password">password</label>
+            <input type="password" name="password" id="password" class="inputslogin">
+            <button type="submit" class="buttonlogin">Login</button>
+        </form>
+    </div>
 </body>
 </html>

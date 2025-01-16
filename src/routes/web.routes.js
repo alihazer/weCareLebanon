@@ -8,7 +8,7 @@ router.get('/', /*isLoggedIn ,*/(req, res)=>{
     res.render('pages/home', { title: 'Home' });
 })
 
-router.get('/login',isLoggedIn , (req, res)=>{
+router.get('/login',/*isLoggedIn ,*/ (req, res)=>{
     res.render('pages/login', { title: 'Login' });
 })
 

@@ -1,6 +1,6 @@
 <header>
 
-     <ul class="header__nav">
+       <ul class="header__nav">
 
             <li class="menuIcon">
                 <svg width="33" height="33" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -108,5 +108,56 @@
             </div>
             <div class="closeContainer"></div>
         </div>
+
+        <div class="invoiceContainer">
+            <div class="closeinvoice"></div>
+            <div class="invoices">
+
+                <div class="Xclose">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="#17526B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+
+                <h1 class="titleinvoice">Invoice</h1>
+
+                <div class="invoiceproduct"></div>
+                <div class="payments">
+
+                    <h3 class="titlepayment">Payment Summary</h3>
+
+                    <div class="subtotal">
+                        <p class="titlesub">Subtotal</p>
+                        <p class="priceSub">12$</p>
+                    </div>
+
+                    <form action="" id="coupon">
+                        <label for="coupon">Enter coupon code</label>
+                        <div class="couponcode">
+                            <input type="text" class="codeinput">
+                            <button type="submit" class="sendcode">Add</button>
+                        </div>
+                    </form>
+
+                    <div class="total">
+                        <p class="titleTotal">Total</p>
+                        <p class="pricetotal">12$</p>
+                    </div>
+                </div>
+
+                <select name="" id="chooseCus">
+                    <option value="" disabled selected>Select customer</option>
+                    <option value=""  >Select customer</option>
+                    <option value=""  >Select customer</option>
+                </select>
+
+                <div class="saveAndprint">
+                    <div class="done">Save pdf</div>
+                    <div class="done">Print</div>
+                </div>
+
+            </div>
+        </div>
+
 
     </header>
