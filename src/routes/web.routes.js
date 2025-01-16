@@ -9,7 +9,7 @@ router.get('/', /*isLoggedIn ,*/(req, res)=>{
 })
 
 router.get('/login',/*isLoggedIn ,*/ (req, res)=>{
-    res.render('pages/login', { title: 'Login' });
+    res.render('pages/login', { title: 'Login', layout: 'layouts/auth' });
 })
 
 router.get('/statistics', /*isLoggedIn ,*/(req, res)=>{
