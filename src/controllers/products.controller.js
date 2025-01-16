@@ -5,7 +5,15 @@ import { v2 as cloudinary } from 'cloudinary';
 // @desc get all products
 const getProducts = asyncHandler(async (req, res) => {
     try {
-        const products = await Product.find({}).populate('supplierId', 'name');;
+        const { category } = req.query;
+        let filter = {};
+        if (category) {
+            filter.category = category;
+        }
+        if (req.query.quantity === 'gt0') {
+            filter.quantity = { $gt: 0 };
+        }
+        const products = await Product.find(filter).populate('supplierId', 'name');
         return res.status(200).json({
             status: true,
             data: products

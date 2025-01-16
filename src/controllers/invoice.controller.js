@@ -8,36 +8,41 @@ import Product from '../models/product.model.js';
 // @route   POST /api/invoices
 
 const createInvoice = asyncHandler(async (req, res) => {
-    try {
-        const { products, customerId, discount, total, isWholeSale } = req.body;
 
-        if (!products || products.length === 0) {
-        return res.status(400).json({ error: 'Products array cannot be empty.' });
-        }
+  try {
+    const { products, customerId, discount, isWholeSale } = req.body;
 
-        for (const product of products) {
-        if (!product.productId || !product.quantity || !product.price) {
+    if (!products || products.length === 0) {
+      return res.status(400).json({ error: 'Products array cannot be empty.' });
+    }
+
+    for (const product of products) {
+      if (!product.productId || !product.quantity || !product.price) {
             return res.status(400).json({ error: 'Each product must have productId, quantity, and price.' });
         }
-        }
+    }
 
-        if(discount < 0 || discount > 100) {
-        return res.status(400).json({ error: 'Discount must be between 0 and 100.' });
-        }
-        const totalPriceWithDiscount = calculateTotal(products, discount);
-        const invoice = new Invoice({
-        products,
-        customerId,
-        discount,
-        total: totalPriceWithDiscount,
-        isWholeSale,
-        });
+    if(discount < 0 || discount > 100) {
+      return res.status(400).json({ error: 'Discount must be between 0 and 100.' });
+    }
+    const totalPriceWithDiscount = calculateTotal(products, discount);
+    const invoice = new Invoice({
+      products,
+      customerId,
+      discount,
+      total: totalPriceWithDiscount,
+      isWholeSale,
+    });
 
-        await invoice.save();
-        await createAndDownloadInvoice(invoice, "/logo.png");
-        res.status(201).json(invoice);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    await invoice.save();
+        
+    for (const product of products) { 
+      await Product.findByIdAndUpdate(product.productId, { $inc: { quantity: -product.quantity } });
+    }
+    await createAndDownloadInvoice(invoice, "/logo.png");
+    res.status(201).json(invoice);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
     }
 });
 
@@ -54,7 +59,7 @@ async function createAndDownloadInvoice(invoice, logoUrl) {
       const {
         invoiceId,
         customerId, 
-        products, // Now we expect an array of product IDs
+        products, 
         discount,
         total,
       } = invoice;
@@ -102,8 +107,8 @@ async function createAndDownloadInvoice(invoice, logoUrl) {
   
       // Add products
       let yPosition = 580;
-      for (const product of products) {
-        const product = products.find(p => p.id === products);
+      for (const product of productss) {
+        const product = productss.find(p => p.id === products);
         if (product) {
           page.drawText(product.name, { x: 50, y: yPosition, size: 12 });
           page.drawText(product.quantity.toString(), { x: 200, y: yPosition, size: 12 });
