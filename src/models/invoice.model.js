@@ -11,6 +11,7 @@ const invoiceSchema = new mongoose.Schema({
     customerId: { type: mongoose.Schema.Types.ObjectId, ref: "Customer", required: true },
     discount: { type: Number, required: true },
     total: { type: Number, required: true },
+    isWholeSale: { type: Boolean, required: true },
 },{timestamps: true});
 
 const Invoice = mongoose.model('Invoice', invoiceSchema);
