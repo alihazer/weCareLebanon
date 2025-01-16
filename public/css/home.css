@@ -2,6 +2,20 @@
     --second-back:#A1CBDD;
     --text-color:#17526B;
 }
+
+body::-webkit-scrollbar {
+    width: 10px; 
+}
+body::-webkit-scrollbar-track {
+    background: #f0f0f0; 
+    border-radius: 5px;
+}
+body::-webkit-scrollbar-thumb {
+    background-color: #17526B;
+    border-radius: 5px;        
+    border: 2px solid #f0f0f0; 
+}
+
 .filters{
     width: 96%;
     margin: 0 auto;
@@ -48,6 +62,7 @@
 }
 .product-image{
     width: 120px;
+    min-width: 120px;
     height: 120px;
     background-position: center;
     background-repeat: no-repeat;
@@ -98,6 +113,7 @@
 }
 .loginform{
     width: 45%;
+    max-width: 500px;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -105,6 +121,7 @@
 }
 .loginImg{
     width: 40%;
+    max-width: 450px;
     height: 400px;
 }
 .inputslogin{
@@ -187,6 +204,7 @@
     }
     .product-image{
         width: 100px;
+        min-width: 100px;
         height: 100px;
     }
     .product-info{
@@ -221,6 +239,7 @@
     }
     .product-image{
         width: 90px;
+        min-width: 90px;
         height: 95px;
     }
     .product-info{
@@ -244,6 +263,7 @@
     }
     .product-image{
         width: 84px;
+        min-width: 84px;
         height: 90px;
     }
 }
