@@ -152,6 +152,12 @@ header{
     padding: 15px;
     gap: 12px;
 }
+.fordisplay{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
 .invoices::-webkit-scrollbar {
     width: 10px; 
 }
@@ -263,7 +269,7 @@ header{
     display: flex;
     flex-direction: column;
     gap: 7px;
-    min-height: 303px;
+    max-height: 303px;
     overflow-y: auto;
 }
 .invoiceproducts::-webkit-scrollbar {
@@ -345,6 +351,13 @@ header{
     right: 5px;
     top: 5px;
     cursor: pointer;
+}
+
+.noinvoice{
+    width: 100%;
+    text-align: center;
+    font-size: 22px;
+    margin: auto;
 }
 
 @media screen and (max-width: 600px){

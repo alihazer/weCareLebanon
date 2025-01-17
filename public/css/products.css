@@ -127,14 +127,14 @@ body{
     border-bottom: 2px solid var(--second-color);
     display: flex;
     align-items: center;
-    width: 1835px;
+    width: 1825px;
 }
 #title{
     width: 190px;
     padding: 10px;
 }
 .images{
-    min-width: 120px;
+    min-width: 100px;
     padding: 10px;
 }
 .quantity , .code{
@@ -148,8 +148,8 @@ body{
 }
 .image{
     background-color: var(--second-color);
-    width: 110px;
-    height:100px;
+    width: 100px;
+    height:90px;
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;

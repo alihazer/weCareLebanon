@@ -121,115 +121,45 @@
 
                 <h1 class="titleinvoice">Invoice</h1>
 
-                <div class="invoiceproducts">
+                <div class="fordisplay"> 
 
-                        <div class="invoiceproduct">
-                    
-                            <div class="productimage" style="background-image: url('/images/bags.png');"></div>
-                            <div class="productinfo">
-                                <h3 class="productname">Product 1</h3>
-                                <div class="priceAndquantity">
-                                    <p class="productprice">100$</p>
-                                    <div class="quantitypro">
-                                        <p class="min" id="mines">-</p>
-                                        <p class="quantitypronb" id="quantitynb">1</p>
-                                        <p class="min" id="plus">+</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <svg class="removepro" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="#17526B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <div class="invoiceproduct">
-                    
-                            <div class="productimage" style="background-image: url('/images/bags.png');"></div>
-                            <div class="productinfo">
-                                <h3 class="productname">Product 1</h3>
-                                <div class="priceAndquantity">
-                                    <p class="productprice">100$</p>
-                                    <div class="quantitypro">
-                                        <p class="min" id="mines">-</p>
-                                        <p class="quantitypronb" id="quantitynb">1</p>
-                                        <p class="min" id="plus">+</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <svg class="removepro" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="#17526B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <div class="invoiceproduct">
-                    
-                            <div class="productimage" style="background-image: url('/images/bags.png');"></div>
-                            <div class="productinfo">
-                                <h3 class="productname">Product 1</h3>
-                                <div class="priceAndquantity">
-                                    <p class="productprice">100$</p>
-                                    <div class="quantitypro">
-                                        <p class="min" id="mines">-</p>
-                                        <p class="quantitypronb" id="quantitynb">1</p>
-                                        <p class="min" id="plus">+</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <svg class="removepro" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="#17526B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <div class="invoiceproduct">
-                    
-                            <div class="productimage" style="background-image: url('/images/bags.png');"></div>
-                            <div class="productinfo">
-                                <h3 class="productname">Product 1</h3>
-                                <div class="priceAndquantity">
-                                    <p class="productprice">100$</p>
-                                    <div class="quantitypro">
-                                        <p class="min" id="mines">-</p>
-                                        <p class="quantitypronb" id="quantitynb">1</p>
-                                        <p class="min" id="plus">+</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <svg class="removepro" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="#17526B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                </div>
-
-                <div class="payments">
-
-                    <h3 class="titlepayment">Payment Summary</h3>
-
-                    <div class="subtotal">
-                        <p class="titlesub">Subtotal</p>
-                        <p class="priceSub">12$</p>
+                    <div class="invoiceproducts">
                     </div>
 
-                    <form action="" id="coupon">
-                        <label for="coupon">Enter coupon code</label>
-                        <div class="couponcode">
-                            <input type="text" class="codeinput">
-                            <button type="submit" class="sendcode">Add</button>
+                    <div class="payments">
+
+                        <h3 class="titlepayment">Payment Summary</h3>
+
+                        <div class="subtotal">
+                            <p class="titlesub">Subtotal</p>
+                            <p class="priceSub">0$</p>
                         </div>
-                    </form>
 
-                    <div class="total">
-                        <p class="titleTotal">Total</p>
-                        <p class="pricetotal">12$</p>
+                        <form action="" id="coupon">
+                            <label for="coupon">Enter Discount amount</label>
+                            <div class="couponcode">
+                                <input type="number" class="codeinput" placeholder="0%">
+                                <button type="submit" class="sendcode">Add</button>
+                            </div>
+                        </form>
+
+                        <div class="total">
+                            <p class="titleTotal">Total</p>
+                            <p class="pricetotal">0$</p>
+                        </div>
                     </div>
-                </div>
 
-                <select name="" id="chooseCus">
-                    <option value="" disabled selected>Select customer</option>
-                    <option value=""  >Select customer</option>
-                    <option value=""  >Select customer</option>
-                </select>
+                    <select name="" id="chooseCus">
+                        <option value="" disabled selected>Select customer</option>
+                    </select>
 
-                <div class="saveAndprint">
-                    <div class="done">Save pdf</div>
-                    <div class="done">Print</div>
+                    <div class="saveAndprint">
+                        <div class="done">Checkout</div>
+                    </div>
+
                 </div>
+                
+                <p class="noinvoice">No products yet</p>
 
             </div>
         </div>

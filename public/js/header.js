@@ -20,3 +20,31 @@ document.querySelector('.closeinvoice').addEventListener('click', () => {
 document.querySelector('.Xclose').addEventListener('click', () => {
     document.querySelector('.invoiceContainer').style.right = '-100%';
 });
+
+
+// get costomers
+async function customerOrder() {
+    
+    try {
+        const response = await fetch('/api/customers');
+        const result = await response.json();
+        const cusSelect = document.getElementById('chooseCus');
+
+        if (response.ok) {
+            const customers = result.data;
+            
+            customers.forEach(cus => {
+                const option = document.createElement('option');
+                option.value = cus._id; 
+                option.textContent = cus.name;
+                cusSelect.appendChild(option);
+            });
+        } else {
+            alert('Failed to load customers.');
+        }
+    } catch (error) {
+        console.error('Error loading customers:', error);
+        alert('An error occurred while loading customers.');
+    }
+}
+customerOrder()
