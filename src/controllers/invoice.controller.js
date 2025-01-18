@@ -25,7 +25,7 @@ const createInvoice = asyncHandler(async (req, res) => {
     if(discount < 0 || discount > 100) {
       return res.status(400).json({ error: 'Discount must be between 0 and 100.' });
     }
-    const totalPriceWithDiscount = calculateTotal(products, discount);
+    const totalPriceWithDiscount = calculateTotal(products, discount, isWholeSale);
     const invoice = new Invoice({
       products,
       customerId,
@@ -46,11 +46,16 @@ const createInvoice = asyncHandler(async (req, res) => {
     }
 });
 
-const calculateTotal = (products, discount) => {
+const calculateTotal = async(products, discount, isWholeSale) => {
     let total = 0;
-    for (const product of products) {
-      total += (product.quantity * product.price);
+    const allProducts = await Product.find({ _id: { $in: products.map(p => p.productId) } });
+    if(isWholeSale){
+      for (const product of allProducts) {
+        total += (product.quantity * product.wholeSalePrice);
+      }
+
     }
+
     return total - (total * discount / 100);
 };
 
