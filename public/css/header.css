@@ -34,6 +34,20 @@ header{
 .invoiceIcon{
     cursor: pointer;
 }
+.productinInvoice{
+    background: var(--text-color);
+    color: white;
+    padding: 4px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 13px;
+    width: fit-content;
+    min-width: 16px;
+    position: relative;
+    top: 12px;
+    right: 6px;
+}
+
 
 .menuContainer{
     height: 100vh;
@@ -154,9 +168,12 @@ header{
 }
 .fordisplay{
     width: 100%;
+    /* height: calc(100% - 102px); */
     display: flex;
     flex-direction: column;
+    /* justify-content: space-between; */
     gap: 12px;
+    /* min-height: 688px; */
 }
 .invoices::-webkit-scrollbar {
     width: 10px; 
@@ -263,6 +280,11 @@ header{
     text-align: center;
     flex-grow: 1;
     cursor: pointer;
+}
+.paymentcontainer{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .invoiceproducts{

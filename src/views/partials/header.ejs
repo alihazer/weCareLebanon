@@ -13,6 +13,7 @@
             <li><a href="/"><img class="logo" src="/images/logo.jpg" alt="logo"/></a></li>
 
             <li class="invoiceIcon">
+                <div class="productinInvoice">0</div>
                 <svg width="33" height="33" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7 6L17 6" stroke="#17526B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M7 9L17 9" stroke="#17526B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -126,37 +127,38 @@
                     <div class="invoiceproducts">
                     </div>
 
-                    <div class="payments">
+                    <div class="paymentcontainer">
+                            <div class="payments">
 
-                        <h3 class="titlepayment">Payment Summary</h3>
+                                <h3 class="titlepayment">Payment Summary</h3>
 
-                        <div class="subtotal">
-                            <p class="titlesub">Subtotal</p>
-                            <p class="priceSub">0$</p>
-                        </div>
+                                <div class="subtotal">
+                                    <p class="titlesub">Subtotal</p>
+                                    <p class="priceSub">0$</p>
+                                </div>
 
-                        <form action="" id="coupon">
-                            <label for="coupon">Enter Discount amount</label>
-                            <div class="couponcode">
-                                <input type="number" class="codeinput" placeholder="0%">
-                                <button type="submit" class="sendcode">Add</button>
+                                <form action="" id="coupon">
+                                    <label for="coupon">Enter Discount amount</label>
+                                    <div class="couponcode">
+                                        <input type="number" class="codeinput" placeholder="0%">
+                                        <button type="submit" class="sendcode">Add</button>
+                                    </div>
+                                </form>
+
+                                <div class="total">
+                                    <p class="titleTotal">Total</p>
+                                    <p class="pricetotal">0$</p>
+                                </div>
                             </div>
-                        </form>
 
-                        <div class="total">
-                            <p class="titleTotal">Total</p>
-                            <p class="pricetotal">0$</p>
-                        </div>
+                            <select name="" id="chooseCus">
+                                <option value="" disabled selected>Select customer</option>
+                            </select>
+
+                            <div class="saveAndprint">
+                                <div class="done">Checkout</div>
+                            </div>
                     </div>
-
-                    <select name="" id="chooseCus">
-                        <option value="" disabled selected>Select customer</option>
-                    </select>
-
-                    <div class="saveAndprint">
-                        <div class="done">Checkout</div>
-                    </div>
-
                 </div>
                 
                 <p class="noinvoice">No products yet</p>

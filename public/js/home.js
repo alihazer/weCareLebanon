@@ -88,14 +88,14 @@ function changeFilterSale(){
 
 
 // add to invoice
-// Object to track product quantities by their IDs
 const productQuantities = {};
+let invoiceProductsArray = [];
 
-function AddToInvoice(product) {
+function AddToInvoice(product, isFromLocalStorage = false) {
     let salevalue = document.getElementById('sale').value;
     const invoiceProductsContainer = document.querySelector('.invoiceproducts');
 
-    const productKey = product.wholeSalePrice === product.singlePrice 
+    const productKey =isFromLocalStorage ? product.key : product.wholeSalePrice === product.singlePrice 
         ? product._id 
         : `${product._id}-${salevalue}`;
 
@@ -112,24 +112,27 @@ function AddToInvoice(product) {
             return sum + parseInt(quantityElement.textContent, 10);
         }, 0);
 
-    if (existingProduct) {
-        // If the product already exists, increase its quantity
+    if (existingProduct && !isFromLocalStorage) {
+
         const quantityElement = existingProduct.querySelector('.quantitypronb');
         const currentQuantity = parseInt(quantityElement.textContent, 10);
         if (totalQuantityInInvoice < product.quantity) {
             const newQuantity = currentQuantity + 1;
             quantityElement.textContent = newQuantity;
 
+            const arrayProduct = invoiceProductsArray.find(p => p.key === productKey);
+            arrayProduct.quantity = newQuantity;
+            
             productQuantities[productKey] = newQuantity;
             calculateTotal();
-            document.querySelector('.invoiceContainer').style.right = '0';
+            if (!isFromLocalStorage) saveToLocalStorage();
         } else {
             alert("No more products to add");
         }
 
     } else {
-        if (totalQuantityInInvoice < product.quantity) {
-            // Add the product to the invoice
+        if (totalQuantityInInvoice < product.quantity || isFromLocalStorage) {
+            
             const invoiceProduct = document.createElement('div');
             invoiceProduct.className = 'invoiceproduct';
             invoiceProduct.setAttribute('data-product-key', productKey);
@@ -140,10 +143,10 @@ function AddToInvoice(product) {
                 <div class="productinfo">
                     <h3 class="productname">${product.name}</h3>
                     <div class="priceAndquantity">
-                        <p class="productprice">${salevalue == "wholesale" ? product.wholeSalePrice : product.singlePrice}$</p>
+                        <p class="productprice">${isFromLocalStorage?product.price : salevalue == "wholesale" ? product.wholeSalePrice : product.singlePrice}$</p>
                         <div class="quantitypro">
                             <p class="min" id="mines">-</p>
-                            <p class="quantitypronb" id="quantitynb">1</p>
+                            <p class="quantitypronb" id="quantitynb">${isFromLocalStorage ? product.quantity : 1}</p>
                             <p class="min" id="plus">+</p>
                         </div>
                     </div>
@@ -153,24 +156,42 @@ function AddToInvoice(product) {
                 </svg>
             `;
 
-            productQuantities[productKey] = 1;
-            document.querySelector('.invoiceContainer').style.right = '0';
-
+            productQuantities[productKey] =isFromLocalStorage ? product.quantity : 1;
+            if (!isFromLocalStorage) {
+                invoiceProductsArray.push({
+                    key: productKey,
+                    _id: product._id,
+                    name: product.name,
+                    image: product.image,
+                    price: salevalue === "wholesale" ? product.wholeSalePrice : product.singlePrice,
+                    quantity: 1,
+                    instock:product.quantity
+                });
+                
+            }
+            
             // Decrease the quantity
             invoiceProduct.querySelector('#mines').addEventListener('click', () => {
                 const quantityElement = invoiceProduct.querySelector('.quantitypronb');
                 const currentQuantity = parseInt(quantityElement.textContent, 10);
                 if (currentQuantity > 1) {
-                    
                     const newQuantity = currentQuantity - 1;
                     quantityElement.textContent = newQuantity;
-                    
+
+                    const arrayProduct = invoiceProductsArray.find(p => p.key === productKey);
+                    arrayProduct.quantity = newQuantity;
+
                     productQuantities[productKey] = newQuantity;
                     calculateTotal();
+                    saveToLocalStorage();
                 } else {
                     invoiceProduct.remove();
+                    const productIndex = invoiceProductsArray.findIndex(p => p.key === productKey);
+                    invoiceProductsArray.splice(productIndex, 1);
+
                     delete productQuantities[productKey];
                     calculateTotal();
+                    saveToLocalStorage();
                 }
             });
 
@@ -185,62 +206,91 @@ function AddToInvoice(product) {
                         const quantityElement = invoiceProduct.querySelector('.quantitypronb');
                         return sum + parseInt(quantityElement.textContent, 10);
                     }, 0);
+                    
 
-                if (totalQuantityInInvoice < product.quantity) {
+                    console.log(isFromLocalStorage ? product.instock : product.quantity);
+                    console.log(totalQuantityInInvoice);
+                    
+                if (totalQuantityInInvoice < (isFromLocalStorage ? product.instock : product.quantity)) {
                     const newQuantity = currentQuantity + 1;
                     quantityElement.textContent = newQuantity;
 
+                    const arrayProduct = invoiceProductsArray.find(p => p.key === productKey);
+                    arrayProduct.quantity = newQuantity;
+                    
                     productQuantities[productKey] = newQuantity;
                     calculateTotal();
+                    saveToLocalStorage();
                 } else {
                     alert("No more products to add");
                 }
             });
 
-
             // Remove a product
             invoiceProduct.querySelector('.removepro').addEventListener('click', () => {
                 invoiceProduct.remove();
+
+                const productIndex = invoiceProductsArray.findIndex(p => p.key === productKey);
+                invoiceProductsArray.splice(productIndex, 1);
+                
                 delete productQuantities[productKey];
                 calculateTotal();
+                saveToLocalStorage();
             });
 
             invoiceProductsContainer.appendChild(invoiceProduct);
             calculateTotal();
+            if (!isFromLocalStorage) saveToLocalStorage();
 
         } else {
-            alert("No more products to add");
+            alert("No more products to addddddddddddddd");
         }
     }
 }
 
 function calculateTotal() {
-    let total = 0;
-    const invoiceProducts = document.querySelector('.invoiceproducts');
-
-    Array.from(invoiceProducts.children).forEach(invoiceProduct => {
-        const priceElement = invoiceProduct.querySelector('.productprice');
-        const quantityElement = invoiceProduct.querySelector('.quantitypronb');
-
-        const priceText = priceElement.textContent.trim();
-        const price = parseFloat(priceText.replace('$', '').trim());
-        const quantity = parseInt(quantityElement.textContent, 10);
-
-        total += price * quantity;
-    });
+    const total = invoiceProductsArray.reduce((sum, product) => {
+        return sum + product.price * product.quantity;
+    }, 0);
 
     document.querySelector('.priceSub').textContent = `${total.toFixed(2)}$`;
     document.querySelector('.pricetotal').textContent = `${total.toFixed(2)}$`;
-    if (total==0) {
-        document.querySelector(".fordisplay").style.display="none"
-        document.querySelector(".noinvoice").style.display="block"
+
+    if (total === 0) {
+        document.querySelector(".fordisplay").style.display = "none";
+        document.querySelector(".noinvoice").style.display = "block";
+    } else {
+        document.querySelector(".fordisplay").style.display = "flex";
+        document.querySelector(".noinvoice").style.display = "none";
     }
-    else{
-        document.querySelector(".fordisplay").style.display="flex"
-        document.querySelector(".noinvoice").style.display="none"
+    const inInvoice = invoiceProductsArray.reduce((sum, product) => {
+        return sum +  product.quantity;
+    }, 0);
+    document.querySelector(".productinInvoice").textContent=inInvoice;
+}
+
+// Save to localStorage
+function saveToLocalStorage() {
+    localStorage.setItem('invoiceProducts', JSON.stringify(invoiceProductsArray));
+}
+
+// Load from localStorage
+function loadFromLocalStorage() {
+    const savedProducts = localStorage.getItem('invoiceProducts');
+    if (savedProducts) {
+        invoiceProductsArray = JSON.parse(savedProducts);
+        invoiceProductsArray.forEach(product => {
+            AddToInvoice(product, true);
+        });
     }
 }
-calculateTotal();
+
+// Load data on page load
+document.addEventListener('DOMContentLoaded', () => {
+    loadFromLocalStorage();
+    calculateTotal();
+});
+
 
 
 
