@@ -142,7 +142,8 @@ if (window.location.pathname=="/products/add") {
 
 // get products
 async function getProducts() {
-    
+            document.querySelector(".products").style.display="none";
+        document.querySelector(".loading").style.display="block"
     try {
         const response = await fetch('/api/products');
         const products = await response.json();
@@ -182,6 +183,10 @@ async function getProducts() {
         });
     } catch (error) {
         console.error('Error fetching products:', error);
+    }
+    finally{
+        document.querySelector(".loading").style.display="none"
+                document.querySelector(".products").style.display="block";
     }
 };
 if (window.location.pathname=="/products"){
@@ -224,6 +229,8 @@ if (window.location.pathname=="/products"){
 
 
 async function getAproduct() {
+        document.getElementById("editProduct").style.display="none";
+        document.querySelector(".loading").style.display="block"
     try {
         const urlPath = window.location.pathname;
         const segments = urlPath.split('/');
@@ -267,6 +274,10 @@ async function getAproduct() {
         }
     } catch (error) {
         console.error('Error fetching the product:', error);
+    }
+    finally{
+        document.querySelector(".loading").style.display="none"
+        document.getElementById("editProduct").style.display="flex";
     }
 }
 // edit product

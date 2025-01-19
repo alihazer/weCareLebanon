@@ -1,4 +1,4 @@
-if (window.location.pathname=="/users/adduser") {
+if (window.location.pathname=="/allUsers/adduser") {
     document.getElementById('adduser').addEventListener('submit', async function (e) {
         e.preventDefault();
 
@@ -55,74 +55,75 @@ if (window.location.pathname=="/users/adduser") {
 
 
 // get all users
-// async function Users() {
+async function Users() {
+    document.querySelector(".cats").style.display="none";
+    document.querySelector(".loading").style.display="block"
+    try {
+        const response = await fetch('/api/users');
+        const categories = await response.json();
+        const container = document.getElementById('categoriesContainer');
+        container.innerHTML = '';
 
-//     try {
-//         const response = await fetch('/api/users');
-//         const users = await response.json();
-//         console.log(users);
-        
-//         const productsContainer = document.getElementById('getUsers');
-//         productsContainer.innerHTML = '';
+        categories.data.forEach(category => {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.classList.add('titles');
+            categoryDiv.innerHTML = `
+                <p class="name">${category.username}</p>
+                <div class="actioncat">
+                    <a href="/allUsers/edit/${category._id}" class="edits">
+                        <img src="/images/edit.png" class="edit" alt="edit">
+                    </a>
+                    <img src="/images/delete.png" class="delete" alt="delete" onclick="confirmDelete('${category._id}')" />
+                </div>
+            `;
+            container.appendChild(categoryDiv);
+        });
+    } catch (error) {
+        console.error('Error fetching user:', error);
+    }
+    finally{
+        document.querySelector(".loading").style.display="none"
+        document.querySelector(".cats").style.display="block";
 
-//         users.data.forEach(user => {
-//             const row = document.createElement('div');
-//             row.classList.add('userrow');
+    }
+}
 
-//             row.innerHTML = `
-//                 <p class="columns">${user.username}</p>
-//                 <div class="actions">
-//                     <a href="/users/edit/${user._id}" class="edits">
-//                         <img src="/images/edit.png" class="edit" alt="edit">
-//                     </a>
-//                     <img src="/images/delete.png" class="delete" alt="delete" onclick="confirmDelete('${user._id}')" />
-//                 </div>
-//             `;
+if (window.location.pathname=="/allUsers"){
+    Users();
 
-//             productsContainer.appendChild(row);
-//         });
-
-//     } catch (error) {
-//         console.error('Error loading users:', error);
-//         alert('Failed to load users.');
-//     }
-// };
-// if (window.location.pathname=="/users"){
-//     // Users();
-
-//     // delete a user
-//     let deleteId = null; 
-//     function confirmDelete(id) {
-//         deleteId = id; 
-//         // document.getElementById('customAlert').style.display = 'flex';
-//     }
-//     function handleYes() {
-//         if (deleteId !== null) {
-//             deletesupplier(deleteId);
-//             deleteId = null;
-//         }
-//         document.getElementById('customAlert').style.display = 'none';
-//     }
-//     function handleNo() {
-//         deleteId = null; 
-//         document.getElementById('customAlert').style.display = 'none';
-//     }
-//     async function deletesupplier(id) {
-//             try {
-//                 const response = await fetch(`/api/suppliers/delete/${id}`, { method: 'DELETE' });
-//                 const result = await response.json();
+    // delete a user
+    let deleteId = null; 
+    function confirmDelete(id) {
+        deleteId = id; 
+        document.getElementById('customAlert').style.display = 'flex';
+    }
+    function handleYes() {
+        if (deleteId !== null) {
+            deletesupplier(deleteId);
+            deleteId = null;
+        }
+        document.getElementById('customAlert').style.display = 'none';
+    }
+    function handleNo() {
+        deleteId = null; 
+        document.getElementById('customAlert').style.display = 'none';
+    }
+    async function deletesupplier(id) {
+            try {
+                const response = await fetch(`/api/users/delete/${id}`, { method: 'DELETE' });
+                const result = await response.json();
                 
-//                 if (result.message=="Supplier deleted successfully") {
-//                     Suppliers();
-//                 } else {
-//                     alert('Failed to delete supplier');
-//                 }
-//             } catch (error) {
-//                 console.error('Error deleting category:', error);
-//             }
-//     }
+                if (result.message=="User deleted successfully") {
+                    Users();
+                } else {
+                    alert('Failed to delete user');
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+            }
+    }
 
-// }
+}
 
 
 // add alerts

@@ -4,9 +4,7 @@ import bcrypt from "bcrypt";
 import createToken from "../services/createToken.js";
 
 // @desc getAddUserForm
-// const getAddUserForm = asyncHandler(async(req, res) => {
 
-// });
 
 
 // @desc add user
@@ -42,17 +40,36 @@ const addUser = asyncHandler(async (req, res) => {
 });
 
 
-const getAllUsers = asyncHandler(async(req, res) => {
+const getAllUsers = asyncHandler(async (req, res) => {
     try {
-        const users = await User.find();
-        res.status(200).json({ users });
-    }catch(error){
+        const users = await User.find({});
+        return res.status(200).json({
+            status: true,
+            data: users
+        });
+    } catch (error) {
         res.status(500);
-        throw new Error("Server error");
+        throw new Error(error.message);
     }
 });
 
+const deleteUser = asyncHandler(async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            res.status(404);
+            throw new Error('user not found');
+        }
+  
+        await User.findByIdAndDelete(req.params.id);
+  
+        res.status(200).json({
+            message: 'User deleted successfully',
+        });
+    } catch (error) {
+        res.status(500);
+        throw new Error('Server Error');
+    }
+});
 
-
-
-export { addUser, getAllUsers };
+export { addUser, getAllUsers,deleteUser };

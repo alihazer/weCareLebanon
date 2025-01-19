@@ -103,12 +103,19 @@ body{
     font-size: 21px;
     text-decoration: none;
 }
+
 .products{
     width: 90%;
     margin: 0 auto;
     margin-bottom: 80px;
     max-height: 550px;
     overflow: auto;
+}
+#headoftable{
+    position: sticky;
+    background: var(--main-color);
+    top: -3px;
+    left: 0;
 }
 .products::-webkit-scrollbar {
     width: 10px; 

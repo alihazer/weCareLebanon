@@ -1,5 +1,7 @@
 // get categories
 async function Categories() {
+        document.querySelector(".cats").style.display="none";
+        document.querySelector(".loading").style.display="block"
         try {
             const response = await fetch('/api/categories');
             const categories = await response.json();
@@ -22,6 +24,11 @@ async function Categories() {
             });
         } catch (error) {
             console.error('Error fetching categories:', error);
+        }
+        finally{
+            document.querySelector(".loading").style.display="none"
+            document.querySelector(".cats").style.display="block";
+
         }
 }
 if (window.location.pathname=="/categories") {
@@ -119,6 +126,8 @@ if (window.location.pathname.startsWith("/categories/add")) {
 
 // get a category and edit category
 async function getCategory() {
+        document.getElementById("editCategoryForm").style.display="none";
+        document.querySelector(".loading").style.display="block"
     try {
         const urlPath = window.location.pathname;
         const segments = urlPath.split('/');
@@ -135,6 +144,10 @@ async function getCategory() {
         }
     } catch (error) {
         console.error('Error fetching the category:', error);
+    }
+    finally{
+        document.querySelector(".loading").style.display="none"
+        document.getElementById("editCategoryForm").style.display="flex";
     }
 }
 

@@ -1,0 +1,30 @@
+
+<div class="Maindiv">
+    <h1 class="titleaddproducts">edit User</h1>
+    <a href="/allUsers" class="toaddProduct">Users</a>
+</div>
+
+<form class="infoProduct" id="adduser" method="post">
+        
+
+        <div class="containerfields">
+            <label for="name" class="labels">username</label>
+            <input type="text" name="username" id="username" class="inputs">
+        </div>
+
+        <div class="containerfields">
+            <label for="details" class="labels">Password</label>
+            <input type="password" name="password" id="password" class="inputs">
+        </div>
+
+       <button type="submit" class="add">Update</button>
+
+</form>
+
+
+<div class="catcontainer">
+    <div class="addAlerts" id="messagesadduser" >
+        <p id="messageuser"></p>
+        <button onclick="handleuserok()" class="ok" >ok</button>
+    </div>
+</div>

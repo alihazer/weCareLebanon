@@ -65,7 +65,8 @@ if (window.location.pathname=="/customers/add") {
 
 // get all customers
 async function Customers() {
-
+        document.querySelector(".products").style.display="none";
+        document.querySelector(".loading").style.display="block"
     try {
         const response = await fetch('/api/customers');
         const customers = await response.json();
@@ -97,6 +98,10 @@ async function Customers() {
     } catch (error) {
         console.error('Error loading customers:', error);
         alert('Failed to load customers.');
+    }
+    finally{
+        document.querySelector(".loading").style.display="none";
+        document.querySelector(".products").style.display="block";
     }
 };
 if (window.location.pathname=="/customers"){
@@ -139,6 +144,8 @@ if (window.location.pathname=="/customers"){
 
 // get a customer
 async function getCustomer() {
+        document.getElementById("editcustomer").style.display="none";
+        document.querySelector(".loading").style.display="block"
     try {
         const urlPath = window.location.pathname;
         const segments = urlPath.split('/');
@@ -161,6 +168,10 @@ async function getCustomer() {
         }
     } catch (error) {
         console.error('Error fetching the supplier:', error);
+    }
+    finally{
+        document.querySelector(".loading").style.display="none"
+        document.getElementById("editcustomer").style.display="flex";
     }
 }
 // edit supplier
