@@ -68,7 +68,7 @@ if (window.location.pathname=="/categories") {
 
 
 function handleokcat() {
-    document.getElementById('messagesadd').style.display = 'none';
+    document.querySelector('.catcontainer').style.display = 'none';
 }
 
 // add category
@@ -79,13 +79,13 @@ if (window.location.pathname.startsWith("/categories/add")) {
         const name = document.getElementById('name').value;
     
         if (!name) {
-            document.getElementById('messagesadd').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('message');
             warningText.textContent = 'Please enter a name';
             return;
         }
         else if (name.length < 3) {
-            document.getElementById('messagesadd').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('message');
             warningText.textContent = 'Name must be at least 3 characters';
             return;
@@ -101,12 +101,12 @@ if (window.location.pathname.startsWith("/categories/add")) {
     
             const result = await response.json();
             if (response.ok) {
-                document.getElementById('messagesadd').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('message');
                 warningText.textContent =result.message;
                 document.getElementById('name').value = '';
             } else {
-                document.getElementById('messagesadd').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('message');
                 warningText.textContent =result.error.message;
             }
@@ -152,13 +152,13 @@ if (window.location.pathname.startsWith("/categories/edit")) {
         const name = document.getElementById('nameinput').value;
 
         if (!name) {
-            document.getElementById('messagesadd').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('message');
             warningText.textContent = 'Please enter a name';
             return;
         }
         else if (name.length < 3) {
-            document.getElementById('messagesadd').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('message');
             warningText.textContent = 'Name must be at least 3 characters';
             return;
@@ -176,11 +176,11 @@ if (window.location.pathname.startsWith("/categories/edit")) {
             const result = await response.json();
     
             if (response.ok) {
-                document.getElementById('messagesadd').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('message');
                 warningText.textContent =result.message;
             } else {
-                document.getElementById('messagesadd').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('message');
                 warningText.textContent =result.error.message;
             }

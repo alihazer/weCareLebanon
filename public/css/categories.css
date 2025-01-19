@@ -85,23 +85,29 @@
     cursor: pointer;
 }
 
+
+.catcontainer{
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);;
+    position: absolute;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+}
 .addAlerts{
     background: white;
-    width: 70%;
+    width: 60%;
     height: 250px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: 22px;
-    position: fixed;
-    top: 35%;
-    left: calc(15% - 10px);
-    bottom: 40px;
     padding: 0 10px;
     text-align: center;
-    display: none;
-    margin-bottom: 40px;
 }
 .ok{
     background-color: var(--second-color);

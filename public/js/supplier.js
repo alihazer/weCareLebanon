@@ -7,25 +7,25 @@ if (window.location.pathname=="/suppliers/add") {
         const address = document.getElementById('address').value.trim();
 
         if (!name || !phone || !address) {
-            document.getElementById('messagesaddsup').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagesup');
             warningText.textContent = 'All fields are required!';
             return;
         }
         else if (name.length<3) {
-            document.getElementById('messagesaddsup').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagesup');
             warningText.textContent = 'name must be at least 3 digits';
             return;
         }
         else if (phone.length!=8) {
-            document.getElementById('messagesaddsup').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagesup');
             warningText.textContent = 'phone must be 8 digits';
             return;
         }
         else if (address.length<6) {
-            document.getElementById('messagesaddsup').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagesup');
             warningText.textContent = 'address must be at least 6 characters';
             return;
@@ -43,7 +43,7 @@ if (window.location.pathname=="/suppliers/add") {
             const result = await response.json();
 
             if (response.ok) {
-                document.getElementById('messagesaddsup').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messagesup');
                 warningText.textContent = result.message;
                 document.getElementById('name').value = '';
@@ -51,7 +51,7 @@ if (window.location.pathname=="/suppliers/add") {
                 document.getElementById('address').value = '';
 
             } else {
-                document.getElementById('messagesaddsup').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messagesup');
                 warningText.textContent = result.error.message;
             }
@@ -176,25 +176,25 @@ if (window.location.pathname.startsWith("/suppliers/edit")) {
         const address = document.getElementById('address').value;
     
         if (!name || !phone || !address) {
-            document.getElementById('messagesaddsup').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagesup');
             warningText.textContent = 'All fields are required!';
             return;
         }
         else if (name.length<3) {
-            document.getElementById('messagesaddsup').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagesup');
             warningText.textContent = 'name must be at least 3 digits';
             return;
         }
         else if (phone.length!=8) {
-            document.getElementById('messagesaddsup').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagesup');
             warningText.textContent = 'phone must be 8 digits';
             return;
         }
         else if (address.length<6) {
-            document.getElementById('messagesaddsup').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagesup');
             warningText.textContent = 'address must be at least 6 characters';
             return;
@@ -212,11 +212,11 @@ if (window.location.pathname.startsWith("/suppliers/edit")) {
             const result = await response.json();
     
             if (response.ok) {
-                document.getElementById('messagesaddsup').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messagesup');
                 warningText.textContent = result.message;
             } else {
-                document.getElementById('messagesaddsup').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messagesup');
                 warningText.textContent = result.error.message;
             }
@@ -231,5 +231,5 @@ if (window.location.pathname.startsWith("/suppliers/edit")) {
 
 // add alerts
 function handlesupok() {
-    document.getElementById('messagesaddsup').style.display = 'none';
+    document.querySelector('.catcontainer').style.display = 'none';
 }

@@ -10,7 +10,7 @@ import Product from '../models/product.model.js';
 const createInvoice = asyncHandler(async (req, res) => {
 
   try {
-    const { products, customerId, discount, isWholeSale } = req.body;
+    const { products, customerId, discount } = req.body;
 
     if (!products || products.length === 0) {
       return res.status(400).json({ error: 'Products array cannot be empty.' });
@@ -25,13 +25,14 @@ const createInvoice = asyncHandler(async (req, res) => {
     if(discount < 0 || discount > 100) {
       return res.status(400).json({ error: 'Discount must be between 0 and 100.' });
     }
-    const totalPriceWithDiscount = calculateTotal(products, discount, isWholeSale);
+
+    const  totalPriceWithDiscount =await calculateTotal(products, discount);
     const invoice = new Invoice({
       products,
       customerId,
       discount,
       total: totalPriceWithDiscount,
-      isWholeSale,
+      // isWholeSale,
     });
 
     await invoice.save();
@@ -39,25 +40,57 @@ const createInvoice = asyncHandler(async (req, res) => {
     for (const product of products) { 
       await Product.findByIdAndUpdate(product.productId, { $inc: { quantity: -product.quantity } });
     }
-    await createAndDownloadInvoice(invoice, "/logo.png");
-    res.status(201).json(invoice);
+
+    // await createAndDownloadInvoice(invoice, "/logo.png");
+
+    // res.status(201).json(invoice);
+    res.status(201).json({
+      message: "Order created successfully!",
+      data: invoice,
+  });
   } catch (error) {
       res.status(500).json({ error: error.message });
     }
 });
 
-const calculateTotal = async(products, discount, isWholeSale) => {
-    let total = 0;
-    const allProducts = await Product.find({ _id: { $in: products.map(p => p.productId) } });
-    if(isWholeSale){
-      for (const product of allProducts) {
-        total += (product.quantity * product.wholeSalePrice);
+// const calculateTotal = async(products, discount,isWholeSale ) => {
+//     let total = 0;
+//     const allProducts = await Product.find({ _id: { $in: products.map(p => p.productId) } });
+//     if(isWholeSale){
+//       for (const product of allProducts) {
+//         total += (product.quantity * product.wholeSalePrice);
+//       }
+//     }
+
+//     return total - (total * discount / 100);
+// };
+
+
+const calculateTotal = async (products, discount) => {
+  try {
+      let total = 0;
+
+      for (const product of products) {
+        
+        const allProducts =  await Product.findById(product.productId.toString());;
+        
+          
+          if (product.isWholeSale) {
+              total += (product.quantity * allProducts.wholeSalePrice);
+          } else {
+              total += (product.quantity * allProducts.singlePrice);
+          }
       }
 
-    }
-
-    return total - (total * discount / 100);
+      return total - (total * discount / 100);
+  } catch (error) {
+      console.error("Error calculating total:", error);
+      throw new Error("Failed to calculate total.");
+  }
 };
+
+
+
 
 async function createAndDownloadInvoice(invoice, logoUrl) {
     try {
@@ -170,3 +203,6 @@ const fetchProducts = async (productIds) => {
     const products = await Product.find({ _id: { $in: productIds } });
     return products;
 }
+
+
+export {createInvoice};

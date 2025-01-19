@@ -27,7 +27,7 @@ async function getCategories() {
 // get home products
 async function gethomeProducts() {
     document.querySelector(".homeproducts").style.display="none";
-    document.querySelector(".loader").style.display="block";
+    document.querySelector(".loading").style.display="block";
     try {
         let salevalue=document.getElementById('sale').value
         let categoryvalue=document.getElementById('categoryfilter').value
@@ -68,7 +68,7 @@ async function gethomeProducts() {
     finally{
         
         document.querySelector(".homeproducts").style.display="flex";
-        document.querySelector(".loader").style.display="none";
+        document.querySelector(".loading").style.display="none";
     }
 }
 
@@ -88,11 +88,14 @@ function changeFilterSale(){
 
 
 // add to invoice
-const productQuantities = {};
+let productQuantities = {};
 let invoiceProductsArray = [];
 
 function AddToInvoice(product, isFromLocalStorage = false) {
-    let salevalue = document.getElementById('sale').value;
+    let salevalue=0;
+    if (!isFromLocalStorage) {
+         salevalue = document.getElementById('sale').value;
+    }
     const invoiceProductsContainer = document.querySelector('.invoiceproducts');
 
     const productKey =isFromLocalStorage ? product.key : product.wholeSalePrice === product.singlePrice 
@@ -127,7 +130,13 @@ function AddToInvoice(product, isFromLocalStorage = false) {
             calculateTotal();
             if (!isFromLocalStorage) saveToLocalStorage();
         } else {
-            alert("No more products to add");
+            document.querySelector('.invoiceContainer').style.right='0';
+            document.querySelector('.messageordercontainer').style.display = 'flex';
+            const warningText = document.getElementById('messageorder');
+            warningText.textContent = 'No more products to add';
+            document.getElementById('BokeOrder').addEventListener('click', function () {
+                handleokOrder();
+            });
         }
 
     } else {
@@ -165,7 +174,8 @@ function AddToInvoice(product, isFromLocalStorage = false) {
                     image: product.image,
                     price: salevalue === "wholesale" ? product.wholeSalePrice : product.singlePrice,
                     quantity: 1,
-                    instock:product.quantity
+                    instock:product.quantity,
+                    isWholeSale: salevalue === "wholesale" ? true : false
                 });
                 
             }
@@ -207,10 +217,6 @@ function AddToInvoice(product, isFromLocalStorage = false) {
                         return sum + parseInt(quantityElement.textContent, 10);
                     }, 0);
                     
-
-                    console.log(isFromLocalStorage ? product.instock : product.quantity);
-                    console.log(totalQuantityInInvoice);
-                    
                 if (totalQuantityInInvoice < (isFromLocalStorage ? product.instock : product.quantity)) {
                     const newQuantity = currentQuantity + 1;
                     quantityElement.textContent = newQuantity;
@@ -222,7 +228,12 @@ function AddToInvoice(product, isFromLocalStorage = false) {
                     calculateTotal();
                     saveToLocalStorage();
                 } else {
-                    alert("No more products to add");
+                    document.querySelector('.messageordercontainer').style.display = 'flex';
+                    const warningText = document.getElementById('messageorder');
+                    warningText.textContent = 'No more products to add';
+                    document.getElementById('BokeOrder').addEventListener('click', function () {
+                        handleokOrder();
+                    });
                 }
             });
 
@@ -243,20 +254,27 @@ function AddToInvoice(product, isFromLocalStorage = false) {
             if (!isFromLocalStorage) saveToLocalStorage();
 
         } else {
-            alert("No more products to addddddddddddddd");
+            alert("No more products to add");
         }
     }
 }
 
 function calculateTotal() {
-    const total = invoiceProductsArray.reduce((sum, product) => {
+    const subtotal = invoiceProductsArray.reduce((sum, product) => {
         return sum + product.price * product.quantity;
     }, 0);
 
-    document.querySelector('.priceSub').textContent = `${total.toFixed(2)}$`;
+    document.querySelector('.priceSub').textContent = `${subtotal.toFixed(2)}$`;
+
+    const discountInput = document.querySelector('.codeinput').value;
+    const discount =  (parseFloat(discountInput) * subtotal / 100)|| 0;
+
+    const total = subtotal - discount;
+
     document.querySelector('.pricetotal').textContent = `${total.toFixed(2)}$`;
 
-    if (total === 0) {
+
+    if (subtotal === 0) {
         document.querySelector(".fordisplay").style.display = "none";
         document.querySelector(".noinvoice").style.display = "block";
     } else {
@@ -268,6 +286,10 @@ function calculateTotal() {
     }, 0);
     document.querySelector(".productinInvoice").textContent=inInvoice;
 }
+
+document.querySelector('.codeinput').addEventListener('change', () => {
+    calculateTotal();
+});
 
 // Save to localStorage
 function saveToLocalStorage() {
@@ -294,4 +316,86 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+document.getElementById('addorder').addEventListener('click', async function (e) {
+    let customerIdValue=document.getElementById('chooseCus').value;
 
+    if (invoiceProductsArray.length===0) {
+        document.querySelector('.messageordercontainer').style.display = 'flex';
+        const warningText = document.getElementById('messageorder');
+        warningText.textContent = 'invoice is empty';
+        document.getElementById('BokeOrder').addEventListener('click', function () {
+            handleokOrder();
+        });
+        return;
+    }
+    else if(!customerIdValue) {
+        document.querySelector('.messageordercontainer').style.display = 'flex';
+        const warningText = document.getElementById('messageorder');
+        warningText.textContent = 'choose a customer';
+        document.getElementById('BokeOrder').addEventListener('click', function () {
+            handleokOrder();
+           
+        });
+        return;
+    }
+    
+
+    try {
+        const orderData = {
+            products: invoiceProductsArray.map(product => ({
+                productId: product._id,
+                quantity: product.quantity,
+                price: product.price,
+                isWholeSale: product.isWholeSale,
+            })),
+    
+            customerId: customerIdValue,
+            discount: parseFloat(document.querySelector('.codeinput').value) || 0,
+        };         
+        const response = await fetch('/api/invoice/addOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+              },
+            body: JSON.stringify(orderData),
+        });
+        
+        const result = await response.json();      
+          
+        if (response.ok) {
+
+                document.querySelector('.messageordercontainer').style.display = 'flex';
+                const warningText = document.getElementById('messageorder');
+                warningText.textContent = result.message;
+                invoiceProductsArray = [];
+                productQuantities = {};
+                saveToLocalStorage();
+                calculateTotal();
+                document.getElementById('BokeOrder').addEventListener('click', function () {
+                    handleokOrder(true);
+                });
+        } else {
+            alert('Failed to place order: ' + result.error);
+            document.querySelector('.messageordercontainer').style.display = 'flex';
+            const warningText = document.getElementById('messageorder');
+            warningText.textContent = result.error;
+            document.getElementById('BokeOrder').addEventListener('click', function () {
+                handleokOrder();
+            });
+        }
+    } catch (error) {
+        alert('An error occurred while placing the order.',error);
+        
+    }
+
+});
+
+
+function handleokOrder(Refresh = false){
+    document.querySelector('.messageordercontainer').style.display = 'none';
+    const warningText = document.getElementById('messageorder');
+    warningText.textContent = " ";
+    if (Refresh) {
+        window.location.href = "/";
+    }
+}

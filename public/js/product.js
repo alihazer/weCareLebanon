@@ -49,7 +49,7 @@ async function getsupplier() {
 }
 
 function handleokprod() {
-    document.getElementById('messageproduct').style.display = 'none';
+    document.querySelector('.catcontainer').style.display = 'none';
 }
 
 if (window.location.pathname=="/products/add") {
@@ -72,26 +72,26 @@ if (window.location.pathname=="/products/add") {
             const image = document.getElementById('image').files[0];
             
             if (!name || !code ||isNaN(quantity) || isNaN(purchasePrice) || isNaN(wholeSalePrice) || isNaN(singlePrice) || !category_id || !supplierId || !image) {
-                document.getElementById('messageproduct').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('message');
                 warningText.textContent = 'All fields are required';
                 return;
             }
             
             else if (name.length < 3) {
-                document.getElementById('messageproduct').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('message');
                 warningText.textContent = 'name must be at least 3 characters';
                 return;
             }
             else if (code.length < 3) {
-                document.getElementById('messageproduct').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('message');
                 warningText.textContent = 'code must be at least 3 characters';
                 return;
             }
             else if (purchasePrice >=singlePrice || purchasePrice >=wholeSalePrice) {
-                document.getElementById('messageproduct').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('message');
                 warningText.textContent = 'Purchase price must be less than both single price and wholesale price';
                 return;
@@ -120,13 +120,13 @@ if (window.location.pathname=="/products/add") {
                 const result = await response.json();
     
                 if (response.ok) {
-                    document.getElementById('messageproduct').style.display = 'flex';
+                    document.querySelector('.catcontainer').style.display = 'flex';
                     const succ = document.getElementById('message');
                     succ.textContent = result.message;
                     document.getElementById('addProduct').reset();
                     
                 } else {
-                    document.getElementById('messageproduct').style.display = 'flex';
+                    document.querySelector('.catcontainer').style.display = 'flex';
                     const warningText = document.getElementById('message');
                     warningText.textContent = result.errors;
 
@@ -295,26 +295,26 @@ if (window.location.pathname.startsWith("/products/edit")) {
         const image = document.getElementById('image').files[0];
         
         if (!name || !code ||isNaN(quantity) || isNaN(purchasePrice) || isNaN(wholeSalePrice) || isNaN(singlePrice) || !category_id || !supplierId ) {
-            document.getElementById('messageproduct').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('message');
             warningText.textContent = 'All fields are required';
             return;
         }
         
         if (name.length < 3) {
-            document.getElementById('messageproduct').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('message');
             warningText.textContent = 'name must be at least 3 characters';
             return;
         }
         else if (code.length < 3) {
-            document.getElementById('messageproduct').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('message');
             warningText.textContent = 'code must be at least 3 characters';
             return;
         }
         else if (purchasePrice >=singlePrice || purchasePrice >=wholeSalePrice) {
-            document.getElementById('messageproduct').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('message');
             warningText.textContent = 'Purchase price must be less than both single price and wholesale price';
             return;
@@ -342,13 +342,13 @@ if (window.location.pathname.startsWith("/products/edit")) {
             const result = await response.json();
     
             if (response.ok) {
-                document.getElementById('messageproduct').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('message');
                 warningText.textContent = result.message;
                 getAproduct()
                 
             } else {
-                document.getElementById('messageproduct').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('message');
                 warningText.textContent = result.error.message;
             }

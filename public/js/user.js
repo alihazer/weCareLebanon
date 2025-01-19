@@ -6,19 +6,19 @@ if (window.location.pathname=="/users/adduser") {
         const password = document.getElementById('password').value.trim();
 
         if (!username || !password) {
-            document.getElementById('messagesadduser').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messageuser');
             warningText.textContent = 'All fields are required!';
             return;
         }
         else if (username.length<3) {
-            document.getElementById('messagesadduser').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messageuser');
             warningText.textContent = 'username must be at least 3 digits';
             return;
         }
         else if (password.length<6) {
-            document.getElementById('messagesadduser').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messageuser');
             warningText.textContent = 'password must be at least 6 digits';
             return;
@@ -36,14 +36,14 @@ if (window.location.pathname=="/users/adduser") {
             const result = await response.json();
 
             if (response.ok) {
-                document.getElementById('messagesadduser').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messageuser');
                 warningText.textContent = result.message;
                 document.getElementById('username').value = '';
                 document.getElementById('password').value = '';
 
             } else {
-                document.getElementById('messagesadduser').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messageuser');
                 warningText.textContent = result.error.message;
             }
@@ -127,5 +127,5 @@ if (window.location.pathname=="/users/adduser") {
 
 // add alerts
 function handleuserok() {
-    document.getElementById('messagesadduser').style.display = 'none';
+    document.querySelector('.catcontainer').style.display = 'none';
 }

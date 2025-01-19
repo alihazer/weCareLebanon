@@ -8,25 +8,25 @@ if (window.location.pathname=="/customers/add") {
         const address = document.getElementById('address').value.trim();
 
         if (!name || !phone || !address) {
-            document.getElementById('messagesaddcus').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagecus');
             warningText.textContent = 'All fields are required!';
             return;
         }
         else if (name.length<3) {
-            document.getElementById('messagesaddcus').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagecus');
             warningText.textContent = 'name must be at least 3 digits';
             return;
         }
         else if (phone.length!=8) {
-            document.getElementById('messagesaddcus').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagecus');
             warningText.textContent = 'phone must be 8 digits';
             return;
         }
         else if (address.length<6) {
-            document.getElementById('messagesaddcus').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagecus');
             warningText.textContent = 'address must be at least 6 characters';
             return;
@@ -45,7 +45,7 @@ if (window.location.pathname=="/customers/add") {
 
             
             if (response.ok) {
-                document.getElementById('messagesaddcus').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messagecus');
                 warningText.textContent = result.message;
                 document.getElementById('name').value = '';
@@ -53,7 +53,7 @@ if (window.location.pathname=="/customers/add") {
                 document.getElementById('address').value = '';
 
             } else {
-                document.getElementById('messagesaddcus').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messagecus');
                 warningText.textContent = result.error.message;
             }
@@ -180,25 +180,25 @@ if (window.location.pathname.startsWith("/customers/edit")) {
     
 
         if (!name || !phone || !address) {
-            document.getElementById('messagesaddcus').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagecus');
             warningText.textContent = 'All fields are required!';
             return;
         }
         else if (name.length<3) {
-            document.getElementById('messagesaddcus').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagecus');
             warningText.textContent = 'name must be at least 3 digits';
             return;
         }
         else if (phone.length!=8) {
-            document.getElementById('messagesaddcus').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagecus');
             warningText.textContent = 'phone must be 8 digits';
             return;
         }
         else if (address.length<6) {
-            document.getElementById('messagesaddcus').style.display = 'flex';
+            document.querySelector('.catcontainer').style.display = 'flex';
             const warningText = document.getElementById('messagecus');
             warningText.textContent = 'address must be at least 6 characters';
             return;
@@ -216,11 +216,11 @@ if (window.location.pathname.startsWith("/customers/edit")) {
             const result = await response.json();
     
             if (response.ok) {
-                document.getElementById('messagesaddcus').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messagecus');
                 warningText.textContent = result.message;
             } else {
-                document.getElementById('messagesaddcus').style.display = 'flex';
+                document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messagecus');
                 warningText.textContent = result.error.message;
             }
@@ -233,5 +233,5 @@ if (window.location.pathname.startsWith("/customers/edit")) {
 
 // add alerts
 function handlecusok() {
-    document.getElementById('messagesaddcus').style.display = 'none';
+    document.querySelector('.catcontainer').style.display = 'none';
 }

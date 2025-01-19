@@ -382,6 +382,33 @@ header{
     margin: auto;
 }
 
+
+
+
+
+/* message when add order */
+.messageordercontainer{
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);;
+    position: absolute;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+#placeorder{
+        background: white;
+        width: 60%;
+        height: 250px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        padding: 0 10px;
+        text-align: center;
+}
+
 @media screen and (max-width: 600px){
     .menu{
         min-width: 240px ;
@@ -393,5 +420,9 @@ header{
     }
     .codeinput{
         width: 135px;
+    }
+    #placeorder{
+        font-size: 18px;
+        width: 70%;
     }
 }

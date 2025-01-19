@@ -137,13 +137,12 @@
                                     <p class="priceSub">0$</p>
                                 </div>
 
-                                <form action="" id="coupon">
+                                <div  id="coupon">
                                     <label for="coupon">Enter Discount amount</label>
                                     <div class="couponcode">
-                                        <input type="number" class="codeinput" placeholder="0%">
-                                        <button type="submit" class="sendcode">Add</button>
+                                        <input type="number" class="codeinput" placeholder="0%" min="0" max="100">
                                     </div>
-                                </form>
+                                </div>
 
                                 <div class="total">
                                     <p class="titleTotal">Total</p>
@@ -156,7 +155,7 @@
                             </select>
 
                             <div class="saveAndprint">
-                                <div class="done">Checkout</div>
+                                <div class="done" id="addorder">Checkout</div>
                             </div>
                     </div>
                 </div>
@@ -164,6 +163,14 @@
                 <p class="noinvoice">No products yet</p>
 
             </div>
+
+            <div class="messageordercontainer">
+                <div  id="placeorder" >
+                    <p id="messageorder"></p>
+                    <button  class="ok" id="BokeOrder" >ok</button>
+               </div>
+            </div>
+            
         </div>
 
 
