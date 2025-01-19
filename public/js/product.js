@@ -282,6 +282,7 @@ if (window.location.pathname.startsWith("/products/edit")) {
         const urlPath = window.location.pathname;
         const segments = urlPath.split('/');
         const proid = segments[segments.length - 1]; 
+        console.log(proid);
     
         const name = document.getElementById('name').value.trim();
         const details = document.getElementById('details').value.trim();

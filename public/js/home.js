@@ -348,45 +348,54 @@ document.getElementById('addorder').addEventListener('click', async function (e)
                 price: product.price,
                 isWholeSale: product.isWholeSale,
             })),
-    
             customerId: customerIdValue,
             discount: parseFloat(document.querySelector('.codeinput').value) || 0,
-        };         
+        };
+    
+        // Send the order data to the backend
         const response = await fetch('/api/invoice/addOrder', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-              },
+            },
             body: JSON.stringify(orderData),
         });
-        
-        const result = await response.json();      
-          
+    
+        const result = await response.json();
+    
         if (response.ok) {
-
-                document.querySelector('.messageordercontainer').style.display = 'flex';
-                const warningText = document.getElementById('messageorder');
-                warningText.textContent = result.message;
-                invoiceProductsArray = [];
-                productQuantities = {};
-                saveToLocalStorage();
-                calculateTotal();
-                document.getElementById('BokeOrder').addEventListener('click', function () {
-                    handleokOrder(true);
-                });
-        } else {
-            alert('Failed to place order: ' + result.error);
+            // Show success message
             document.querySelector('.messageordercontainer').style.display = 'flex';
             const warningText = document.getElementById('messageorder');
-            warningText.textContent = result.error;
-            document.getElementById('BokeOrder').addEventListener('click', function () {
-                handleokOrder();
+            warningText.textContent = result.message;
+    
+            // Reset local state
+            invoiceProductsArray = [];
+            productQuantities = {};
+            saveToLocalStorage();
+            calculateTotal();
+    
+            // Download the PDF
+            const pdfBytes = atob(result.pdfBytes); // Decode base64 to binary
+            const blob = new Blob([new Uint8Array([...pdfBytes].map(char => char.charCodeAt(0)))], {
+                type: 'application/pdf',
             });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'invoice.pdf';
+            link.click();
+            URL.revokeObjectURL(link.href); // Clean up the URL object
+        } else {
+            // Show error message
+            alert('Failed to place order: ' + result.error);
+            const warningText = document.getElementById('messageorder');
+            warningText.textContent = result.error;
         }
     } catch (error) {
-        alert('An error occurred while placing the order.',error);
-        
+        alert('An error occurred while placing the order.');
+        console.error('Error:', error);
     }
+    
 
 });
 

@@ -166,6 +166,7 @@ const editProduct = asyncHandler(async (req, res) => {
             message: "An error occurred while updating the product",
             error: error.message,
         });
+        console.log(error);
     }
 });
 
