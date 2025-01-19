@@ -15,6 +15,7 @@ const getCategories = asyncHandler(async (req, res) => {
     }
 });
 
+
 // @desc get single category
 const getCategory = asyncHandler(async (req, res) => {
     try {

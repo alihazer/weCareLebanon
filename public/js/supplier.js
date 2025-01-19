@@ -63,7 +63,8 @@ if (window.location.pathname=="/suppliers/add") {
 
 // get all suppliers
 async function Suppliers() {
-
+        document.querySelector(".products").style.display="none";
+        document.querySelector(".loading").style.display="block"
     try {
         const response = await fetch('/api/suppliers');
         const suppliers = await response.json();
@@ -95,6 +96,10 @@ async function Suppliers() {
     } catch (error) {
         console.error('Error loading suppliers:', error);
         alert('Failed to load suppliers.');
+    }
+    finally{
+        document.querySelector(".loading").style.display="none"
+                document.querySelector(".products").style.display="block";
     }
 };
 if (window.location.pathname=="/suppliers"){
@@ -137,6 +142,8 @@ if (window.location.pathname=="/suppliers"){
 
 
 async function getSupplier() {
+            document.getElementById("editsup").style.display="none";
+        document.querySelector(".loading").style.display="block"
     try {
         const urlPath = window.location.pathname;
         const segments = urlPath.split('/');
@@ -159,6 +166,10 @@ async function getSupplier() {
         }
     } catch (error) {
         console.error('Error fetching the supplier:', error);
+    }
+    finally{
+        document.querySelector(".loading").style.display="none"
+        document.getElementById("editsup").style.display="flex";
     }
 }
 // edit supplier

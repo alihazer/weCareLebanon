@@ -1,4 +1,4 @@
-.catContainer{
+.catContainers{
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -10,6 +10,21 @@
     width: 70%;
     margin: 0 auto;
     margin-bottom: 50px;
+    max-height: 550px;
+    overflow-y: auto;
+}
+.cats::-webkit-scrollbar {
+    width: 10px; 
+    height: 10px;
+}
+.cats::-webkit-scrollbar-track {
+    background: #f0f0f0; 
+    border-radius: 5px;
+}
+.cats::-webkit-scrollbar-thumb {
+    background-color: #17526B;
+    border-radius: 5px;        
+    border: 2px solid #f0f0f0; 
 }
 .cats .titles{
     width: 100%;
@@ -96,6 +111,7 @@
     justify-content: center;
     position: fixed;
     top: 0;
+    z-index: 12000;
 }
 .addAlerts{
     background: white;
@@ -122,7 +138,7 @@
 
 
 @media screen and (max-width: 950px){
-    .catContainer{
+    .catContainers{
         width: 80%;
     }
     .cats{
@@ -132,7 +148,7 @@
     
 }
 @media screen and (max-width: 850px){
-    .catContainer{
+    .catContainers{
         width: 90%;
     }
     .cats{
@@ -148,7 +164,7 @@
     
 }
 @media screen and (max-width: 600px){
-    .catContainer{
+    .catContainers{
         width: 96%;
     }
     .cats{
