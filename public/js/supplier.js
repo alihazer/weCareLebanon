@@ -1,6 +1,7 @@
 if (window.location.pathname=="/suppliers/add") {
     document.getElementById('addsup').addEventListener('submit', async function (e) {
         e.preventDefault();
+        document.getElementById('addsupbutton').disabled = true;
 
         const name = document.getElementById('name').value.trim();
         const phone = document.getElementById('phone').value.trim();
@@ -177,6 +178,7 @@ if (window.location.pathname.startsWith("/suppliers/edit")) {
     getSupplier();
     document.getElementById('editsup').addEventListener('submit', async function (e) {
         e.preventDefault(); 
+        document.getElementById('updatesupbutton').disabled = true;
     
         const urlPath = window.location.pathname;
         const segments = urlPath.split('/');
@@ -243,4 +245,11 @@ if (window.location.pathname.startsWith("/suppliers/edit")) {
 // add alerts
 function handlesupok() {
     document.querySelector('.catcontainer').style.display = 'none';
+    document.getElementById('addsupbutton').disabled = false;
+
+}
+function handlesupokedit() {
+    document.querySelector('.catcontainer').style.display = 'none';
+    document.getElementById('updatesupbutton').disabled = false;
+
 }

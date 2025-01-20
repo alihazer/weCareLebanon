@@ -50,8 +50,14 @@ async function getsupplier() {
 
 function handleokprod() {
     document.querySelector('.catcontainer').style.display = 'none';
-}
+    document.getElementById('addprobutton').disabled = false;
 
+}
+function handleokeditprod() {
+    document.querySelector('.catcontainer').style.display = 'none';
+    document.getElementById('updateprobutton').disabled = false;
+
+}
 if (window.location.pathname=="/products/add") {
      getCategories();    
      getsupplier();
@@ -59,7 +65,8 @@ if (window.location.pathname=="/products/add") {
 
        document.getElementById('addProduct').addEventListener('submit', async function (e) {
             e.preventDefault();
-    
+            document.getElementById('addprobutton').disabled = true;
+
             const name = document.getElementById('name').value.trim();
             const details = document.getElementById('details').value.trim();
             const code = document.getElementById('code').value.trim();
@@ -289,11 +296,11 @@ if (window.location.pathname.startsWith("/products/edit")) {
 
     document.getElementById('editProduct').addEventListener('submit', async function (e) {
         e.preventDefault(); 
-    
+        document.getElementById('updateprobutton').disabled = true;
+
         const urlPath = window.location.pathname;
         const segments = urlPath.split('/');
         const proid = segments[segments.length - 1]; 
-        console.log(proid);
     
         const name = document.getElementById('name').value.trim();
         const details = document.getElementById('details').value.trim();

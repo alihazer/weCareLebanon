@@ -1,6 +1,7 @@
 if (window.location.pathname=="/allUsers/adduser") {
     document.getElementById('adduser').addEventListener('submit', async function (e) {
         e.preventDefault();
+        document.getElementById('adduserbutton').disabled = true;
 
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value.trim();
@@ -129,4 +130,6 @@ if (window.location.pathname=="/allUsers"){
 // add alerts
 function handleuserok() {
     document.querySelector('.catcontainer').style.display = 'none';
+    document.getElementById('adduserbutton').disabled = false;
+
 }

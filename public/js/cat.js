@@ -76,28 +76,36 @@ if (window.location.pathname=="/categories") {
 
 function handleokcat() {
     document.querySelector('.catcontainer').style.display = 'none';
+    document.getElementById('catsubmit').disabled = false;
+
+}
+function handleokcatedit() {
+    document.querySelector('.catcontainer').style.display = 'none';
+    document.getElementById('editCategory').disabled = false;
+
 }
 
 // add category
 if (window.location.pathname.startsWith("/categories/add")) {
+
     document.getElementById('addCat').addEventListener('submit', async function (e) {
         e.preventDefault(); 
-    
+        document.getElementById('catsubmit').disabled = true;
+        
         const name = document.getElementById('name').value;
-    
+        const warningText = document.getElementById('message');
+        
         if (!name) {
             document.querySelector('.catcontainer').style.display = 'flex';
-            const warningText = document.getElementById('message');
             warningText.textContent = 'Please enter a name';
             return;
-        }
-        else if (name.length < 3) {
+        } else if (name.length < 3) {
             document.querySelector('.catcontainer').style.display = 'flex';
-            const warningText = document.getElementById('message');
             warningText.textContent = 'Name must be at least 3 characters';
             return;
-        } 
-
+        }
+    
+        try {
             const response = await fetch('/api/categories/add', {
                 method: 'POST',
                 headers: {
@@ -105,19 +113,22 @@ if (window.location.pathname.startsWith("/categories/add")) {
                 },
                 body: JSON.stringify({ name }),
             });
-    
             const result = await response.json();
+    
             if (response.ok) {
                 document.querySelector('.catcontainer').style.display = 'flex';
-                const warningText = document.getElementById('message');
-                warningText.textContent =result.message;
+                warningText.textContent = result.message;
                 document.getElementById('name').value = '';
             } else {
                 document.querySelector('.catcontainer').style.display = 'flex';
-                const warningText = document.getElementById('message');
-                warningText.textContent =result.error.message;
+                warningText.textContent = result.error.message || 'An error occurred while adding the category';
             }
+        } catch (error) {
+            document.querySelector('.catcontainer').style.display = 'flex';
+            warningText.textContent = 'Failed to add category. Please try again.';
+        }
     });
+    
 }
 
 
@@ -157,7 +168,8 @@ if (window.location.pathname.startsWith("/categories/edit")) {
 
     document.getElementById('editCategoryForm').addEventListener('submit', async function (e) {
         e.preventDefault(); 
-    
+        document.getElementById('editCategory').disabled = true;
+        
         const urlPath = window.location.pathname;
         const segments = urlPath.split('/');
         const categoryId = segments[segments.length - 1]; 
@@ -187,7 +199,7 @@ if (window.location.pathname.startsWith("/categories/edit")) {
             });
     
             const result = await response.json();
-    
+            
             if (response.ok) {
                 document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('message');

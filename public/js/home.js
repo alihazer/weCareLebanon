@@ -281,14 +281,31 @@ function calculateTotal() {
         document.querySelector(".fordisplay").style.display = "flex";
         document.querySelector(".noinvoice").style.display = "none";
     }
+
     const inInvoice = invoiceProductsArray.reduce((sum, product) => {
         return sum +  product.quantity;
     }, 0);
-    document.querySelector(".productinInvoice").textContent=inInvoice;
+    if (inInvoice>0) {
+        document.querySelector(".productinInvoice").style.display="block";
+        document.querySelector(".productinInvoice").textContent=inInvoice;
+    }
+    else{
+        document.querySelector(".productinInvoice").style.display="none";
+    }
 }
 
 document.querySelector('.codeinput').addEventListener('change', () => {
+    let disc=document.querySelector('.codeinput').value;
+    if (disc>100) {
+        document.querySelector('.codeinput').value=100
+        disc=100
+    }
+    if (disc<0) {
+        document.querySelector('.codeinput').value=0
+        disc=0
+    }
     calculateTotal();
+    document.getElementById("displayDiscount").textContent= disc ? disc+'%' : '0%';
 });
 
 // Save to localStorage
@@ -318,6 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.getElementById('addorder').addEventListener('click', async function (e) {
     let customerIdValue=document.getElementById('chooseCus').value;
+    document.getElementById('addorder').disabled = true;
 
     if (invoiceProductsArray.length===0) {
         document.querySelector('.messageordercontainer').style.display = 'flex';
@@ -325,6 +343,16 @@ document.getElementById('addorder').addEventListener('click', async function (e)
         warningText.textContent = 'invoice is empty';
         document.getElementById('BokeOrder').addEventListener('click', function () {
             handleokOrder();
+        });
+        return;
+    }
+    else if(document.querySelector('.codeinput').value>100 && document.querySelector('.codeinput').value <0){
+        document.querySelector('.messageordercontainer').style.display = 'flex';
+        const warningText = document.getElementById('messageorder');
+        warningText.textContent = 'The discount must be between 0 and 100';
+        document.getElementById('BokeOrder').addEventListener('click', function () {
+            handleokOrder();
+           
         });
         return;
     }
@@ -339,7 +367,10 @@ document.getElementById('addorder').addEventListener('click', async function (e)
         return;
     }
     
-
+    document.querySelector('.messageordercontainer').style.display = 'flex';
+    const warningText = document.getElementById('messageorder');
+    warningText.textContent = "loading...";
+    document.getElementById('BokeOrder').style.display="none"
     try {
         const orderData = {
             products: invoiceProductsArray.map(product => ({
@@ -352,7 +383,6 @@ document.getElementById('addorder').addEventListener('click', async function (e)
             discount: parseFloat(document.querySelector('.codeinput').value) || 0,
         };
     
-        // Send the order data to the backend
         const response = await fetch('/api/invoice/addOrder', {
             method: 'POST',
             headers: {
@@ -364,17 +394,7 @@ document.getElementById('addorder').addEventListener('click', async function (e)
         const result = await response.json();
     
         if (response.ok) {
-            // Show success message
-            document.querySelector('.messageordercontainer').style.display = 'flex';
-            const warningText = document.getElementById('messageorder');
-            warningText.textContent = result.message;
-    
-            // Reset local state
-            invoiceProductsArray = [];
-            productQuantities = {};
-            saveToLocalStorage();
-            calculateTotal();
-    
+
             // Download the PDF
             const pdfBytes = atob(result.pdfBytes); // Decode base64 to binary
             const blob = new Blob([new Uint8Array([...pdfBytes].map(char => char.charCodeAt(0)))], {
@@ -385,17 +405,38 @@ document.getElementById('addorder').addEventListener('click', async function (e)
             link.download = 'invoice.pdf';
             link.click();
             URL.revokeObjectURL(link.href); // Clean up the URL object
+
+            // Reset local state
+            invoiceProductsArray = [];
+            productQuantities = {};
+            saveToLocalStorage();
+            calculateTotal();
+
+
+            document.querySelector('.messageordercontainer').style.display = 'flex';
+            const warningText = document.getElementById('messageorder');
+            warningText.textContent = result.message;
+            document.getElementById('BokeOrder').style.display="block"
+    
+            document.getElementById('BokeOrder').addEventListener('click', function () {
+                handleokOrder(true);
+               
+            });
+            
         } else {
-            // Show error message
-            alert('Failed to place order: ' + result.error);
+            document.querySelector('.messageordercontainer').style.display = 'flex';
             const warningText = document.getElementById('messageorder');
             warningText.textContent = result.error;
+            document.getElementById('BokeOrder').style.display="block"
+            document.getElementById('BokeOrder').addEventListener('click', function () {
+                handleokOrder();
+            });
         }
+
     } catch (error) {
         alert('An error occurred while placing the order.');
-        console.error('Error:', error);
     }
-    
+
 
 });
 
@@ -407,4 +448,6 @@ function handleokOrder(Refresh = false){
     if (Refresh) {
         window.location.href = "/";
     }
+    document.getElementById('addorder').disabled = false;
+
 }

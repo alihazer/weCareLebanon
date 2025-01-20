@@ -1,7 +1,9 @@
 // add a customer
 if (window.location.pathname=="/customers/add") {
+
     document.getElementById('addcustomer').addEventListener('submit', async function (e) {
         e.preventDefault();
+        document.getElementById('addcus').disabled = true;
 
         const name = document.getElementById('name').value.trim();
         const phone = document.getElementById('phone').value.trim();
@@ -180,7 +182,8 @@ if (window.location.pathname.startsWith("/customers/edit")) {
 
     document.getElementById('editcustomer').addEventListener('submit', async function (e) {
         e.preventDefault(); 
-    
+        document.getElementById('updatecus').disabled = true;
+
         const urlPath = window.location.pathname;
         const segments = urlPath.split('/');
         const cusid = segments[segments.length - 1]; 
@@ -245,4 +248,11 @@ if (window.location.pathname.startsWith("/customers/edit")) {
 // add alerts
 function handlecusok() {
     document.querySelector('.catcontainer').style.display = 'none';
+    document.getElementById('addcus').disabled = false;
+
+}
+function handleeditcusok() {
+    document.querySelector('.catcontainer').style.display = 'none';
+    document.getElementById('updatecus').disabled = false;
+
 }

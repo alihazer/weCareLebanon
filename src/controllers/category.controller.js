@@ -72,7 +72,13 @@ const createCategory = asyncHandler(async (req, res) => {
 
 const editCategory = asyncHandler(async (req, res) => {
     const { name } = req.body;
-  
+
+    const alreadyExists = await Category.findOne({ name });
+    if(alreadyExists){
+        res.status(400);
+        throw new Error("Category already exists");
+    }
+    
     try {
         const category = await Category.findById(req.params.id);
   
