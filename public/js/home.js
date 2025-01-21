@@ -402,7 +402,7 @@ document.getElementById('addorder').addEventListener('click', async function (e)
             });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = 'invoice.pdf';
+            link.download = `invoice-${result.data.invoiceNumber}-${result.customerName}.pdf`;
             link.click();
             URL.revokeObjectURL(link.href); // Clean up the URL object
 

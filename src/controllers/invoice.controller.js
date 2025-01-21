@@ -1,9 +1,15 @@
 import asyncHandler from 'express-async-handler';
 import Invoice from '../models/invoice.model.js';
-import { PDFDocument, rgb } from 'pdf-lib';
+import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import fetch from 'node-fetch';
 import Customer from '../models/customer.model.js';
 import Product from '../models/product.model.js';
+import fs from 'fs/promises';
+import fontkit from '@pdf-lib/fontkit';
+import ArabicReshaper from 'arabic-reshaper';
+import bidiFactory from 'bidi-js'
+
+
 
 // @desc    Create a new invoice
 // @route   POST /api/invoices
@@ -12,7 +18,6 @@ const createInvoice = asyncHandler(async (req, res) => {
 
   try {
     const { products, customerId, discount } = req.body;
-
     if (!products || products.length === 0) {
       return res.status(400).json({ error: 'Products array cannot be empty.' });
     }
@@ -40,10 +45,14 @@ const createInvoice = asyncHandler(async (req, res) => {
     for (const product of products) { 
       await Product.findByIdAndUpdate(product.productId, { $inc: { quantity: -product.quantity } });
     }
-    const logo = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi_GX_c-BdJjgmFkmrmmRcgzP6D0FgIXivV0v3onTZr8Xke3tAElO1glvmNJBW7l_5WPCiKUSh2_G-3MD5ly0EL3PgvWTZZ_MoDPHijg1A8wlrJvX9UV52ETa47N73LLokZdtkWWEfZtlrql9UT3ze3CRud4HI0Rx7OZOOR4AqcFzEw9SO3q85ZuRSjJCQ/s800/Untitled-2.png"
-    const pdfBytes = await createAndDownloadInvoice(invoice, logo, products[0].isWholeSale);
+    const logo = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg7k4y5SSYQvLYQkiXVjPHn4ueVgaICSkzRzPGqB7rb0XrQme9c_mN_JJy49nB7cfvVVLrOMnARiXsg4CPczlBIO1JM5pvC7gtJtzl8RhGxii9T8rimBr_4M7bHu5FADWP8NDYuxWqRPUHJOB1zRwmDpj8No6-tmrP0TSzuzZQcmw_CzeSB0RGrRq7x5S0/s400/Untitled-adad1.png"
+    const pdfBytes = await createAndDownloadInvoice(invoice, logo);
+    const customer = await Customer.findById(customerId);
     if(!pdfBytes) {
-      return res.status(500).json({ message: 'Failed to create invoice.' });
+      return res.status(500).json({
+        status: false,
+        message: "Error creating invoice"
+      });
     }
     
       res.setHeader('Content-Type', 'application/pdf');
@@ -52,7 +61,8 @@ const createInvoice = asyncHandler(async (req, res) => {
     res.status(201).json({
       message: "Order created successfully!",
       data: invoice,
-      pdfBytes: Buffer.from(pdfBytes).toString('base64')
+      pdfBytes: Buffer.from(pdfBytes).toString('base64'),
+      customerName: customer.name,
   });
   } catch (error) {
       res.status(500).json({ error: error.message });
@@ -82,75 +92,135 @@ const calculateTotal = async (products, discount) => {
 
 
 
-
-async function createAndDownloadInvoice(invoice, logoUrl, isWholeSale) {
+async function createAndDownloadInvoice(invoice, logoUrl) {
   try {
-    const { _id, customerId, products, discount, total } = invoice;
+    const { _id, customerId, products, discount, total, invoiceNumber } = invoice;
 
     // Fetch customer and product details
     const customer = await fetchCustomer(customerId);
     if (!customer) throw new Error('Customer not found');
-    const productIds = products.map(p => p.productId);
+    const productIds = products.map((p) => p.productId);
     const allProducts = await fetchProducts(productIds);
     if (!allProducts || allProducts.length === 0) throw new Error('No products found');
 
+    // Load Arabic-supported font
+    const arabicFontBytes = await fs.readFile('src/utils/font/Amiri-Regular.ttf');
+
     // Create PDF
     const pdfDoc = await PDFDocument.create();
-    const page = pdfDoc.addPage([600, 800]); // Standard page size
-    let yPosition = 750; // Start near the top
+    pdfDoc.registerFontkit(fontkit); // Register fontkit
+    const arabicFont = await pdfDoc.embedFont(arabicFontBytes);
+    const page = pdfDoc.addPage([600, 800]);
+    const bidi = bidiFactory();
+    let yPosition = 750;
 
     // Add logo
     if (logoUrl) {
-      const logoImageBytes = await fetch(logoUrl).then(res => res.arrayBuffer());
+      const logoImageBytes = await fetch(logoUrl).then((res) => res.arrayBuffer());
       const logoImage = await pdfDoc.embedPng(logoImageBytes);
       const logoDims = logoImage.scale(0.5);
-      page.drawImage(logoImage, { x: 80, y: yPosition - 50, width: logoDims.width, height: logoDims.height });
+      page.drawImage(logoImage, { x: 0, y: yPosition - 120, width: logoDims.width, height: logoDims.height });
     }
 
+    // Reshape the Arabic text
+    const reshaperCustomerAddress = ArabicReshaper.convertArabic(customer.address);
+
+    // Get the embedding levels for bidirectional text
+    const embeddingLevels = bidi.getEmbeddingLevels(reshaperCustomerAddress);
+
+    // Get the reorder segments
+    const flips = bidi.getReorderSegments(
+      reshaperCustomerAddress, // the reshaped input string
+      embeddingLevels          // the result object from getEmbeddingLevels
+    );
+
+    // Rebuild the text with correct order
+    let reorderedText = '';
+    flips.forEach(range => {
+      const [start, end] = range;
+
+      // Extract the range and reverse it for RTL
+      const segment = reshaperCustomerAddress.slice(start, end + 1);
+      reorderedText += segment.split('').reverse().join('');
+    });
+
     // Invoice Header
-    page.drawText('INVOICE', { x: 260, y: yPosition - 73, size: 24, color: rgb(0.2, 0.4, 0.6) });
-    yPosition -= 100;
-    page.drawText(`Invoice ID: ${_id}`, { x: 50, y: yPosition, size: 12 });
+    page.drawText('INVOICE', { x: 250, y: yPosition - 65, size: 24, color: rgb(0.2, 0.4, 0.6) });
+    page.drawText(`#${invoiceNumber}`, { x: 285, y: yPosition - 80, size: 15 });
+    yPosition -= 120;
+    page.drawText(`Customer Name: ${customer.name}`, { x: 50, y: yPosition, size: 12, font: arabicFont });
+    page.drawText(`DATE: ${new Date().toLocaleDateString()}`, { x: 450, y: yPosition, size: 12 });
     yPosition -= 20;
-    page.drawText(`Customer Name: ${customer.name}`, { x: 50, y: yPosition, size: 12 });
+    page.drawText(`Phone Number: ${customer.phone}`, { x: 50, y: yPosition, size: 12, font: arabicFont });
     yPosition -= 20;
-    page.drawText(`Phone Number: ${customer.phone}`, { x: 50, y: yPosition, size: 12 });
+    page.drawText(`Address: ${reorderedText}`, { x: 50, y: yPosition, size: 12, font: arabicFont });
     yPosition -= 40;
 
-    // Table Header
-    page.drawText('Product', { x: 50, y: yPosition, size: 12 });
-    page.drawText('Quantity', { x: 250, y: yPosition, size: 12 });
-    page.drawText('Price', { x: 350, y: yPosition, size: 12 });
-    page.drawText('Total', { x: 450, y: yPosition, size: 12 });
-    yPosition -= 20;
+    // Table Header with gray background and vertical lines
+    const colWidths = [150, 100, 100, 100]; // Set fixed column widths
+    const tableHeaderHeight = 20;
+    const tableHeight = allProducts.length * 10 + tableHeaderHeight; // Calculate height based on the number of products
+
+    // Draw gray background for header row
+    page.drawRectangle({
+      x: 50,
+      y: yPosition,
+      width: colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3],
+      height: tableHeaderHeight,
+      color: rgb(0.8, 0.8, 0.8), // Gray color
+    });
+
+    // Draw Table Header text
+    page.drawText('  Product', { x: 50, y: yPosition + 5, size: 12 });
+    page.drawText('Quantity', { x: 50 + colWidths[0], y: yPosition + 5, size: 12 });
+    page.drawText('Price', { x: 50 + colWidths[0] + colWidths[1], y: yPosition + 5, size: 12 });
+    page.drawText('Total', { x: 50 + colWidths[0] + colWidths[1] + colWidths[2], y: yPosition + 5, size: 12 });
+
+    // Draw vertical lines for each column
+    page.drawRectangle({ x: 20 + colWidths[0], y: yPosition - 10, width: 0, height: tableHeaderHeight + 10, color: rgb(0, 0, 0) }); // Line 1
+    page.drawRectangle({ x: 20 + colWidths[0] + colWidths[1], y: yPosition - 10, width: 0, height: tableHeaderHeight + 10, color: rgb(0, 0, 0) }); // Line 2
+    page.drawRectangle({ x: 20 + colWidths[0] + colWidths[1] + colWidths[2], y: yPosition - 10, width: 0, height: tableHeaderHeight + 10, color: rgb(0, 0, 0) }); // Line 3
+
+    yPosition -= tableHeaderHeight;
+
+    let totalPrice = 0;
 
     // Product Rows
     for (const product of allProducts) {
-      const productDetails = products.find(p => p.productId.toString() === product._id.toString());
-      const unitPrice = isWholeSale ? product.wholeSalePrice : product.singlePrice;
+      const productDetails = products.find((p) => p.productId.toString() === product._id.toString());
+      const unitPrice = productDetails.isWholeSale ? product.wholeSalePrice : product.singlePrice;
       const productTotal = productDetails.quantity * unitPrice;
-      page.drawText(product.name, { x: 50, y: yPosition, size: 10 });
-      page.drawText(productDetails.quantity.toString(), { x: 250, y: yPosition, size: 10 });
-      page.drawText(`$${unitPrice.toFixed(2)}`, { x: 350, y: yPosition, size: 10 });
-      page.drawText(`$${productTotal.toFixed(2)}`, { x: 450, y: yPosition, size: 10 });
+      totalPrice += productTotal;
+
+      // Draw Product Rows
+      page.drawText(`  ${product.name}`, { x: 50, y: yPosition, size: 10, font: arabicFont });
+      page.drawText(`  ${productDetails.quantity.toString()}`, { x: 50 + colWidths[0], y: yPosition, size: 10 });
+      page.drawText(`  $${unitPrice.toFixed(2)}`, { x: 50 + colWidths[0] + colWidths[1], y: yPosition, size: 10 });
+      page.drawText(`  $${productTotal.toFixed(2)}`, { x: 50 + colWidths[0] + colWidths[1] + colWidths[2], y: yPosition, size: 10 });
+
+      // Draw vertical lines between columns for product rows
+      page.drawRectangle({ x: 20 + colWidths[0], y: yPosition, width: 0, height: 10, color: rgb(0, 0, 0) }); // Line 1
+      page.drawRectangle({ x: 20 + colWidths[0] + colWidths[1], y: yPosition, width: 0, height: 10, color: rgb(0, 0, 0) }); // Line 2
+      page.drawRectangle({ x: 20 + colWidths[0] + colWidths[1] + colWidths[2], y: yPosition, width: 0, height: 10, color: rgb(0, 0, 0) }); // Line 3
+
       yPosition -= 10;
     }
 
     // Totals
     yPosition -= 20;
-    const discountAmount = (total * discount) / 100;
-    const unDiscountedTotal = total + discountAmount;
+    const discountAmount = totalPrice * (discount / 100);
 
-    page.drawText(`Subtotal: $${unDiscountedTotal.toFixed(2)}`, { x: 350, y: yPosition, size: 12 });
+    page.drawText(`Subtotal: $${totalPrice.toFixed(2)}`, { x: 350, y: yPosition, size: 12 });
     yPosition -= 20;
     page.drawText(`Discount (${discount}%): -$${discountAmount.toFixed(2)}`, { x: 350, y: yPosition, size: 12 });
     yPosition -= 20;
     page.drawText(`Total: $${total.toFixed(2)}`, { x: 350, y: yPosition, size: 14, color: rgb(1, 0, 0) });
 
-    const footerYPosition = 50; 
-    page.drawText('Ansar, Nabatieh', { x: 230, y: footerYPosition, size: 15 });
-    page.drawText('Phone: +961 76920892', { x: 215, y: footerYPosition - 15, size: 15 });
-    page.drawText('email@email.com', { x: 230, y: footerYPosition - 30, size: 15 });
+    // Footer
+    const footerYPosition = 50;
+    page.drawText('Ansar, Nabatieh', { x: 230, y: footerYPosition, size: 15, font: arabicFont });
+    page.drawText('Phone: +961 76920892', { x: 215, y: footerYPosition - 15, size: 15, font: arabicFont });
+    page.drawText('email@email.com', { x: 230, y: footerYPosition - 30, size: 15, font: arabicFont });
 
     // Save PDF
     const pdfBytes = await pdfDoc.save();
@@ -158,9 +228,9 @@ async function createAndDownloadInvoice(invoice, logoUrl, isWholeSale) {
   } catch (error) {
     console.error('Error creating invoice:', error);
     return null;
-    
   }
 }
+
 
   
 
