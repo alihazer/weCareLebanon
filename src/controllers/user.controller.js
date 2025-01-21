@@ -34,9 +34,6 @@ const addUser = asyncHandler(async (req, res) => {
         res.status(500);
         throw new Error("Server error");
     }
-    
-
-
 });
 
 
@@ -72,4 +69,44 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 });
 
-export { addUser, getAllUsers,deleteUser };
+
+// get aa user by id
+const getUserById = asyncHandler(async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            res.status(404);
+            throw new Error('User not found');
+        }
+        return res.status(200).json({
+            status: true,
+            data: user
+        });
+    } catch (error) {
+        res.status(500);
+        throw new Error(error.message);
+    }
+});
+
+const updateUser = asyncHandler(async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            res.status(404);
+            throw new Error('User not found');
+        }
+        user.username = req.body.username || user.username;
+        user.password = req.body.password || user.password;
+        await user.save();
+        return res.status(200).json({
+            status: true,
+            message: 'User updated successfully',
+            data: user
+        });
+    } catch (error) {
+        res.status(500);
+        throw new Error(error.message);
+    }
+});
+
+export { addUser, getAllUsers,deleteUser, getUserById, updateUser};
