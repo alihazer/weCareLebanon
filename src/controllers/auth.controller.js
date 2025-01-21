@@ -21,6 +21,7 @@ const login = asyncHandler(async (req, res) => {
     }
     const token = createToken(user._id);
     const isDevEnv = process.env.NODE_ENV === 'development';
+
     const options = {
         expires: new Date(Date.now() + (30 * 24 * 60 * 60 * 1000)), // 30 days,
         httpOnly: !isDevEnv,
@@ -28,6 +29,7 @@ const login = asyncHandler(async (req, res) => {
         sameSite: isDevEnv ? 'lax' : 'none',
     };
     res.cookie('token', token, options);
+    
     console.log("Cookie set");
     return res.status(200).json({
         status: true,
@@ -36,9 +38,20 @@ const login = asyncHandler(async (req, res) => {
     });
 });
 
+const logout= asyncHandler(async (req, res) => {
+    res.clearCookie('token', {
+        path: '/', 
+        secure: !isDevEnv,
+        sameSite: isDevEnv ? 'lax' : 'none',
+    });
+    res.status(200).json({ message: 'Logged out successfully' });
+});
+
+
+
 // @desc get login form
 const getLoginForm = (req, res) => {
     res.render('pages/login');
 };
 
-export { login, getLoginForm };
+export { login, getLoginForm,logout };

@@ -126,10 +126,94 @@ if (window.location.pathname=="/allUsers"){
 
 }
 
+async function getuser() {
+    document.getElementById("edituser").style.display="none";
+    document.querySelector(".loading").style.display="block"
+try {
+    const urlPath = window.location.pathname;
+    const segments = urlPath.split('/');
+    const userId = segments[segments.length - 1]; 
 
+    const response = await fetch(`/api/users/${userId}`);
+    const user = await response.json();
+
+    if (user && user.data) {
+
+        const username = document.getElementById('username');
+        username.value = user.data.username; 
+    } else {
+        console.error('user not found');
+    }
+} catch (error) {
+    console.error('Error fetching the category:', error);
+}
+finally{
+    document.querySelector(".loading").style.display="none"
+    document.getElementById("edituser").style.display="flex";
+}
+}
+
+if (window.location.pathname.startsWith("/allUsers/edit")) {
+    getuser();
+
+    document.getElementById('edituser').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        document.getElementById('edituserbutton').disabled = true;
+
+
+        const urlPath = window.location.pathname;
+        const segments = urlPath.split('/');
+        const userid = segments[segments.length - 1]; 
+
+        const username = document.getElementById('username').value.trim();
+
+        if (!username) {
+            document.querySelector('.catcontainer').style.display = 'flex';
+            const warningText = document.getElementById('messageuser');
+            warningText.textContent = 'enter a username';
+            return;
+        }
+        else if (username.length<3) {
+            document.querySelector('.catcontainer').style.display = 'flex';
+            const warningText = document.getElementById('messageuser');
+            warningText.textContent = 'username must be at least 3 digits';
+            return;
+        }
+
+
+        try {
+            const response = await fetch(`/api/users/update/${userid}`, {
+                method: 'put',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username}),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                document.querySelector('.catcontainer').style.display = 'flex';
+                const warningText = document.getElementById('messageuser');
+                warningText.textContent = result.message;
+            } else {
+                document.querySelector('.catcontainer').style.display = 'flex';
+                const warningText = document.getElementById('messageuser');
+                warningText.textContent = result.error.message;
+            }
+        } catch (error) {
+            alert('An error occurred while updating the user.');
+        }
+    });
+}
 // add alerts
 function handleuserok() {
     document.querySelector('.catcontainer').style.display = 'none';
     document.getElementById('adduserbutton').disabled = false;
+
+}
+function handleusereditok() {
+    document.querySelector('.catcontainer').style.display = 'none';
+    document.getElementById('edituserbutton').disabled = false;
 
 }

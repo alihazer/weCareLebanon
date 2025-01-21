@@ -5,6 +5,6 @@ import { isLoggedIn } from '../middlewares/isLoggedIn.js';
 
 const router = express.Router();
 
-router.post('/addOrder',/*isLoggedIn,*/  createInvoice);
+router.post('/addOrder',isLoggedIn,  createInvoice);
 
 export default router;

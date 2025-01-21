@@ -15,7 +15,6 @@ import authRoutes from './routes/auth.routes.js';
 import categoryRoutes from './routes/category.routes.js';
 import productsRoutes from './routes/products.routes.js';
 import supplierRoutes from './routes/supplier.routes.js';
-import userRoutes from './routes/user.routes.js';
 import customerRoutes from './routes/customer.routes.js';
 import usersRoutes from './routes/user.routes.js';
 import invoices from './routes/invouce.routes.js';
@@ -51,7 +50,6 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 
 // Routes
-app.use('/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productsRoutes);
 app.use('/api/categories', categoryRoutes);

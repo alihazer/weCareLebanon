@@ -1,6 +1,7 @@
 <div class="loginPage">
     <img src="/images/logo.jpg" alt="logo" class="loginImg">
-    <form class="loginform" >
+
+    <form class="loginform" id="loginfrom">
 
         <h2 class="welcome">Welcome</h2>
 
@@ -8,6 +9,14 @@
         <input type="text" name="username" id="username" class="inputslogin">
         <label for="password">password</label>
         <input type="password" name="password" id="password" class="inputslogin">
-        <button type="submit" class="buttonlogin">Login</button>
+        <button type="submit" class="buttonlogin" id="loginbutton">Login</button>
     </form>
+</div>
+
+
+<div class="catcontainer">
+    <div class="addAlerts" id="messagesadd" >
+        <p id="message"></p>
+        <button onclick="handleoklogin()" class="ok" >ok</button>
+    </div>
 </div>

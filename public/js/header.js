@@ -47,4 +47,11 @@ async function customerOrder() {
         alert('An error occurred while loading customers.');
     }
 }
-customerOrder()
+customerOrder();
+
+
+document.getElementById('logoutButton').addEventListener('click', async () => {
+    document.cookie = `token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+    window.location.href="/login"
+});
+

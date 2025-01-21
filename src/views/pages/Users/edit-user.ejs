@@ -4,7 +4,7 @@
     <a href="/allUsers" class="toaddProduct">Users</a>
 </div>
 
-<form class="infoProduct" id="adduser" method="post">
+<form class="infoProduct" id="edituser" method="post">
         
 
         <div class="containerfields">
@@ -12,19 +12,18 @@
             <input type="text" name="username" id="username" class="inputs">
         </div>
 
-        <div class="containerfields">
-            <label for="details" class="labels">Password</label>
-            <input type="password" name="password" id="password" class="inputs">
-        </div>
-
-       <button type="submit" class="add">Update</button>
+       <button type="submit" class="add" id="edituserbutton">Update</button>
 
 </form>
 
-
+<div class="loading">
+    <div class="loader">
+         <div class="justify-content-center jimu-primary-loading"></div>
+    </div>
+</div>
 <div class="catcontainer">
     <div class="addAlerts" id="messagesadduser" >
         <p id="messageuser"></p>
-        <button onclick="handleuserok()" class="ok" >ok</button>
+        <button onclick="handleusereditok()" class="ok" >ok</button>
     </div>
 </div>

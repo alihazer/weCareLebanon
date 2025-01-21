@@ -8,11 +8,11 @@ const router = express.Router();
 const multerStorage = multer.memoryStorage();
 const upload = multer({ storage: multerStorage });
 
-router.get('/', /*isLoggedIn,*/ getProducts);
-router.get('/:id', /*isLoggedIn,*/ getProduct);
-router.post('/add',/*isLoggedIn,*/ upload.single('image') ,createProduct);
-router.put('/edit/:id', /*isLoggedIn ,*/upload.single('image'),editProduct);
-router.delete('/delete/:id',/*isLoggedIn,*/deleteProduct);
+router.get('/', isLoggedIn, getProducts);
+router.get('/:id', isLoggedIn, getProduct);
+router.post('/add',isLoggedIn, upload.single('image') ,createProduct);
+router.put('/edit/:id', isLoggedIn ,upload.single('image'),editProduct);
+router.delete('/delete/:id',isLoggedIn,deleteProduct);
 
 
 

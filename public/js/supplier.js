@@ -143,7 +143,7 @@ if (window.location.pathname=="/suppliers"){
 
 
 async function getSupplier() {
-            document.getElementById("editsup").style.display="none";
+        document.getElementById("editsup").style.display="none";
         document.querySelector(".loading").style.display="block"
     try {
         const urlPath = window.location.pathname;
