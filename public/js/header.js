@@ -51,7 +51,24 @@ customerOrder();
 
 
 document.getElementById('logoutButton').addEventListener('click', async () => {
-    document.cookie = `token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
-    window.location.href="/login"
+    try {
+        const response = await fetch('/api/auth/logout', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json' ,
+                'Accept': 'application/json',
+            },
+
+        });
+        const result = await response.json();
+        if (response.ok) {
+            window.location.href = '/login';
+        } else {
+            alert('Failed to logout');
+        }
+    } catch (error) {
+        console.error('Error logging out:', error);
+        alert('An error occurred while logging out');
+    }
 });
 

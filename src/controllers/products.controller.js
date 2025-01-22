@@ -104,6 +104,7 @@ const createProduct = asyncHandler(async (req, res) => {
 
 const editProduct = asyncHandler(async (req, res) => {
     const { name, category_id, code, details, purchasePrice, wholeSalePrice, singlePrice, supplierId, quantity } = req.body;
+    
 
     try {
         const product = await Product.findById(req.params.id);

@@ -3,10 +3,8 @@ const globalErrorHandler = (err, req, res, next) => {
     const isDev = process.env.NODE_ENV === 'development';
     if (req.originalUrl.startsWith('/api')) {
         return res.status(err.status || 500).json({
-          error: {
-            message: isDev ? err.message : 'Something went wrong, please try again later.',
-            stack: isDev ? err.stack : undefined,
-          },
+          message: isDev ? err.message : 'Something went wrong, please try again later.',
+          stack: isDev ? err.stack : undefined,
         });
   }
 

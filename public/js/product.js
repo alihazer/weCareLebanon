@@ -351,25 +351,35 @@ if (window.location.pathname.startsWith("/products/edit")) {
             formData.append('singlePrice', singlePrice);
             formData.append('category_id', category_id);
             formData.append('supplierId', supplierId);
-            formData.append('image', image);
+            
+
+            
+            
+            if (image) {
+                formData.append('image', image);
+            }
+            formData.forEach((value, key) => console.log(`${key}: ${value}`));
+
             
             const response = await fetch(`/api/products/edit/${proid}`, {
                 method: 'PUT',
                 body: formData,
             });
+
     
             const result = await response.json();
-    
+            console.log(result)
             if (response.ok) {
                 document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('message');
+                
                 warningText.textContent = result.message;
                 getAproduct()
                 
             } else {
                 document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('message');
-                warningText.textContent = result.error.message;
+                warningText.textContent = result.message;
             }
         } catch (error) {
             console.error('Error updating product:', error);

@@ -19,6 +19,7 @@ import customerRoutes from './routes/customer.routes.js';
 import usersRoutes from './routes/user.routes.js';
 import invoices from './routes/invouce.routes.js';
 import webRoutes from './routes/web.routes.js';
+import { isLoggedIn } from './middlewares/isLoggedIn.js';
 
 dotenv.config();
 
@@ -60,8 +61,9 @@ app.use('/api/invoice', invoices);
 app.use('/', webRoutes);
 
 
+
 // Error handling middlewares
-app.use(notFoundHandler);
-app.use(globalErrorHandler);
+app.use(isLoggedIn, notFoundHandler);
+app.use(isLoggedIn, globalErrorHandler);
 
 export default app;

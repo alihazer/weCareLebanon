@@ -16,7 +16,6 @@ router.get('/statistics', isLoggedIn ,(req, res)=>{
     res.render('pages/statistics', { title: 'Statistics' });
 });
 
-
 // Products pages
 router.get('/products', isLoggedIn ,(req, res)=>{
     res.render('pages/Products/products', { title: 'Products' });

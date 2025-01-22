@@ -30,7 +30,6 @@ const login = asyncHandler(async (req, res) => {
     };
     res.cookie('token', token, options);
     
-    console.log("Cookie set");
     return res.status(200).json({
         status: true,
         message: "Login successful",
@@ -38,13 +37,19 @@ const login = asyncHandler(async (req, res) => {
     });
 });
 
-const logout= asyncHandler(async (req, res) => {
-    res.clearCookie('token', {
-        path: '/', 
-        secure: !isDevEnv,
-        sameSite: isDevEnv ? 'lax' : 'none',
-    });
-    res.status(200).json({ message: 'Logged out successfully' });
+const logout = asyncHandler(async (req, res) => {
+    try {
+        const isDevEnv = process.env.NODE_ENV == 'development'
+        res.clearCookie('token', {
+            path: '/', 
+            secure: !isDevEnv,
+            sameSite: isDevEnv ? 'lax' : 'none',
+        });
+        res.status(200).json({ message: 'Logged out successfully' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Failed to logout' });
+    }
 });
 
 
@@ -53,5 +58,7 @@ const logout= asyncHandler(async (req, res) => {
 const getLoginForm = (req, res) => {
     res.render('pages/login');
 };
+
+
 
 export { login, getLoginForm,logout };

@@ -2,6 +2,7 @@ import express from 'express';
 import { getProducts,getProduct, createProduct, editProduct, deleteProduct} from '../controllers/products.controller.js';
 import { isLoggedIn } from '../middlewares/isLoggedIn.js';
 import multer from 'multer';
+import optionalUpload from '../middlewares/optionalUpload.js';
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ const upload = multer({ storage: multerStorage });
 router.get('/', isLoggedIn, getProducts);
 router.get('/:id', isLoggedIn, getProduct);
 router.post('/add',isLoggedIn, upload.single('image') ,createProduct);
-router.put('/edit/:id', isLoggedIn ,upload.single('image'),editProduct);
+router.put('/edit/:id', isLoggedIn, optionalUpload ,editProduct);
 router.delete('/delete/:id',isLoggedIn,deleteProduct);
 
 
