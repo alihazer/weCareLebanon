@@ -388,4 +388,57 @@ if (window.location.pathname.startsWith("/products/edit")) {
 }
 
 
+async function getinfoProduct() {
+    document.querySelector(".containerAproducts").style.display="none";
+    document.querySelector(".loading").style.display="block"
+try {
+    const urlPath = window.location.pathname;
+    const segments = urlPath.split('/');
+    const proid = segments[segments.length - 1]; 
+
+    const response = await fetch(`/api/products/${proid}`);
+    const product = await response.json();
+    
+    const productsContainer = document.querySelector('.getproducts');
+    productsContainer.innerHTML = '';
+
+    if (product && product.data) {
+        
+        const productElement = document.createElement('div');
+        productElement.className = 'titlesinfo';
+        if (product.data.quantity==0) {
+            productElement.style.backgroundColor="#f03636";
+            productElement.style.color="white";
+
+        }
+        productElement.innerHTML = `
+            <div class="images">
+                <div class="image" 
+                    style="background-image: url('${product.data.image ? product.data.image : '/images/default-product.png'}');">
+                </div>
+            </div>
+            <p class="name" id="title">${product.data.name}</p>
+            <p class="details" id="title">${product.data.details ? product.data.details : 'null'}</p>
+            <p class="quantity">${product.data.quantity}</p>
+            <p class="purchasePrice">${product.data.purchasePrice}</p>
+            <p class="wholeSalePrice">${product.data.wholeSalePrice}</p>
+            <p class="singlePrice">${product.data.singlePrice}</p>
+            <p class="code">${product.data.code}</p>
+            <p class="supplier" id="title">${product.data.supplierId.name}</p>
+        `;
+
+        productsContainer.appendChild(productElement);
+    };
+    } catch (error) {
+      console.error('Error fetching product:', error);
+    }
+    finally{
+            document.querySelector(".loading").style.display="none"
+            document.querySelector(".containerAproducts").style.display="block";
+    }
+};
+
+if (window.location.pathname.startsWith("/products/")){
+    getinfoProduct()
+}
 

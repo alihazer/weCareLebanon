@@ -1,4 +1,4 @@
-if (window.location.pathname.startsWith("/login")) {
+if (window.location.pathname=="/login") {
 
     document.getElementById('loginfrom').addEventListener('submit', async function (e) {
         e.preventDefault(); 
@@ -32,7 +32,7 @@ if (window.location.pathname.startsWith("/login")) {
                 
             } else {
                 document.querySelector('.catcontainer').style.display = 'flex';
-                warningText.textContent = result.error.message || 'An error occurred while login';
+                warningText.textContent = result.message || 'An error occurred while login';
             }
         } catch (error) {
             document.querySelector('.catcontainer').style.display = 'flex';

@@ -17,7 +17,7 @@ const login = asyncHandler(async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if(!isMatch){
         res.status(401);
-        throw new Error("Invalid credentials");
+        throw new Error("Invalid password");
     }
     const token = createToken(user._id);
     const isDevEnv = process.env.NODE_ENV === 'development';

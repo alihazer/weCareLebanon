@@ -5,11 +5,14 @@ import { v2 as cloudinary } from 'cloudinary';
 // @desc get all products
 const getProducts = asyncHandler(async (req, res) => {
     try {
-        const { category } = req.query;
+        const { category,supplier } = req.query;
         
         let filter = {};
         if (category) {
             filter.category_id = category;
+        }
+        if (supplier) {
+            filter.supplierId = supplier;
         }
         if (req.query.quantity === 'gt0') {
             filter.quantity = { $gt: 0 };
@@ -29,7 +32,7 @@ const getProducts = asyncHandler(async (req, res) => {
 // @desc get single product
 const getProduct = asyncHandler(async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
+        const product = await Product.findById(req.params.id).populate('supplierId', 'name');
         if(!product){
             res.status(404);
             throw new Error("Product not found");

@@ -241,6 +241,92 @@ if (window.location.pathname.startsWith("/suppliers/edit")) {
 
 
 
+async function getAsupplier() {
+    document.querySelector(".containerAproducts").style.display="none";
+    document.querySelector(".loading").style.display="block"
+    try {
+        const urlPath = window.location.pathname;
+        const segments = urlPath.split('/');
+        const supid = segments[segments.length - 1]; 
+
+        const response = await fetch(`/api/suppliers/${supid}`);
+        const supplier = await response.json();
+
+        if (supplier && supplier.data) {
+        const productsContainer = document.getElementById('getsuppliers');
+        productsContainer.innerHTML = '';
+
+                const row = document.createElement('div');
+                row.classList.add('headrow');
+
+                row.innerHTML = `
+                    <p class="columns">${supplier.data.name}</p>
+                    <p class="columns" >${supplier.data.phone}</p>
+                    <p class="columns">${supplier.data.address}</p>
+                `;
+
+                productsContainer.appendChild(row);
+        }
+
+    } catch (error) {
+        console.error('Error loading suppliers:', error);
+        alert('Failed to load suppliers.');
+    }
+    finally{
+        document.querySelector(".loading").style.display="none"
+        document.querySelector(".containerAproducts").style.display="block";
+    }
+};
+async function getProductsSup() {
+    try {
+        const urlPath = window.location.pathname;
+        const segments = urlPath.split('/');
+        const supid = segments[segments.length - 1]; 
+    const response = await fetch(`/api/products?supplier=${supid}`);
+    const products = await response.json();
+
+    
+    if (products.data.length === 0) {
+        document.querySelector('.haveproSup').style.display="none"; 
+        document.querySelector('.NhaveProSup').style.display="block"; 
+
+    } else {
+
+        const productsContainer = document.querySelector('.getproducts');
+        productsContainer.innerHTML = '';
+
+        products.data.forEach(product => {
+            const productElement = document.createElement('div');
+            productElement.className = 'infoproSup';
+            if (product.quantity==0) {
+                productElement.style.backgroundColor="#f03636";
+                productElement.style.color="white";
+            }
+            productElement.innerHTML = `
+                <div class="imagesSup">
+                    <div class="image" 
+                        style="background-image: url('${product.image ? product.image : '/images/default-product.png'}');">
+                    </div>
+                </div>
+                <p class="columns" id="title">${product.name}</p>
+                <p class="columns">${product.quantity}</p>
+                <p class="columns">${product.purchasePrice}</p>
+                `;
+
+            productsContainer.appendChild(productElement);
+        });
+    }
+    } catch (error) {
+    console.error('Error fetching products:', error);
+    }
+
+};
+
+if (window.location.pathname.startsWith("/suppliers/")) {
+    getAsupplier()
+    getProductsSup()
+}
+
 
 // add alerts
 function handlesupok() {

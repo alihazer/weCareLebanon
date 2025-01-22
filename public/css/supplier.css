@@ -25,6 +25,41 @@
     padding: 10px;
     width: 26%;
 }
+
+
+.headrow{
+    border-bottom: 2px solid var(--second-color);
+    display: flex;
+    align-items: center;
+    min-width: 620px;
+}
+
+
+#headerproSUp , .infoproSup{
+    border-bottom: 2px solid var(--second-color);
+    display: flex;
+    align-items: center;
+    min-width: 725px;
+}
+#tabelproSup{
+    width: 100%;
+}
+
+.imagesSup{
+    flex-grow: 1;
+    padding: 10px;
+    width: 18%;
+    display: flex;
+    justify-content: center;
+}
+
+.NhaveProSup{
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+    margin: 30px 0;
+    display: none;
+}
 @media screen and (max-width: 600px){
     .containerfields{
         width: 70%;
