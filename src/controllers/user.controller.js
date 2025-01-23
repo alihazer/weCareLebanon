@@ -52,7 +52,13 @@ const getAllUsers = asyncHandler(async (req, res) => {
 
 const deleteUser = asyncHandler(async (req, res) => {
     try {
+
         const user = await User.findById(req.params.id);
+        const allUsers = await User.find({});
+        if(allUsers.length === 1){
+            res.status(400);
+            throw new Error('Cannot delete the only user');
+        }
         if (!user) {
             res.status(404);
             throw new Error('user not found');
@@ -65,7 +71,8 @@ const deleteUser = asyncHandler(async (req, res) => {
         });
     } catch (error) {
         res.status(500);
-        throw new Error('Server Error');
+        console.log(error);
+        throw new Error(error.message);
     }
 });
 

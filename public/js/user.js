@@ -113,11 +113,13 @@ if (window.location.pathname=="/allUsers"){
             try {
                 const response = await fetch(`/api/users/delete/${id}`, { method: 'DELETE' });
                 const result = await response.json();
-                
+                console.log(result);
                 if (result.message=="User deleted successfully") {
                     Users();
                 } else {
-                    alert('Failed to delete user');
+                    document.querySelector('.catcontainer').style.display = 'flex';
+                    const warningText = document.getElementById('messageuser');
+                    warningText.textContent = `Error: ${result.message}`;
                 }
             } catch (error) {
                 console.error('Error deleting user:', error);
@@ -199,7 +201,7 @@ if (window.location.pathname.startsWith("/allUsers/edit")) {
             } else {
                 document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messageuser');
-                warningText.textContent = result.error.message;
+                warningText.textContent = result.message;
             }
         } catch (error) {
             alert('An error occurred while updating the user.');
