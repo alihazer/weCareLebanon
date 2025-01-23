@@ -283,15 +283,11 @@ async function getProductsSup() {
     document.querySelector('.proSupllier').style.display="none"; 
     document.querySelector(".loading").style.display="block"
     try {
-        const fromdate=document.getElementById("from").value ;
-        const to=document.getElementById("To").value;
-        let fromquery=fromdate?`&from=${fromdate}`:'';
-        let toquery=to?`&to=${to}`:'';
-
+ 
         const urlPath = window.location.pathname;
         const segments = urlPath.split('/');
         const supid = segments[segments.length - 1]; 
-        const response = await fetch(`/api/products?supplier=${supid}${fromquery}${toquery}`);
+        const response = await fetch(`/api/products?supplier=${supid}`);
         const products = await response.json();
         
     if (products.data.length === 0) {
@@ -323,7 +319,6 @@ async function getProductsSup() {
             productsContainer.appendChild(productElement);
         });
         document.getElementById("nbproSup").textContent=`nb of products: ${products.data.length}`;
-        document.getElementById("buyitProsup").textContent=`price of products: ${prices}$`;
 
         document.querySelector(".loading").style.display="none"
         document.querySelector('.NhaveProSup').style.display="none"; 
@@ -338,12 +333,6 @@ async function getProductsSup() {
 if (window.location.pathname.startsWith("/suppliers/")) {
     getAsupplier()
     getProductsSup()
-    document.getElementById('from').addEventListener('change', () => {
-        getProductsSup()
-    });
-    document.getElementById('To').addEventListener('change', () => {
-        getProductsSup()
-    });
 }
 
 

@@ -245,6 +245,7 @@ async function getAproduct() {
 
         const response = await fetch(`/api/products/${proid}`);
         const product = await response.json();
+        console.log(product)
         
         if (product && product.data) {
             const nameInput = document.getElementById('name');
@@ -387,7 +388,6 @@ if (window.location.pathname.startsWith("/products/edit")) {
     });
 }
 
-
 async function getinfoProduct() {
     document.querySelector(".containerAproducts").style.display="none";
     document.querySelector(".loading").style.display="block"
@@ -437,8 +437,95 @@ try {
             document.querySelector(".containerAproducts").style.display="block";
     }
 };
-
 if (window.location.pathname.startsWith("/products/")){
     getinfoProduct()
 }
 
+const renderChart = async (year) => {
+    const productId = window.location.pathname.split('/')[2];
+
+    // Fetch stats for the selected year
+    const response = await fetch(`/api/products/stats/${productId}?startDate=${year}`);
+    const result = await response.json();
+
+    if (response.ok) {
+        const stats = result.data || [];
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const categories = stats.map(stat => months[stat.month - 1] || 'Unknown');
+        const totalQuantities = stats.map(stat => stat.totalQuantity || 0);
+
+        const options = {
+            series: [{
+                name: 'Total Quantity',
+                data: totalQuantities,
+            }],
+            chart: {
+                type: 'bar',
+                height: 350,
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '55%',
+                    endingShape: 'rounded',
+                },
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent'],
+            },
+            xaxis: {
+                categories: categories,
+            },
+            yaxis: {
+                title: {
+                    text: 'Quantity Sold',
+                },
+            },
+            fill: {
+                opacity: 1,
+            },
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val;
+                    },
+                },
+            },
+        };
+
+        // Destroy existing chart if it exists
+        if (window.chart && typeof window.chart.destroy === 'function') {
+            window.chart.destroy();
+        }
+
+        const chartElement = document.getElementById('chart');
+        if (chartElement) {
+            window.chart = new ApexCharts(chartElement, options);
+            window.chart.render();
+        } else {
+            console.error('Chart element not found');
+        }
+    } else {
+        console.error('Failed to fetch stats:', result.message);
+    }
+};
+
+// Initialize chart on page load and set up event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    const yearSelect = document.getElementById('year');
+    const defaultYear = parseInt(yearSelect.value);
+
+    // Render chart for default year
+    renderChart(defaultYear);
+
+    // Attach event listener to year dropdown
+    yearSelect.addEventListener('change', (event) => {
+        const selectedYear = parseInt(event.target.value);
+        renderChart(selectedYear);
+    });
+});

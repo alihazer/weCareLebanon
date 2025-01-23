@@ -1,5 +1,5 @@
 import express from 'express';
-import { getProducts,getProduct, createProduct, editProduct, deleteProduct} from '../controllers/products.controller.js';
+import { getProducts,getProduct, createProduct, editProduct, deleteProduct, getProductStats} from '../controllers/products.controller.js';
 import { isLoggedIn } from '../middlewares/isLoggedIn.js';
 import multer from 'multer';
 import optionalUpload from '../middlewares/optionalUpload.js';
@@ -14,6 +14,7 @@ router.get('/:id', isLoggedIn, getProduct);
 router.post('/add',isLoggedIn, upload.single('image') ,createProduct);
 router.put('/edit/:id', isLoggedIn, optionalUpload ,editProduct);
 router.delete('/delete/:id',isLoggedIn,deleteProduct);
+router.get('/stats/:id', isLoggedIn, getProductStats);
 
 
 

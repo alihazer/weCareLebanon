@@ -28,7 +28,8 @@ const getSupplier = asyncHandler(async (req, res) => {
             data: supplier
         });
     } catch (error) {
-        
+        res.status(500);
+        throw new Error(error.message);
     }
 });
 

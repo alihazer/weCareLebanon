@@ -1,6 +1,8 @@
 import Product from '../models/product.model.js';
 import asyncHandler from 'express-async-handler';
 import { v2 as cloudinary } from 'cloudinary';
+import Invoice from '../models/invoice.model.js';
+import mongoose from 'mongoose';
 
 // @desc get all products
 const getProducts = asyncHandler(async (req, res) => {
@@ -205,5 +207,61 @@ const deleteProduct = asyncHandler(async (req, res) => {
         });
     }
 });
-  
-export {createProduct, getProducts, getProduct, editProduct, deleteProduct};
+
+const getProductStats = asyncHandler(async (req, res) => {
+    const productId = req.params.id;
+    const year = parseInt(req.query.startDate) || new Date().getFullYear();
+
+    try {
+        const stats = await Invoice.aggregate([
+            {
+                $match: {
+                    "products.productId": new mongoose.Types.ObjectId(productId),
+                    createdAt: {
+                        $gte: new Date(year, 0, 1), 
+                        $lte: new Date(year, 11, 31, 23, 59, 59), 
+                    },
+                },
+            },
+            { $unwind: "$products" },
+            {
+                $match: {
+                    "products.productId": new mongoose.Types.ObjectId(productId),
+                },
+            },
+            {
+                $group: {
+                    _id: { $month: "$createdAt" },
+                    totalQuantity: { $sum: "$products.quantity" },
+                },
+            },
+            { $sort: { "_id": 1 } }, 
+        ]);
+
+
+        const allMonths = Array.from({ length: 12 }, (_, index) => ({
+            month: index + 1,
+            totalQuantity: 0,
+        }));
+
+
+        stats.forEach(stat => {
+            const monthIndex = stat._id - 1; 
+            allMonths[monthIndex].totalQuantity = stat.totalQuantity;
+        });
+
+ 
+        res.status(200).json({
+            status: true,
+            data: allMonths,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "An error occurred while fetching product stats",
+            error: error.message
+        });
+    }
+});
+
+
+export {createProduct, getProducts, getProduct, editProduct, deleteProduct, getProductStats};

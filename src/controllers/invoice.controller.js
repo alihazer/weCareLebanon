@@ -8,6 +8,7 @@ import fs from 'fs/promises';
 import fontkit from '@pdf-lib/fontkit';
 import ArabicReshaper from 'arabic-reshaper';
 import bidiFactory from 'bidi-js'
+import Profit from '../models/profit.model.js';
 
 
 
@@ -32,7 +33,7 @@ const createInvoice = asyncHandler(async (req, res) => {
       return res.status(400).json({ error: 'Discount must be between 0 and 100.' });
     }
 
-    const  totalPriceWithDiscount =await calculateTotal(products, discount);
+    const  totalPriceWithDiscount = await calculateTotal(products, discount);
     const invoice = new Invoice({
       products,
       customerId,
@@ -40,7 +41,17 @@ const createInvoice = asyncHandler(async (req, res) => {
       total: totalPriceWithDiscount,
     });
 
+
     await invoice.save();
+
+    const discountAmmount = totalPriceWithDiscount * (discount / 100);
+    const totalProfit = await calculateProductProfit(products, discountAmmount);
+    // Save profit
+    const profit = new Profit({
+      invoiceId: invoice._id,
+      totalProfit,
+    })
+    await profit.save();
         
     for (const product of products) { 
       await Product.findByIdAndUpdate(product.productId, { $inc: { quantity: -product.quantity } });
@@ -243,6 +254,22 @@ const fetchProducts = async (productIds) => {
     const products = await Product.find({ _id: { $in: productIds } });
     return products;
 }
+
+const calculateProductProfit = async (products, discountAmmount) => {
+  const allProducts = await Product.find({ _id: { $in: products.map((p) => p.productId) } });
+  let totalProfit = 0;
+  for (const product of products) {
+    const productDetails = allProducts.find((p) => p._id.toString() === product.productId.toString());
+    const unitProfit = productDetails.wholeSalePrice - productDetails.purchasePrice;
+    totalProfit += unitProfit * product.quantity;
+  }
+
+  const profitWithDiscount = totalProfit - discountAmmount;
+
+  console.log('Total Profit:', profitWithDiscount);
+  return profitWithDiscount;
+}
+
 
 
 export {createInvoice};

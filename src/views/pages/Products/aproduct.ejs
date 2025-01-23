@@ -23,20 +23,19 @@
     </div>
 
     <div class="ghraphPro">
-        
-        <form class="filterdatePro">
+        <h1>Product Stats:</h1>
+        <form class="filterdatePro" id="filterdatePro">
             <div>
-                <label for="from">from:</label>
-                <input type="date" id="from" >
-            </div>
-
-            <div>
-                <label for="To">To:</label>
-                <input type="date" id="To" >
+                <label for="year">Year</label>
+                <select id="year">
+                    <% const currentYear = new Date().getFullYear(); %>
+                    <% for (let i = 2025; i <= currentYear; i++) { %>
+                        <option value="<%= i %>" <%= i === currentYear ? 'selected' : '' %>><%= i %></option>
+                    <% } %>
+                </select>
             </div>
         </form>
-
-        <div class="statisticPro"></div>
+        <div id="chart"></div>
     </div>
 </div>
 
@@ -45,3 +44,4 @@
          <div class="justify-content-center jimu-primary-loading"></div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
