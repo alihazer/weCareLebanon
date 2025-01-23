@@ -277,25 +277,32 @@ async function getAsupplier() {
         document.querySelector(".containerAproducts").style.display="block";
     }
 };
+
 async function getProductsSup() {
+    document.querySelector('.NhaveProSup').style.display="none"; 
+    document.querySelector('.proSupllier').style.display="none"; 
+    document.querySelector(".loading").style.display="block"
     try {
+        const fromdate=document.getElementById("from").value ;
+        const to=document.getElementById("To").value;
+        let fromquery=fromdate?`&from=${fromdate}`:'';
+        let toquery=to?`&to=${to}`:'';
+
         const urlPath = window.location.pathname;
         const segments = urlPath.split('/');
         const supid = segments[segments.length - 1]; 
-    const response = await fetch(`/api/products?supplier=${supid}`);
-    const products = await response.json();
-
-    
+        const response = await fetch(`/api/products?supplier=${supid}${fromquery}${toquery}`);
+        const products = await response.json();
+        
     if (products.data.length === 0) {
-        document.querySelector('.haveproSup').style.display="none"; 
+        document.querySelector(".loading").style.display="none"
         document.querySelector('.NhaveProSup').style.display="block"; 
-
     } else {
-
         const productsContainer = document.querySelector('.getproducts');
         productsContainer.innerHTML = '';
-
+        let prices=0
         products.data.forEach(product => {
+            prices+=product.purchasePrice
             const productElement = document.createElement('div');
             productElement.className = 'infoproSup';
             if (product.quantity==0) {
@@ -310,11 +317,17 @@ async function getProductsSup() {
                 </div>
                 <p class="columns" id="title">${product.name}</p>
                 <p class="columns">${product.quantity}</p>
-                <p class="columns">${product.purchasePrice}</p>
+                <p class="columns">${product.purchasePrice}$</p>
                 `;
 
             productsContainer.appendChild(productElement);
         });
+        document.getElementById("nbproSup").textContent=`nb of products: ${products.data.length}`;
+        document.getElementById("buyitProsup").textContent=`price of products: ${prices}$`;
+
+        document.querySelector(".loading").style.display="none"
+        document.querySelector('.NhaveProSup').style.display="none"; 
+        document.querySelector('.proSupllier').style.display="block"; 
     }
     } catch (error) {
     console.error('Error fetching products:', error);
@@ -325,6 +338,12 @@ async function getProductsSup() {
 if (window.location.pathname.startsWith("/suppliers/")) {
     getAsupplier()
     getProductsSup()
+    document.getElementById('from').addEventListener('change', () => {
+        getProductsSup()
+    });
+    document.getElementById('To').addEventListener('change', () => {
+        getProductsSup()
+    });
 }
 
 
