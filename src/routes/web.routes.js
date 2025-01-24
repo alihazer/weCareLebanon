@@ -52,7 +52,7 @@ router.get('/suppliers/add', isLoggedIn ,(req, res)=>{
 router.get('/suppliers/edit/:id', isLoggedIn ,(req, res)=>{
     res.render('pages/Supplier/edit-supplier', { title: 'edit Supplier' });
 });
-router.get('/suppliers/:id', isLoggedIn ,(req, res)=>{
+router.get('/suppliers/view/:id', isLoggedIn ,(req, res)=>{
     res.render('pages/Supplier/asupplier', { title: 'A Supplier' });
 });
 
@@ -67,7 +67,7 @@ router.get('/customers/add', isLoggedIn ,(req, res)=>{
 router.get('/customers/edit/:id', isLoggedIn ,(req, res)=>{
     res.render('pages/Customers/edit-customer', { title: 'edit Customer' });
 });
-router.get('/customers/:id', isLoggedIn ,(req, res)=>{
+router.get('/customers/view/:id', isLoggedIn ,(req, res)=>{
     res.render('pages/Customers/acustomer', { title: 'A Customer' });
 });
 

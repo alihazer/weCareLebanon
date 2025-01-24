@@ -81,7 +81,7 @@ async function Suppliers() {
                 <p class="columns" >${supplier.phone}</p>
                 <p class="columns">${supplier.address}</p>
                 <div class="actions">
-                    <a href="/suppliers/${supplier._id}" class="edits">
+                    <a href="/suppliers/view/${supplier._id}" class="edits">
                         <img src="/images/view.png" class="edit" alt="view">
                     </a>
                     <a href="/suppliers/edit/${supplier._id}" class="edits">
@@ -296,9 +296,7 @@ async function getProductsSup() {
     } else {
         const productsContainer = document.querySelector('.getproducts');
         productsContainer.innerHTML = '';
-        let prices=0
         products.data.forEach(product => {
-            prices+=product.purchasePrice
             const productElement = document.createElement('div');
             productElement.className = 'infoproSup';
             if (product.quantity==0) {
@@ -318,7 +316,6 @@ async function getProductsSup() {
 
             productsContainer.appendChild(productElement);
         });
-        document.getElementById("nbproSup").textContent=`nb of products: ${products.data.length}`;
 
         document.querySelector(".loading").style.display="none"
         document.querySelector('.NhaveProSup').style.display="none"; 
@@ -330,7 +327,7 @@ async function getProductsSup() {
 
 };
 
-if (window.location.pathname.startsWith("/suppliers/")) {
+if (window.location.pathname.startsWith("/suppliers/view/")) {
     getAsupplier()
     getProductsSup()
 }

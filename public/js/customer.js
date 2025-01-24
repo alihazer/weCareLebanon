@@ -84,7 +84,7 @@ async function Customers() {
                 <p class="columns" >${customer.phone}</p>
                 <p class="columns">${customer.address}</p>
                 <div class="actions">
-                    <a href="/customers/${customer._id}" class="edits">
+                    <a href="/customers/view/${customer._id}" class="edits">
                         <img src="/images/view.png" class="edit" alt="view">
                     </a>
                     <a href="/customers/edit/${customer._id}" class="edits">
@@ -243,6 +243,62 @@ if (window.location.pathname.startsWith("/customers/edit")) {
         }
     });
 }
+
+
+async function getAcustomer() {
+    document.querySelector(".containerAproducts").style.display="none";
+    document.querySelector(".loading").style.display="block"
+    try {
+        const urlPath = window.location.pathname;
+        const segments = urlPath.split('/');
+        const cusid = segments[segments.length - 1]; 
+
+        const response = await fetch(`/api/customers/${cusid}`);
+        const customer = await response.json();
+
+        if (customer && customer.data) {
+        const productsContainer = document.getElementById('getcustomers');
+        productsContainer.innerHTML = '';
+
+                const row = document.createElement('div');
+                row.classList.add('headrow');
+
+                row.innerHTML = `
+                    <p class="columns">${customer.data.name}</p>
+                    <p class="columns" >${customer.data.phone}</p>
+                    <p class="columns">${customer.data.address}</p>
+                `;
+
+                productsContainer.appendChild(row);
+        }
+
+    } catch (error) {
+        console.error('Error loading customer:', error);
+        alert('Failed to load customer.');
+    }
+    finally{
+        document.querySelector(".loading").style.display="none"
+        document.querySelector(".containerAproducts").style.display="block";
+    }
+};
+
+async function getinvoicesbyCus() {
+
+    const urlPath = window.location.pathname;
+    const segments = urlPath.split('/');
+    const cusid = segments[segments.length - 1]; 
+
+    const response = await fetch(`/api/invoice/customer/${cusid}`);
+    const customer = await response.json();
+    console.log(customer);
+    
+}
+if (window.location.pathname.startsWith("/customers/view/")) {
+    getAcustomer()
+    getinvoicesbyCus();
+}
+
+
 
 
 // add alerts

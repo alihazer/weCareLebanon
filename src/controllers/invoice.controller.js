@@ -270,6 +270,8 @@ const calculateProductProfit = async (products, discountAmmount) => {
   return profitWithDiscount;
 }
 
+
+
 const getCustomerInvoices = asyncHandler(async (req, res) => {
   try {
     const customerId = req.params.id;
