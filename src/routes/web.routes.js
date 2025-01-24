@@ -26,7 +26,7 @@ router.get('/products/add', isLoggedIn ,(req, res)=>{
 router.get('/products/edit/:id',isLoggedIn ,(req, res)=>{
     res.render('pages/Products/edit-product', { id: req.params.id, title: 'Edit Product' });
 });
-router.get('/products/:id',isLoggedIn , (req, res)=>{
+router.get('/products/view/:id',isLoggedIn , (req, res)=>{
     res.render('pages/Products/aproduct', { id: req.params.id, title: 'A Product' });
 });
 

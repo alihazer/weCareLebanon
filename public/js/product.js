@@ -174,13 +174,13 @@ async function getProducts() {
                 <p class="name" id="title">${product.name}</p>
                 <p class="details" id="title">${product.details ? product.details : 'null'}</p>
                 <p class="quantity">${product.quantity}</p>
-                <p class="purchasePrice">${product.purchasePrice}</p>
-                <p class="wholeSalePrice">${product.wholeSalePrice}</p>
-                <p class="singlePrice">${product.singlePrice}</p>
+                <p class="purchasePrice">${product.purchasePrice}$</p>
+                <p class="wholeSalePrice">${product.wholeSalePrice}$</p>
+                <p class="singlePrice">${product.singlePrice}$</p>
                 <p class="code">${product.code}</p>
                 <p class="supplier" id="title">${product.supplierId?.name}</p>
                 <div class="actions">
-                    <a href="/products/${product._id}" class="edits"><img src="/images/view.png" class="edit" alt="view"></a>
+                    <a href="/products/view/${product._id}" class="edits"><img src="/images/view.png" class="edit" alt="view"></a>
                     <a href="/products/edit/${product._id}" class="edits"><img src="/images/edit.png" class="edit" alt="edit"></a>
                     <img src="/images/delete.png" class="delete" alt="delete" onclick="confirmDelete('${product._id}')"/>
                 </div>
@@ -369,7 +369,6 @@ if (window.location.pathname.startsWith("/products/edit")) {
 
     
             const result = await response.json();
-            console.log(result)
             if (response.ok) {
                 document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('message');
@@ -420,9 +419,9 @@ try {
             <p class="name" id="title">${product.data.name}</p>
             <p class="details" id="title">${product.data.details ? product.data.details : 'null'}</p>
             <p class="quantity">${product.data.quantity}</p>
-            <p class="purchasePrice">${product.data.purchasePrice}</p>
-            <p class="wholeSalePrice">${product.data.wholeSalePrice}</p>
-            <p class="singlePrice">${product.data.singlePrice}</p>
+            <p class="purchasePrice">${product.data.purchasePrice}$</p>
+            <p class="wholeSalePrice">${product.data.wholeSalePrice}$</p>
+            <p class="singlePrice">${product.data.singlePrice}$</p>
             <p class="code">${product.data.code}</p>
             <p class="supplier" id="title">${product.data.supplierId.name}</p>
         `;
@@ -437,7 +436,7 @@ try {
             document.querySelector(".containerAproducts").style.display="block";
     }
 };
-if (window.location.pathname.startsWith("/products/")){
+if (window.location.pathname.startsWith("/products/view")){
     getinfoProduct()
 }
 
