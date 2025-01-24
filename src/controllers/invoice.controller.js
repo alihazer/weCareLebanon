@@ -298,24 +298,56 @@ const getCustomerInvoices = asyncHandler(async (req, res) => {
       }
     }
 
-    const invoices = await Invoice.find(filter).sort({ createdAt: -1 });
+
+    const invoices = await Invoice.find(filter)
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "products.productId", 
+        select: "name price description", 
+      })
+
+    const enrichedInvoices = await Promise.all(
+      invoices.map(async (invoice) => {
+        const profit = await Profit.findOne({ invoiceId: invoice._id });
+        return {
+          ...invoice.toObject(), 
+          profit: profit ? profit.totalProfit : null, 
+        };
+      })
+    );
+
     return res.status(200).json({
       status: true,
-      data: invoices,
-      count: invoices.length 
+      data: enrichedInvoices,
+      count: enrichedInvoices.length,
     });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
   }
 });
 
+
+
 const getAllInvoices = asyncHandler(async (req, res) => {
   try {
-    const invoices = await Invoice.find().sort({ createdAt: -1 });
+    const invoices = await Invoice.find().populate({
+      path: "products.productId", 
+      select: "name price description", 
+    }).sort({ createdAt: -1 });
+    const enrichedInvoices = await Promise.all(
+      invoices.map(async (invoice) => {
+        const profit = await Profit.findOne({ invoiceId: invoice._id });
+        return {
+          ...invoice.toObject(), 
+          profit: profit ? profit.totalProfit : null, 
+        };
+      })
+    );
+
     return res.status(200).json({
       status: true,
-      data: invoices,
-      count: invoices.length
+      data: enrichedInvoices,
+      count: enrichedInvoices.length
     });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
