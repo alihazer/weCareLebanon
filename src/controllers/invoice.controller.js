@@ -270,6 +270,56 @@ const calculateProductProfit = async (products, discountAmmount) => {
   return profitWithDiscount;
 }
 
+const getCustomerInvoices = asyncHandler(async (req, res) => {
+  try {
+    const customerId = req.params.id;
+    const startDate = req.query.startDate;
+    const endDate = req.query.endDate;
+
+    let filter = { customerId };
+
+    if (startDate || endDate) {
+      filter.createdAt = {};
+      if (startDate) {
+        const parsedStartDate = new Date(startDate);
+        if (isNaN(parsedStartDate)) {
+          return res.status(400).json({ status: false, message: "Invalid startDate" });
+        }
+        filter.createdAt.$gte = parsedStartDate;
+      }
+      if (endDate) {
+        const parsedEndDate = new Date(endDate);
+        if (isNaN(parsedEndDate)) {
+          return res.status(400).json({ status: false, message: "Invalid endDate" });
+        }
+        filter.createdAt.$lte = parsedEndDate;
+      }
+    }
+
+    const invoices = await Invoice.find(filter).sort({ createdAt: -1 });
+    return res.status(200).json({
+      status: true,
+      data: invoices,
+      count: invoices.length 
+    });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+});
+
+const getAllInvoices = asyncHandler(async (req, res) => {
+  try {
+    const invoices = await Invoice.find().sort({ createdAt: -1 });
+    return res.status(200).json({
+      status: true,
+      data: invoices,
+      count: invoices.length
+    });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+});
 
 
-export {createInvoice};
+
+export {createInvoice, getCustomerInvoices, getAllInvoices};
