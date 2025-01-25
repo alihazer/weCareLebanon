@@ -1,30 +1,32 @@
 <div class="Maincontainer">
-    <h1 class="ProductsTitile">Suppliers</h1>
-    <a href="/suppliers/add" class="toaddProduct">add supplier</a>
+    <h1 class="ProductsTitile">Statistics</h1>
+    <a href="/invoices" class="toaddProduct">Invoices</a>
 </div>
 
 <div class="products">
-    
-    <div class="rows" id="headoftable">
-        <h2 class="columns">Name</h2>
-        <h2 class="columns" >phone</h2>
-        <h2 class="columns" >Address</h2>
-        <p class="actions"></p>
+    <!-- Year Selection Dropdown -->
+    <div class="yearSelection">
+        <label for="yearSelect">Select Year:</label>
+        <select id="yearSelect">
+            <!-- Options will be populated dynamically -->
+        </select>
     </div>
 
-    <div id="getsuppliers"></div>
+    <!-- Container for the profit chart -->
+    <div id="profitStatsChart" class="profitStatsChart"></div>
+    <br>
+    <br>
+    <!-- Container for the invoice chart -->
+    <div id="invoiceStatsChart" class="invoiceStatsChart"></div>
 </div>
 
-
+<!-- Loading Spinner -->
 <div class="loading">
     <div class="loader">
-         <div class="justify-content-center jimu-primary-loading"></div>
+        <div class="justify-content-center jimu-primary-loading"></div>
     </div>
 </div>
-<div id="customAlert" >
-    <p>Are you sure you want to delete this supplier?</p>
-    <div class="sure">
-        <button onclick="handleYes()" class="yes">Yes</button>
-        <button onclick="handleNo()" class="yes">No</button>
-    </div>
-</div>
+
+<!-- Include ApexCharts library -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="/js/statistics.js"></script>

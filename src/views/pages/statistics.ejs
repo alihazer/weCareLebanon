@@ -1,4 +1,38 @@
 <div class="Maincontainer">
-    <h1 class="ProductsTitile">Statistices</h1>
-    <a href="/invoices" class="toaddProduct">invoices</a>
+    <h1 class="ProductsTitile">Statistics</h1>
+    <a href="/invoices" class="toaddProduct">Invoices</a>
 </div>
+
+
+    <div class="yearSelection" style="margin-left: 20px;">
+        <label for="yearSelect">Select Year:</label>
+        <select id="yearSelect">
+        </select>
+    </div>
+
+    <div id="profitStatsChart" class="profitStatsChart"></div>
+
+    <div id="invoiceStatsChart" class="invoiceStatsChart"></div>
+
+    
+    <div class="products">
+        <div id="topProductsTable" class="topProductsTable">
+            <h2>Top Products by Month</h2>
+            <div class="rows" id="headoftable">
+                <h2 class="columns">Month</h2>
+                <h2 class="columns">Top Products</h2>
+            </div>
+            <div id="topProductsData"></div>
+        </div>
+    </div>
+
+
+
+<div class="loading">
+    <div class="loader">
+        <div class="justify-content-center jimu-primary-loading"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="/js/statistics.js"></script>

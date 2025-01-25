@@ -260,12 +260,12 @@ const calculateProductProfit = async (products, discountAmmount) => {
   let totalProfit = 0;
   for (const product of products) {
     const productDetails = allProducts.find((p) => p._id.toString() === product.productId.toString());
-    const unitProfit = productDetails.wholeSalePrice - productDetails.purchasePrice;
+    const unitProfit = product.isWholeSale ? productDetails.wholeSalePrice - productDetails.purchasePrice : productDetails.singlePrice - productDetails.purchasePrice;
+
     totalProfit += unitProfit * product.quantity;
   }
 
   const profitWithDiscount = totalProfit - discountAmmount;
-
   console.log('Total Profit:', profitWithDiscount);
   return profitWithDiscount;
 }
