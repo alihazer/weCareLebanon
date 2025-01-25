@@ -282,21 +282,99 @@ async function getAcustomer() {
     }
 };
 
+
 async function getinvoicesbyCus() {
+    document.querySelector('.NhaveProSup').style.display="none"; 
+    document.querySelector('.invCustomer').style.display="none"; 
+    document.querySelector(".loading").style.display="block"
+    try {
+        let fromdate=document.getElementById("fromdateCus").value? `&startDate=${document.getElementById("fromdateCus").value}`:'';
+        let todate=document.getElementById("todatecus").value? `&endDate=${document.getElementById("todatecus").value}`:'';
 
-    const urlPath = window.location.pathname;
-    const segments = urlPath.split('/');
-    const cusid = segments[segments.length - 1]; 
 
-    const response = await fetch(`/api/invoice/customer/${cusid}`);
-    const customer = await response.json();
-    console.log(customer);
+        const urlPath = window.location.pathname;
+        const segments = urlPath.split('/');
+        const cusid = segments[segments.length - 1]; 
     
-}
+        const response = await fetch(`/api/invoice/customer/${cusid}?${fromdate}${todate}`);
+        const invoice = await response.json();
+        
+    if (invoice.data.length === 0) {
+        document.querySelector(".loading").style.display="none"
+        document.querySelector('.NhaveProSup').style.display="block"; 
+    } else {
+        const productsContainer = document.querySelector('.getinvoices');
+        productsContainer.innerHTML = '';
+
+        invoice.data.forEach(inv => {
+            const createdAt = new Date(inv.createdAt); 
+        
+            const formattedDate = createdAt.toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+            });            
+            
+            const productElement = document.createElement('div');
+            productElement.className = 'infoinvcus';
+        
+            // const productsContainerpro = document.createElement('div');
+            // productsContainerpro.className = 'productsContainer';
+            // productsContainerpro.style.display = 'none'; 
+        
+            // inv.products.forEach(product => {
+            //     const productDetails = document.createElement('p');
+            //     productDetails.className = 'productDetails';
+            //     productDetails.textContent = ` ${product.quantity} pcs - $${product.price}`;
+            //     productsContainerpro.appendChild(productDetails);
+            // });
+        
+            productElement.innerHTML = `
+                <p class="columns">${formattedDate}</p>
+                <p class="columns">${inv.invoiceNumber}</p>
+                <p class="columns">${inv.discount}%</p>
+                <p class="columns">${inv.total}$</p>
+                <p class="columns">${inv.profit}$</p>
+                <p class="columns" id="showProductsBtn">Show Products</p>
+            `;
+        
+            // productElement.appendChild(productsContainerpro);
+        
+            // const showProductsBtn = productElement.querySelector('.showProductsBtn');
+            // showProductsBtn.addEventListener('click', () => {
+            //     if (productsContainerpro.style.display === 'none') {
+            //         productsContainerpro.style.display = 'block';
+            //         showProductsBtn.textContent = 'Hide Products';
+            //     } else {
+            //         productsContainerpro.style.display = 'none';
+            //         showProductsBtn.textContent = 'Show Products';
+            //     }
+            // });
+        
+            productsContainer.appendChild(productElement);
+        });
+        
+
+        document.querySelector(".loading").style.display="none"
+        document.querySelector('.NhaveProSup').style.display="none"; 
+        document.querySelector('.invCustomer').style.display="block"; 
+    }
+    } catch (error) {
+    console.error('Error fetching invoices:', error);
+    }
+
+};
 if (window.location.pathname.startsWith("/customers/view/")) {
     getAcustomer()
     getinvoicesbyCus();
 }
+
+document.getElementById('fromdateCus').addEventListener('change', () => {
+    getinvoicesbyCus()
+});
+document.getElementById('todatecus').addEventListener('change', () => {
+    getinvoicesbyCus()
+});
 
 
 
