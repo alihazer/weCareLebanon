@@ -30,11 +30,16 @@ async function gethomeProducts() {
     document.querySelector(".loading").style.display="block";
     try {
         let salevalue=document.getElementById('sale').value
-        let categoryvalue=document.getElementById('categoryfilter').value
+        let categoryvalue=document.getElementById('categoryfilter').value;
+        let Searchvalue=document.getElementById('search').value;
+
         const category =categoryvalue=="all"?
-                        '':`&category=${categoryvalue}`;       
+                        '':`&category=${categoryvalue}`;   
+
+        const search =Searchvalue?
+                        `&search=${Searchvalue}`: '';       
         
-        const response = await fetch(`/api/products?quantity=gt0${category}`); 
+        const response = await fetch(`/api/products?quantity=gt0${category}${search}`); 
         const products = await response.json();
         
         const homeProductsContainer = document.querySelector('.homeproducts'); 
@@ -76,6 +81,10 @@ async function gethomeProducts() {
 if (window.location.pathname === "/") {
     getCategories();
     gethomeProducts();
+    document.getElementById('search').addEventListener('input', () => {
+        gethomeProducts()
+    });
+    
 }
 function changeFilterCategory(){
     gethomeProducts();
@@ -294,7 +303,7 @@ function calculateTotal() {
     }
 }
 
-document.querySelector('.codeinput').addEventListener('change', () => {
+document.querySelector('.codeinput').addEventListener('input', () => {
     let disc=document.querySelector('.codeinput').value;
     if (disc>100) {
         document.querySelector('.codeinput').value=100

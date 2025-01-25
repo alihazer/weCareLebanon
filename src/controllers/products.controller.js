@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 // @desc get all products
 const getProducts = asyncHandler(async (req, res) => {
     try {
-        const { category,supplier,from, to } = req.query;
+        const { category,supplier,from, to,search } = req.query;
         
         let filter = {};
         if (category) {
@@ -19,6 +19,9 @@ const getProducts = asyncHandler(async (req, res) => {
         if (req.query.quantity === 'gt0') {
             filter.quantity = { $gt: 0 };
         }
+        if (search) {
+            filter.name = { $regex: search, $options: 'i' }; 
+        }        
         if (from || to) {
             filter.createdAt = {};
         

@@ -12,6 +12,10 @@ router.get('/login' , (req, res)=>{
     res.render('pages/login', { title: 'Login', layout: 'layouts/auth' });
 })
 
+router.get('/invoices', isLoggedIn ,(req, res)=>{
+    res.render('pages/invoices', { title: 'invoices' });
+});
+
 router.get('/statistics', isLoggedIn ,(req, res)=>{
     res.render('pages/statistics', { title: 'Statistics' });
 });

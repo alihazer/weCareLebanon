@@ -436,13 +436,10 @@ try {
             document.querySelector(".containerAproducts").style.display="block";
     }
 };
-if (window.location.pathname.startsWith("/products/view")){
-    getinfoProduct()
-}
 
 const renderChart = async (year) => {
-    const productId = window.location.pathname.split('/')[2];
-
+    const productId = window.location.pathname.split('/')[3];
+    
     // Fetch stats for the selected year
     const response = await fetch(`/api/products/stats/${productId}?startDate=${year}`);
     const result = await response.json();
@@ -514,8 +511,10 @@ const renderChart = async (year) => {
     }
 };
 
-// Initialize chart on page load and set up event listeners
-document.addEventListener('DOMContentLoaded', () => {
+if (window.location.pathname.startsWith("/products/view")){
+    getinfoProduct();
+
+    // Initialize chart on page load and set up event listeners
     const yearSelect = document.getElementById('year');
     const defaultYear = parseInt(yearSelect.value);
 
@@ -527,4 +526,4 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedYear = parseInt(event.target.value);
         renderChart(selectedYear);
     });
-});
+}

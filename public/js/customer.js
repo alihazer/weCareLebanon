@@ -303,8 +303,8 @@ async function getinvoicesbyCus() {
         document.querySelector(".loading").style.display="none"
         document.querySelector('.NhaveProSup').style.display="block"; 
     } else {
-        const productsContainer = document.querySelector('.getinvoices');
-        productsContainer.innerHTML = '';
+        const invContainer = document.querySelector('.getinvoices');
+        invContainer.innerHTML = '';
 
         invoice.data.forEach(inv => {
             const createdAt = new Date(inv.createdAt); 
@@ -314,67 +314,63 @@ async function getinvoicesbyCus() {
                 month: 'numeric',
                 day: 'numeric',
             });            
-            
-            const productElement = document.createElement('div');
-            productElement.className = 'infoinvcus';
         
-            // const productsContainerpro = document.createElement('div');
-            // productsContainerpro.className = 'productsContainer';
-            // productsContainerpro.style.display = 'none'; 
-        
-            // inv.products.forEach(product => {
-            //     const productDetails = document.createElement('p');
-            //     productDetails.className = 'productDetails';
-            //     productDetails.textContent = ` ${product.quantity} pcs - $${product.price}`;
-            //     productsContainerpro.appendChild(productDetails);
-            // });
-        
-            productElement.innerHTML = `
+            const invsElement = document.createElement('div');
+            invsElement.className = 'infoinvcus';
+            invsElement.innerHTML = `
                 <p class="columns">${formattedDate}</p>
                 <p class="columns">${inv.invoiceNumber}</p>
                 <p class="columns">${inv.discount}%</p>
                 <p class="columns">${inv.total}$</p>
                 <p class="columns">${inv.profit}$</p>
-                <p class="columns" id="showProductsBtn">Show Products</p>
+                <div class="columns"><p class="showProductsBtn">Show Products</p></div>
             `;
         
-            // productElement.appendChild(productsContainerpro);
-        
-            // const showProductsBtn = productElement.querySelector('.showProductsBtn');
-            // showProductsBtn.addEventListener('click', () => {
-            //     if (productsContainerpro.style.display === 'none') {
-            //         productsContainerpro.style.display = 'block';
-            //         showProductsBtn.textContent = 'Hide Products';
-            //     } else {
-            //         productsContainerpro.style.display = 'none';
-            //         showProductsBtn.textContent = 'Show Products';
-            //     }
-            // });
-        
-            productsContainer.appendChild(productElement);
-        });
+            invContainer.appendChild(invsElement);
         
 
+            const showProductsBtn = invsElement.querySelector('.showProductsBtn');
+            showProductsBtn.addEventListener('click', () => {
+                document.querySelector(".proAninv").style.display = "flex";
+        
+                const productsContainer = document.querySelector('.getinvpro');
+                productsContainer.innerHTML = ''; 
+                inv.products.forEach(product => {
+                    const productElement = document.createElement('div');
+                    productElement.className = 'infoproinvcus';
+                    productElement.innerHTML = `
+                        <p class="columns">${product.productId.name}</p>
+                        <p class="columns">${product.price}$</p>
+                        <p class="columns">${product.quantity}</p>
+                    `;
+                    productsContainer.appendChild(productElement);
+                });
+            });
+        });
+        
         document.querySelector(".loading").style.display="none"
         document.querySelector('.NhaveProSup').style.display="none"; 
         document.querySelector('.invCustomer').style.display="block"; 
     }
     } catch (error) {
-    console.error('Error fetching invoices:', error);
+        console.error('Error fetching invoices:', error);
     }
 
 };
 if (window.location.pathname.startsWith("/customers/view/")) {
     getAcustomer()
     getinvoicesbyCus();
+    document.getElementById('fromdateCus').addEventListener('change', () => {
+        getinvoicesbyCus()
+    });
+    document.getElementById('todatecus').addEventListener('change', () => {
+        getinvoicesbyCus()
+    });
+    document.querySelector('.closeinvpro').addEventListener('click', () => {
+        document.querySelector(".proAninv").style.display = "none";
+    });
 }
 
-document.getElementById('fromdateCus').addEventListener('change', () => {
-    getinvoicesbyCus()
-});
-document.getElementById('todatecus').addEventListener('change', () => {
-    getinvoicesbyCus()
-});
 
 
 
