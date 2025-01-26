@@ -1,5 +1,5 @@
 import express from 'express';
-import { getProducts,getProduct, createProduct, editProduct, deleteProduct, getProductStats, createQuotation} from '../controllers/products.controller.js';
+import { getProducts,getProduct, createProduct, editProduct, deleteProduct, getProductStats, createQuotation, createTextQuotation} from '../controllers/products.controller.js';
 import { isLoggedIn } from '../middlewares/isLoggedIn.js';
 import multer from 'multer';
 import optionalUpload from '../middlewares/optionalUpload.js';
@@ -16,6 +16,7 @@ router.put('/edit/:id', isLoggedIn, optionalUpload ,editProduct);
 router.delete('/delete/:id',isLoggedIn,deleteProduct);
 router.get('/stats/:id', isLoggedIn, getProductStats);
 router.post('/quotation/create-quotation', isLoggedIn, createQuotation);
+router.post('/quotation/create-text-quotation', isLoggedIn, createTextQuotation);
 
 
 

@@ -458,4 +458,121 @@ const createQuotation = asyncHandler(async (req, res) => {
     }
 });
 
-export {createProduct, getProducts, getProduct, editProduct, deleteProduct, getProductStats, createQuotation};
+
+const createTextQuotation = asyncHandler(async (req, res) => {
+    const { text } = req.body; // Get the text content from the request body
+
+    try {
+        // Create a new PDF document
+        const pdfDoc = await PDFDocument.create();
+        let page = pdfDoc.addPage([600, 800]); // Set page size (width, height)
+        const { width, height } = page.getSize();
+
+        // Set up fonts
+        const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+        const fontSize = 12;
+        const lineHeight = 15;
+
+        // Add company logo (top-left corner)
+        const logoUrl = 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg7k4y5SSYQvLYQkiXVjPHn4ueVgaICSkzRzPGqB7rb0XrQme9c_mN_JJy49nB7cfvVVLrOMnARiXsg4CPczlBIO1JM5pvC7gtJtzl8RhGxii9T8rimBr_4M7bHu5FADWP8NDYuxWqRPUHJOB1zRwmDpj8No6-tmrP0TSzuzZQcmw_CzeSB0RGrRq7x5S0/s400/Untitled-adad1.png';
+        const logoResponse = await fetch(logoUrl);
+        const logoBuffer = await logoResponse.arrayBuffer();
+        const logoImage = await pdfDoc.embedPng(logoBuffer); // Assuming the logo is a PNG
+        const logoDims = logoImage.scale(0.2); // Scale the logo to 20% of its original size
+        page.drawImage(logoImage, {
+            x: 50, // X position for the logo
+            y: height - 50 - logoDims.height, // Y position for the logo
+            width: logoDims.width,
+            height: logoDims.height,
+        });
+
+        // Add current date (top-right corner)
+        const currentDate = new Date().toLocaleDateString();
+        const dateWidth = font.widthOfTextAtSize(currentDate, fontSize);
+        page.drawText(currentDate, {
+            x: width - 50 - dateWidth, // X position for the date
+            y: height - 95, // Y position for the date
+            size: fontSize,
+            font,
+            color: rgb(0, 0, 0),
+        });
+
+        // Add text content below the logo and date
+        let y = height - 100 - logoDims.height; // Start below the logo and date
+
+        // Define the maximum width for the text
+        const maxTextWidth = width - 100; // 50px margin on both sides
+
+        // Split the text into paragraphs and add them to the PDF
+        const paragraphs = text.split('\n'); // Split text by newlines
+        for (const paragraph of paragraphs) {
+            // Split the paragraph into lines that fit within the maxTextWidth
+            const lines = [];
+            let currentLine = '';
+            const words = paragraph.split(' ');
+            for (const word of words) {
+                const testLine = currentLine ? `${currentLine} ${word}` : word;
+                const testWidth = font.widthOfTextAtSize(testLine, fontSize);
+                if (testWidth <= maxTextWidth) {
+                    currentLine = testLine;
+                } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                }
+            }
+            if (currentLine) {
+                lines.push(currentLine);
+            }
+
+            // Add each line to the PDF
+            for (const line of lines) {
+                if (y < 100) { // Bottom margin (adjust as needed)
+                    // Create a new page if the current page is full
+                    page = pdfDoc.addPage([600, 800]);
+                    y = height - 50; // Reset Y position for the new page
+                }
+
+                page.drawText(line, {
+                    x: 50, // X position for the text
+                    y,
+                    size: fontSize,
+                    font,
+                    color: rgb(0, 0, 0),
+                });
+
+                y -= lineHeight; // Move down for the next line
+            }
+
+            y -= lineHeight; // Add extra space between paragraphs
+        }
+
+        // Add footer (company address, phone number, and email)
+        const footerText = `Ansar, Nabatieh, Lebanon | Phone:+961 76920892  | Email: aboualijomaa@gmail.com`;
+        const footerY = 50; // Y position for the footer
+        page.drawText(footerText, {
+            x: 50,
+            y: footerY,
+            size: fontSize,
+            font,
+            color: rgb(0, 0, 0),
+        });
+
+        // Serialize the PDF to bytes
+        const pdfBytes = await pdfDoc.save();
+
+        // Convert PDF bytes to a base64 string
+        const pdfBase64 = Buffer.from(pdfBytes).toString('base64');
+
+        // Send the base64 string as a JSON response
+        res.json({
+            success: true,
+            pdf: pdfBase64,
+            filename: `text-quotation-${currentDate}.pdf`,
+        });
+    } catch (error) {
+        console.error('Error creating text quotation:', error);
+        res.status(500).json({ success: false, error: 'Failed to create text quotation' });
+    }
+});
+
+export {createProduct, getProducts, getProduct, editProduct, deleteProduct, getProductStats, createQuotation, createTextQuotation};

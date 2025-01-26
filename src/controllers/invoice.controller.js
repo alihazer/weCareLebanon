@@ -129,8 +129,8 @@ async function createAndDownloadInvoice(invoice, logoUrl) {
     if (logoUrl) {
       const logoImageBytes = await fetch(logoUrl).then((res) => res.arrayBuffer());
       const logoImage = await pdfDoc.embedPng(logoImageBytes);
-      const logoDims = logoImage.scale(0.5);
-      page.drawImage(logoImage, { x: 0, y: yPosition - 120, width: logoDims.width, height: logoDims.height });
+      const logoDims = logoImage.scale(0.3);
+      page.drawImage(logoImage, { x: 20, y: yPosition - 80, width: logoDims.width, height: logoDims.height });
     }
 
     // Reshape the Arabic text
@@ -156,8 +156,8 @@ async function createAndDownloadInvoice(invoice, logoUrl) {
     });
 
     // Invoice Header
-    page.drawText('INVOICE', { x: 250, y: yPosition - 65, size: 24, color: rgb(0.2, 0.4, 0.6) });
-    page.drawText(`#${invoiceNumber}`, { x: 285, y: yPosition - 80, size: 15 });
+    page.drawText('INVOICE', { x: 250, y: yPosition - 20, size: 24, color: rgb(0.2, 0.4, 0.6) });
+    page.drawText(`#${invoiceNumber}`, { x: 285, y: yPosition - 40, size: 15 });
     yPosition -= 120;
     page.drawText(`Customer Name: ${customer.name}`, { x: 50, y: yPosition, size: 12, font: arabicFont });
     page.drawText(`DATE: ${new Date().toLocaleDateString()}`, { x: 450, y: yPosition, size: 12 });
@@ -229,9 +229,8 @@ async function createAndDownloadInvoice(invoice, logoUrl) {
 
     // Footer
     const footerYPosition = 50;
-    page.drawText('Ansar, Nabatieh', { x: 230, y: footerYPosition, size: 15, font: arabicFont });
-    page.drawText('Phone: +961 76920892', { x: 215, y: footerYPosition - 15, size: 15, font: arabicFont });
-    page.drawText('aboualijomaa@gmail.com', { x: 230, y: footerYPosition - 30, size: 15, font: arabicFont });
+    page.drawText('Ansar, Nabatieh, Lebanon | Phone:+961 76920892  | Email: aboualijomaa@gmail.com', { x: 40, y: footerYPosition, size: 13,  });
+
 
     // Save PDF
     const pdfBytes = await pdfDoc.save();

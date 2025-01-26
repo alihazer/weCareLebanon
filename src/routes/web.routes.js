@@ -22,6 +22,9 @@ router.get('/statistics', isLoggedIn ,(req, res)=>{
 router.get('/creatQuotations', isLoggedIn ,(req, res)=>{
     res.render('pages/creatQuotation', { title: 'creatQuotation' });
 });
+router.get('/create-text-quotation', isLoggedIn ,(req, res)=>{
+    res.render('pages/create-text-quotation', { title: 'create-text-quotation' });
+});
 
 
 // Products pages
