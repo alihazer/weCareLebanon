@@ -54,10 +54,12 @@ if (window.location.pathname=="/suppliers/add") {
             } else {
                 document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messagesup');
-                warningText.textContent = result.error.message;
+                warningText.textContent = result.message;
             }
         } catch (error) {
-            alert('An error occurred while adding the supplier.');
+            document.querySelector('.catcontainer').style.display = 'flex';
+            const warningText = document.getElementById('messagesup');
+            warningText.textContent = 'Failed to add supplier';
         }
     });
 }
@@ -231,7 +233,7 @@ if (window.location.pathname.startsWith("/suppliers/edit")) {
             } else {
                 document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messagesup');
-                warningText.textContent = result.error.message;
+                warningText.textContent = result.message;
             }
         } catch (error) {
             console.error('Error updating supplier:', error);

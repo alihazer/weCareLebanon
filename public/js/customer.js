@@ -57,7 +57,7 @@ if (window.location.pathname=="/customers/add") {
             } else {
                 document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messagecus');
-                warningText.textContent = result.error.message;
+                warningText.textContent = result.message;
             }
         } catch (error) {
             alert('An error occurred while adding the supplier.');
@@ -236,7 +236,7 @@ if (window.location.pathname.startsWith("/customers/edit")) {
             } else {
                 document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messagecus');
-                warningText.textContent = result.error.message;
+                warningText.textContent = result.message;
             }
         } catch (error) {
             console.error('Error updating customer:', error);

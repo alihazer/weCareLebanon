@@ -135,7 +135,7 @@ if (window.location.pathname=="/products/add") {
                 } else {
                     document.querySelector('.catcontainer').style.display = 'flex';
                     const warningText = document.getElementById('message');
-                    warningText.textContent = result.errors;
+                    warningText.textContent = result.message;
 
                 }
             } catch (error) {

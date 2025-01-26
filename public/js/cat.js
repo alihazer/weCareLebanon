@@ -121,7 +121,7 @@ if (window.location.pathname.startsWith("/categories/add")) {
                 document.getElementById('name').value = '';
             } else {
                 document.querySelector('.catcontainer').style.display = 'flex';
-                warningText.textContent = result.error.message || 'An error occurred while adding the category';
+                warningText.textContent = result.message || 'An error occurred while adding the category';
             }
         } catch (error) {
             document.querySelector('.catcontainer').style.display = 'flex';
@@ -207,7 +207,7 @@ if (window.location.pathname.startsWith("/categories/edit")) {
             } else {
                 document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('message');
-                warningText.textContent =result.error.message;
+                warningText.textContent =result.message;
             }
         } catch (error) {
             console.error('Error updating category:', error);

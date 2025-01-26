@@ -32,7 +32,7 @@ const addUser = asyncHandler(async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500);
-        throw new Error("Server error");
+        throw new Error(error.message);
     }
 });
 

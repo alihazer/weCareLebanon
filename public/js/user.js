@@ -46,7 +46,7 @@ if (window.location.pathname=="/allUsers/adduser") {
             } else {
                 document.querySelector('.catcontainer').style.display = 'flex';
                 const warningText = document.getElementById('messageuser');
-                warningText.textContent = result.error.message;
+                warningText.textContent = result.message;
             }
         } catch (error) {
             alert('An error occurred while adding the user.');

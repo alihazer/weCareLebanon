@@ -431,7 +431,7 @@ document.getElementById('addorder').addEventListener('click', async function (e)
         } else {
             document.querySelector('.messageordercontainer').style.display = 'flex';
             const warningText = document.getElementById('messageorder');
-            warningText.textContent = result.error;
+            warningText.textContent = result.message || 'An error occurred while placing the order.';
             document.getElementById('BokeOrder').style.display="block"
             document.getElementById('BokeOrder').addEventListener('click', function () {
                 handleokOrder();
