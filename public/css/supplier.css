@@ -140,6 +140,27 @@
      margin-bottom: 30px;
 }
 
+#headoftableSta , .staticrows{
+    border-bottom: 2px solid var(--second-color);
+    display: flex;
+    align-items: center;
+    min-width: 400px;
+    /* text-align: center; */
+}
+#headquataion , .rowquat {
+    border-bottom: 2px solid var(--second-color);
+    display: flex;
+    align-items: center;
+    min-width: 440px;
+    padding: 10px 0;
+}
+
+.columncheck{
+        display: flex;
+            justify-content: center;
+            width: 10%;
+            flex-grow: 0.5;
+}
 
 .closeinvpro{
     color: white;
@@ -153,6 +174,29 @@
     justify-content: center;
     cursor: pointer;
 }
+
+.selectinquatation{
+    padding: 8px;
+    border-radius: 12px;
+    border: 1px solid #17526B;
+    background-color: transparent;
+    color: #17526B;
+}
+.creatQuotation{
+    background-color: #17526B;
+    border: solid transparent;
+    border-radius: 16px;
+    border-width: 0 0 4px;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    padding: 15px;
+    width: 200px;
+    text-transform: uppercase;
+}
+
 @media screen and (max-width: 600px){
     .containerfields{
         width: 70%;

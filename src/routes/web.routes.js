@@ -19,6 +19,10 @@ router.get('/invoices', isLoggedIn ,(req, res)=>{
 router.get('/statistics', isLoggedIn ,(req, res)=>{
     res.render('pages/statistics', { title: 'Statistics' });
 });
+router.get('/creatQuotations', isLoggedIn ,(req, res)=>{
+    res.render('pages/creatQuotation', { title: 'creatQuotation' });
+});
+
 
 // Products pages
 router.get('/products', isLoggedIn ,(req, res)=>{

@@ -17,7 +17,7 @@ function populateYearDropdown() {
     const yearSelect = document.getElementById('yearSelect');
     const currentYear = new Date().getFullYear();
 
-    for (let year = 2020; year <= currentYear; year++) {
+    for (let year = 2023; year <= currentYear; year++) {
         const option = document.createElement('option');
         option.value = year;
         option.textContent = year;
@@ -30,10 +30,8 @@ function populateYearDropdown() {
 async function fetchDataAndRenderCharts(year) {
     const loadingElement = document.querySelector('.loading');
 
+    loadingElement.style.display = 'flex';
     try {
-
-        loadingElement.style.display = 'flex';
-
    
         const profitResponse = await fetch(`/api/statistics/profit?year=${year}`);
         const profitResult = await profitResponse.json();
@@ -184,7 +182,7 @@ function renderTopProductsTable(data) {
         const monthName = months[monthData.month - 1]; 
 
         const row = document.createElement('div');
-        row.className = 'rows';
+        row.className = 'staticrows';
 
 
         const monthCell = document.createElement('p');

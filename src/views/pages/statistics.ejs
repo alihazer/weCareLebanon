@@ -4,21 +4,23 @@
 </div>
 
 
-    <div class="yearSelection" style="margin-left: 20px;">
-        <label for="yearSelect">Select Year:</label>
-        <select id="yearSelect">
-        </select>
+    <div class="statisticcontainerInv">
+        <div class="yearSelection" style="margin-bottom: 30px;">
+            <label for="yearSelect">Select Year:</label>
+            <select id="yearSelect"></select>
+        </div>
+
+        <div id="profitStatsChart" class="profitStatsChart"></div>
     </div>
+    <div class="statisticcontainerInv">
 
-    <div id="profitStatsChart" class="profitStatsChart"></div>
-
-    <div id="invoiceStatsChart" class="invoiceStatsChart"></div>
-
+        <div id="invoiceStatsChart" class="invoiceStatsChart"></div>
+    </div>
     
     <div class="products">
         <div id="topProductsTable" class="topProductsTable">
             <h2>Top Products by Month</h2>
-            <div class="rows" id="headoftable">
+            <div class="rows" id="headoftableSta">
                 <h2 class="columns">Month</h2>
                 <h2 class="columns">Top Products</h2>
             </div>
