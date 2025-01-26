@@ -3,6 +3,10 @@ import asyncHandler from 'express-async-handler';
 import { v2 as cloudinary } from 'cloudinary';
 import Invoice from '../models/invoice.model.js';
 import mongoose from 'mongoose';
+import  { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import fs from 'fs';
+
+
 
 // @desc get all products
 const getProducts = asyncHandler(async (req, res) => {
@@ -265,6 +269,193 @@ const getProductStats = asyncHandler(async (req, res) => {
         });
     }
 });
+const createQuotation = asyncHandler(async (req, res) => {
+    let { selectedProducts, isWholeSale } = req.body;
 
+    try {
+        selectedProducts = selectedProducts.split(',');
+        const products = await Product.find({ _id: { $in: selectedProducts } });
 
-export {createProduct, getProducts, getProduct, editProduct, deleteProduct, getProductStats};
+        // Create a new PDF document
+        const pdfDoc = await PDFDocument.create();
+        let page = pdfDoc.addPage([600, 800]); // Set page size (width, height)
+        const { width, height } = page.getSize();
+
+        // Set up fonts
+        const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+        const fontSize = 12;
+        const lineHeight = 15;
+
+        // Add company logo (top-left corner)
+        const logoUrl = 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg7k4y5SSYQvLYQkiXVjPHn4ueVgaICSkzRzPGqB7rb0XrQme9c_mN_JJy49nB7cfvVVLrOMnARiXsg4CPczlBIO1JM5pvC7gtJtzl8RhGxii9T8rimBr_4M7bHu5FADWP8NDYuxWqRPUHJOB1zRwmDpj8No6-tmrP0TSzuzZQcmw_CzeSB0RGrRq7x5S0/s400/Untitled-adad1.png';
+        const logoResponse = await fetch(logoUrl);
+        const logoBuffer = await logoResponse.arrayBuffer();
+        const logoImage = await pdfDoc.embedPng(logoBuffer); 
+        const logoDims = logoImage.scale(0.3); 
+        page.drawImage(logoImage, {
+            x: 50, 
+            y: height - 50 - logoDims.height, 
+            width: logoDims.width,
+            height: logoDims.height,
+        });
+
+       
+        const currentDate = new Date().toLocaleDateString();
+        const dateWidth = font.widthOfTextAtSize(currentDate, fontSize);
+        page.drawText(currentDate, {
+            x: width - 50 - dateWidth,
+            y: height - 110,
+            size: fontSize,
+            font,
+            color: rgb(0, 0, 0),
+        });
+
+        
+        let y = height - 100 - logoDims.height; 
+        page.drawText('Quotation', {
+            x: 50,
+            y,
+            size: 20,
+            font,
+            color: rgb(0, 0, 0),
+        });
+        y -= lineHeight * 2; 
+
+        
+        const headers = ['Image', 'Name', 'Details', 'Price'];
+        const columnWidths = [100, 150, 200, 100]; 
+
+        
+        headers.forEach((header, index) => {
+            page.drawText(header, {
+                x: 50 + columnWidths.slice(0, index).reduce((a, b) => a + b, 0),
+                y,
+                size: fontSize,
+                font,
+                color: rgb(0, 0, 0),
+            });
+        });
+        y -= lineHeight * 4; 
+
+        
+        const imageWidth = 80; 
+        const imageHeight = 80; 
+
+      
+        for (const product of products) {
+        
+            if (y < 150) { 
+                page = pdfDoc.addPage([600, 800]); 
+                y = height - 50; 
+
+               
+                headers.forEach((header, index) => {
+                    page.drawText(header, {
+                        x: 50 + columnWidths.slice(0, index).reduce((a, b) => a + b, 0),
+                        y,
+                        size: fontSize,
+                        font,
+                        color: rgb(0, 0, 0),
+                    });
+                });
+                y -= lineHeight * 4; 
+            }
+
+           
+            if (product.image) {
+                try {
+                    const imageResponse = await fetch(product.image);
+                    const imageBuffer = await imageResponse.arrayBuffer();
+
+                    
+                    const imageUrl = product.image.toLowerCase();
+                    let image;
+                    if (imageUrl.endsWith('.png')) {
+                        image = await pdfDoc.embedPng(imageBuffer); 
+                    } else if (imageUrl.endsWith('.jpg') || imageUrl.endsWith('.jpeg')) {
+                        image = await pdfDoc.embedJpg(imageBuffer); 
+                    } else {
+                        console.error('Unsupported image format:', product.image);
+                        continue; 
+                    }
+
+                    
+                    const imageDims = image.scaleToFit(imageWidth, imageHeight);
+
+                    
+                    page.drawImage(image, {
+                        x: 50, 
+                        y: y - imageHeight + 40,
+                        width: imageDims.width,
+                        height: imageDims.height,
+                    });
+                } catch (error) {
+                    console.error('Error embedding image:', error);
+                }
+            }
+
+            
+            page.drawText(product.name, {
+                x: 150, 
+                y,
+                size: fontSize,
+                font,
+                color: rgb(0, 0, 0),
+            });
+            const productDescription = product.details || 'No description';
+            page.drawText(productDescription, {
+                x: 300, 
+                y,
+                size: fontSize,
+                font,
+                color: rgb(0, 0, 0),
+            });
+
+            page.drawText(`$${isWholeSale ? product.wholeSalePrice : product.singlePrice}`, {
+                x: 500, 
+                y,
+                size: fontSize,
+                font,
+                color: rgb(0, 0, 0),
+            });
+
+            
+            y -= Math.max(imageHeight, lineHeight * 2) - 40; 
+            page.drawLine({
+                start: { x: 50, y },
+                end: { x: width - 50, y },
+                thickness: 1,
+                color: rgb(0, 0, 0),
+            });
+            y -= lineHeight * 4; 
+        }
+
+        
+        const footerText = `Ansar, Nabatieh, Lebanon | Phone:+961 76920892  | Email: aboualijomaa@gmail.com`;
+        const footerY = 50; 
+        page.drawText(footerText, {
+            x: 70,
+            y: footerY,
+            size: fontSize,
+            font,
+            color: rgb(0, 0, 0),
+        });
+
+        // Serialize the PDF to bytes
+        const pdfBytes = await pdfDoc.save();
+
+        // Convert PDF bytes to a base64 string
+        const pdfBase64 = Buffer.from(pdfBytes).toString('base64');
+
+        // Send the base64 string as a JSON response
+        res.json({
+            success: true,
+            pdf: pdfBase64,
+        });
+    } catch (error) {
+        console.error('Error creating quotation:', error);
+        res.status(500).json({ success: false, error: 'Failed to create quotation' });
+    }
+});
+
+export {createProduct, getProducts, getProduct, editProduct, deleteProduct, getProductStats, createQuotation};

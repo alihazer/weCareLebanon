@@ -231,7 +231,7 @@ async function createAndDownloadInvoice(invoice, logoUrl) {
     const footerYPosition = 50;
     page.drawText('Ansar, Nabatieh', { x: 230, y: footerYPosition, size: 15, font: arabicFont });
     page.drawText('Phone: +961 76920892', { x: 215, y: footerYPosition - 15, size: 15, font: arabicFont });
-    page.drawText('email@email.com', { x: 230, y: footerYPosition - 30, size: 15, font: arabicFont });
+    page.drawText('aboualijomaa@gmail.com', { x: 230, y: footerYPosition - 30, size: 15, font: arabicFont });
 
     // Save PDF
     const pdfBytes = await pdfDoc.save();
