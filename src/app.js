@@ -61,7 +61,7 @@ app.use('/api/users', usersRoutes);
 app.use('/api/invoice', invoices);
 app.use('/api/statistics', statisticsRoutes);
 
-app.use('/', webRoutes);
+app.use('/', isLoggedIn, webRoutes);
 
 
 

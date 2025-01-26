@@ -16,9 +16,6 @@ router.get('/invoices', isLoggedIn ,(req, res)=>{
     res.render('pages/invoices', { title: 'invoices' });
 });
 
-router.get('/statistics', isLoggedIn ,(req, res)=>{
-    res.render('pages/statistics', { title: 'Statistics' });
-});
 router.get('/creatQuotations', isLoggedIn ,(req, res)=>{
     res.render('pages/creatQuotation', { title: 'creatQuotation' });
 });
@@ -55,6 +52,7 @@ router.get('/categories/edit/:id', isLoggedIn ,(req, res)=>{
 
 // Suppliers pages
 router.get('/suppliers', isLoggedIn ,(req, res)=>{
+    
     res.render('pages/Supplier/supplier', { title: 'Suppliers' });
 });
 router.get('/suppliers/add', isLoggedIn ,(req, res)=>{
@@ -91,6 +89,11 @@ router.get('/allUsers/adduser', isLoggedIn ,(req, res)=>{
 });
 router.get('/allUsers/edit/:id', isLoggedIn ,(req, res)=>{
     res.render('pages/Users/edit-user', { title: 'edit user' });
+});
+
+router.get('/statistics', isLoggedIn ,(req, res)=>{
+    console.log('statistics');
+    res.render('pages/statistics', { title: 'Statistics' });
 });
 
 export default router;
