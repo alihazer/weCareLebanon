@@ -494,3 +494,17 @@ textarea:focus {
         font-size: 14px; /* Smaller font size */
     }
 }
+
+footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--text-color);
+    height: 80px;
+    width: 100%;
+    color: var(--backgorund-color);
+}
+footer a{
+    color: var(--second-back);
+
+}
