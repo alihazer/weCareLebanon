@@ -154,18 +154,23 @@ function AddToInvoice(product, isFromLocalStorage = false) {
             invoiceProduct.setAttribute('data-product-id', product._id);
 
             invoiceProduct.innerHTML = `
-                <div class="productimage" style="background-image: url('${product.image ? product.image : "/images/default-product.png"}');"></div>
-                <div class="productinfo">
-                    <h3 class="productname">${product.name}</h3>
-                    <div class="priceAndquantity">
-                        <p class="productprice">${isFromLocalStorage ? product.price : salevalue == "wholesale" ? product.wholeSalePrice : product.singlePrice}$</p>
-                        <div class="quantitypro">
-                            <p class="min" id="mines">-</p>
-                            <p class="quantitypronb" id="quantitynb">${isFromLocalStorage ? product.quantity : 1}</p>
-                            <p class="min" id="plus">+</p>
-                        </div>
-                    </div>
+            <div class="productimage" style="background-image: url('${product.image ? product.image : "/images/default-product.png"}');"></div>
+            <div class="productinfo">
+              <h3 class="productname">${product.name}</h3>
+              <div class="priceAndquantity">
+                <p class="productprice">${isFromLocalStorage ? product.price : salevalue == "wholesale" ? product.wholeSalePrice : product.singlePrice}$</p>
+                <div class="quantitypro">
+                  <p class="min" id="mines">-</p>
+                  <p class="quantitypronb" id="quantitynb">${isFromLocalStorage ? product.quantity : 1}</p>
+                  <p class="min" id="plus">+</p>
                 </div>
+              </div>
+              
+              <input type="text" class="product-note" 
+                     placeholder="Add note" 
+                     value="${product.note || ''}" 
+                     style="margin-top: 5px; padding: 2px 5px; width: 100%">
+            </div>
                 <svg class="removepro" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="#17526B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -179,12 +184,19 @@ function AddToInvoice(product, isFromLocalStorage = false) {
                     name: product.name,
                     image: product.image,
                     price: salevalue === "wholesale" ? product.wholeSalePrice : product.singlePrice,
-                    purchasePrice: product.purchasePrice, // Ensure purchasePrice is included
+                    purchasePrice: product.purchasePrice,
                     quantity: 1,
                     instock: product.quantity,
-                    isWholeSale: salevalue === "wholesale" ? true : false
-                });
+                    isWholeSale: salevalue === "wholesale",
+                    note: "" 
+                  });
             }
+
+            invoiceProduct.querySelector('.product-note').addEventListener('input', (e) => {
+                const arrayProduct = invoiceProductsArray.find(p => p.key === productKey);
+                arrayProduct.note = e.target.value;
+                saveToLocalStorage();
+              });
 
             // Decrease the quantity
             invoiceProduct.querySelector('#mines').addEventListener('click', () => {
@@ -324,7 +336,9 @@ function loadFromLocalStorage() {
     if (savedProducts) {
         invoiceProductsArray = JSON.parse(savedProducts);
         invoiceProductsArray.forEach(product => {
+            if (!product.note) product.note = "";
             AddToInvoice(product, true);
+            
         });
     }
 }
@@ -383,6 +397,7 @@ document.getElementById('addorder').addEventListener('click', async function (e)
                 quantity: product.quantity,
                 price: product.price,
                 isWholeSale: product.isWholeSale,
+                note: product.note,
             })),
             customerId: customerIdValue,
             discount: parseFloat(document.querySelector('.codeinput').value) || 0,

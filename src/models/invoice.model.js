@@ -13,6 +13,7 @@ const invoiceSchema = new Schema(
         quantity: { type: Number, required: true },
         price: { type: Number, required: true },
         isWholeSale: { type: Boolean, required: true },
+        note: { type: String, default: "" },
       },
     ],
     customerId: { type: mongoose.Schema.Types.ObjectId, ref: "Customer", required: true },

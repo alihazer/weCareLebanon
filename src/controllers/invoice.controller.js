@@ -107,132 +107,198 @@ async function createAndDownloadInvoice(invoice, logoUrl) {
   try {
     const { _id, customerId, products, discount, total, invoiceNumber } = invoice;
 
+    // Constants
+    const PAGE_WIDTH = 600;
+    const PAGE_HEIGHT = 800;
+    const BOTTOM_MARGIN = 50;
+
     // Fetch customer and product details
     const customer = await fetchCustomer(customerId);
     if (!customer) throw new Error('Customer not found');
     const productIds = products.map((p) => p.productId);
     const allProducts = await fetchProducts(productIds);
-    if (!allProducts || allProducts.length === 0) throw new Error('No products found');
+    if (!allProducts?.length) throw new Error('No products found');
 
     // Load Arabic-supported font
     const arabicFontBytes = await fs.readFile('src/utils/font/Amiri-Regular.ttf');
 
     // Create PDF
     const pdfDoc = await PDFDocument.create();
-    pdfDoc.registerFontkit(fontkit); // Register fontkit
+    pdfDoc.registerFontkit(fontkit);
     const arabicFont = await pdfDoc.embedFont(arabicFontBytes);
-    const page = pdfDoc.addPage([600, 800]);
     const bidi = bidiFactory();
-    let yPosition = 750;
+
+    let currentPage;
+    let currentY;
+
+    // Function to add a new page and reset Y position
+    const addNewPage = () => {
+      currentPage = pdfDoc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
+      currentY = PAGE_HEIGHT - 50; // Initial Y position after top margin
+    };
+
+    // Function to draw table headers with vertical lines
+    const drawTableHeader = () => {
+      const colWidths = [200, 80, 80, 80];
+      const tableHeaderHeight = 20;
+
+      // Header background
+      currentPage.drawRectangle({
+        x: 50,
+        y: currentY,
+        width: colWidths.reduce((a, b) => a + b, 0),
+        height: tableHeaderHeight,
+        color: rgb(0.8, 0.8, 0.8),
+      });
+
+      // Header text
+      currentPage.drawText('Product', { x: 50, y: currentY + 5, size: 12 });
+      currentPage.drawText('Quantity', { x: 50 + colWidths[0], y: currentY + 5, size: 12 });
+      currentPage.drawText('Price', { x: 50 + colWidths[0] + colWidths[1], y: currentY + 5, size: 12 });
+      currentPage.drawText('Total', { x: 50 + colWidths[0] + colWidths[1] + colWidths[2], y: currentY + 5, size: 12 });
+
+      // Vertical lines for columns
+      let xPos = 30;
+      for (const width of colWidths) {
+        xPos += width;
+        currentPage.drawLine({
+          start: { x: xPos, y: currentY },
+          end: { x: xPos, y: currentY - tableHeaderHeight },
+          thickness: 1,
+          color: rgb(0, 0, 0),
+        });
+      }
+
+      currentY -= tableHeaderHeight;
+    };
+
+    // Initialize first page
+    addNewPage();
 
     // Add logo
     if (logoUrl) {
       const logoImageBytes = await fetch(logoUrl).then((res) => res.arrayBuffer());
       const logoImage = await pdfDoc.embedPng(logoImageBytes);
       const logoDims = logoImage.scale(0.3);
-      page.drawImage(logoImage, { x: 20, y: yPosition - 80, width: logoDims.width, height: logoDims.height });
+      currentPage.drawImage(logoImage, {
+        x: 20,
+        y: currentY - 80,
+        width: logoDims.width,
+        height: logoDims.height,
+      });
     }
 
-    // Reshape the Arabic text
-    const reshaperCustomerAddress = ArabicReshaper.convertArabic(customer.address);
-
-    // Get the embedding levels for bidirectional text
-    const embeddingLevels = bidi.getEmbeddingLevels(reshaperCustomerAddress);
-
-    // Get the reorder segments
-    const flips = bidi.getReorderSegments(
-      reshaperCustomerAddress, // the reshaped input string
-      embeddingLevels          // the result object from getEmbeddingLevels
-    );
-
-    // Rebuild the text with correct order
+    // Process customer address
+    const reshapedAddress = ArabicReshaper.convertArabic(customer.address);
+    const embeddingLevels = bidi.getEmbeddingLevels(reshapedAddress);
+    const flips = bidi.getReorderSegments(reshapedAddress, embeddingLevels);
     let reorderedText = '';
-    flips.forEach(range => {
-      const [start, end] = range;
-
-      // Extract the range and reverse it for RTL
-      const segment = reshaperCustomerAddress.slice(start, end + 1);
-      reorderedText += segment.split('').reverse().join('');
+    flips.forEach(([start, end]) => {
+      reorderedText += reshapedAddress.slice(start, end + 1).split('').reverse().join('');
     });
 
     // Invoice Header
-    page.drawText('INVOICE', { x: 250, y: yPosition - 20, size: 24, color: rgb(0.2, 0.4, 0.6) });
-    page.drawText(`#${invoiceNumber}`, { x: 285, y: yPosition - 40, size: 15 });
-    yPosition -= 120;
-    page.drawText(`Customer Name: ${customer.name}`, { x: 50, y: yPosition, size: 12, font: arabicFont });
-    page.drawText(`DATE: ${new Date().toLocaleDateString()}`, { x: 450, y: yPosition, size: 12 });
-    yPosition -= 20;
-    page.drawText(`Phone Number: ${customer.phone}`, { x: 50, y: yPosition, size: 12, font: arabicFont });
-    yPosition -= 20;
-    page.drawText(`Address: ${reorderedText}`, { x: 50, y: yPosition, size: 12, font: arabicFont });
-    yPosition -= 40;
+    currentPage.drawText('INVOICE', { x: 250, y: currentY - 20, size: 24, color: rgb(0.2, 0.4, 0.6) });
+    currentPage.drawText(`#${invoiceNumber}`, { x: 280, y: currentY - 40, size: 15 });
+    currentY -= 120;
 
-    // Table Header with gray background and vertical lines
-    const colWidths = [150, 100, 100, 100]; // Set fixed column widths
-    const tableHeaderHeight = 20;
-    const tableHeight = allProducts.length * 10 + tableHeaderHeight; // Calculate height based on the number of products
+    // Customer Details
+    currentPage.drawText(`Customer Name: ${customer.name}`, { x: 50, y: currentY, size: 12, font: arabicFont });
+    currentPage.drawText(`DATE: ${new Date().toLocaleDateString()}`, { x: 450, y: currentY, size: 12 });
+    currentY -= 20;
+    currentPage.drawText(`Phone Number: ${customer.phone}`, { x: 50, y: currentY, size: 12, font: arabicFont });
+    currentY -= 20;
+    currentPage.drawText(`Address: ${reorderedText}`, { x: 50, y: currentY, size: 12, font: arabicFont });
+    currentY -= 40;
 
-    // Draw gray background for header row
-    page.drawRectangle({
-      x: 50,
-      y: yPosition,
-      width: colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3],
-      height: tableHeaderHeight,
-      color: rgb(0.8, 0.8, 0.8), // Gray color
-    });
+    // Draw initial table header
+    drawTableHeader();
 
-    // Draw Table Header text
-    page.drawText('  Product', { x: 50, y: yPosition + 5, size: 12 });
-    page.drawText('Quantity', { x: 50 + colWidths[0], y: yPosition + 5, size: 12 });
-    page.drawText('Price', { x: 50 + colWidths[0] + colWidths[1], y: yPosition + 5, size: 12 });
-    page.drawText('Total', { x: 50 + colWidths[0] + colWidths[1] + colWidths[2], y: yPosition + 5, size: 12 });
-
-    // Draw vertical lines for each column
-    page.drawRectangle({ x: 20 + colWidths[0], y: yPosition - 10, width: 0, height: tableHeaderHeight + 10, color: rgb(0, 0, 0) }); // Line 1
-    page.drawRectangle({ x: 20 + colWidths[0] + colWidths[1], y: yPosition - 10, width: 0, height: tableHeaderHeight + 10, color: rgb(0, 0, 0) }); // Line 2
-    page.drawRectangle({ x: 20 + colWidths[0] + colWidths[1] + colWidths[2], y: yPosition - 10, width: 0, height: tableHeaderHeight + 10, color: rgb(0, 0, 0) }); // Line 3
-
-    yPosition -= tableHeaderHeight;
-
+    // Process products
     let totalPrice = 0;
-
-    // Product Rows
     for (const product of allProducts) {
       const productDetails = products.find((p) => p.productId.toString() === product._id.toString());
       const unitPrice = productDetails.isWholeSale ? product.wholeSalePrice : product.singlePrice;
       const productTotal = productDetails.quantity * unitPrice;
       totalPrice += productTotal;
+      const note = productDetails.note || '';
 
-      // Draw Product Rows
-      page.drawText(`  ${product.name}`, { x: 50, y: yPosition, size: 10, font: arabicFont });
-      page.drawText(`  ${productDetails.quantity.toString()}`, { x: 50 + colWidths[0], y: yPosition, size: 10 });
-      page.drawText(`  $${unitPrice.toFixed(2)}`, { x: 50 + colWidths[0] + colWidths[1], y: yPosition, size: 10 });
-      page.drawText(`  $${productTotal.toFixed(2)}`, { x: 50 + colWidths[0] + colWidths[1] + colWidths[2], y: yPosition, size: 10 });
+      // Calculate row height
+      const lineHeight = 12;
+      const rowHeight = lineHeight + 5;
 
-      // Draw vertical lines between columns for product rows
-      page.drawRectangle({ x: 20 + colWidths[0], y: yPosition, width: 0, height: 10, color: rgb(0, 0, 0) }); // Line 1
-      page.drawRectangle({ x: 20 + colWidths[0] + colWidths[1], y: yPosition, width: 0, height: 10, color: rgb(0, 0, 0) }); // Line 2
-      page.drawRectangle({ x: 20 + colWidths[0] + colWidths[1] + colWidths[2], y: yPosition, width: 0, height: 10, color: rgb(0, 0, 0) }); // Line 3
+      // Check if new page is needed
+      if (currentY - rowHeight < BOTTOM_MARGIN) {
+        addNewPage();
+        drawTableHeader();
+      }
 
-      yPosition -= 10;
+      // Draw product name and note
+      currentPage.drawText(product.name, {
+        x: 50,
+        y: currentY,
+        size: 10,
+        font: arabicFont,
+        maxWidth: 200 * 0.5,
+      });
+
+      if (note) {
+        currentPage.drawText(`(${note} )`, {
+          x: 50 + 70,
+          y: currentY,
+          size: 8,
+          font: arabicFont,
+          color: rgb(0.5, 0.5, 0.5),
+          maxWidth: 200 * 0.5,
+        });
+      }
+
+      // Draw other columns
+      currentPage.drawText(productDetails.quantity.toString(), { x: 250, y: currentY, size: 10 });
+      currentPage.drawText(`$${unitPrice.toFixed(2)}`, { x: 330, y: currentY, size: 10 });
+      currentPage.drawText(`$${productTotal.toFixed(2)}`, { x: 410, y: currentY, size: 10 });
+
+      // Vertical lines for product rows
+      const colWidths = [200, 80, 80, 80];
+      let xPos = 30;
+      for (const width of colWidths) {
+        xPos += width;
+        currentPage.drawLine({
+          start: { x: xPos, y: currentY + 5 },
+          end: { x: xPos, y: currentY - rowHeight + 5 },
+          thickness: 1,
+          color: rgb(0, 0, 0),
+        });
+      }
+
+      currentY -= rowHeight - 5;
     }
 
-    // Totals
-    yPosition -= 20;
+    // Check space for totals (3 lines @ 20 each + footer)
+    if (currentY - 60 < BOTTOM_MARGIN) {
+      addNewPage();
+    }
+
+    // Draw totals
     const discountAmount = totalPrice * (discount / 100);
+    currentY -= 40;
+    currentPage.drawText(`Subtotal: $${totalPrice.toFixed(2)}`, { x: 350, y: currentY, size: 12 });
+    currentY -= 20;
+    currentPage.drawText(`Discount (${discount}%): -$${discountAmount.toFixed(2)}`, { x: 350, y: currentY, size: 12 });
+    currentY -= 20;
+    currentPage.drawText(`Total: $${total.toFixed(2)}`, { x: 350, y: currentY, size: 14, color: rgb(1, 0, 0) });
+    currentY -= 20;
 
-    page.drawText(`Subtotal: $${totalPrice.toFixed(2)}`, { x: 350, y: yPosition, size: 12 });
-    yPosition -= 20;
-    page.drawText(`Discount (${discount}%): -$${discountAmount.toFixed(2)}`, { x: 350, y: yPosition, size: 12 });
-    yPosition -= 20;
-    page.drawText(`Total: $${total.toFixed(2)}`, { x: 350, y: yPosition, size: 14, color: rgb(1, 0, 0) });
+    // Ensure footer is on last page
+    if (currentY < BOTTOM_MARGIN) {
+      addNewPage();
+    }
+    currentPage.drawText('Ansar, Nabatieh, Lebanon | Phone:+961 76920892  | Email: aboualijomaa@gmail.com', {
+      x: 40,
+      y: 50,
+      size: 13,
+    });
 
-    // Footer
-    const footerYPosition = 50;
-    page.drawText('Ansar, Nabatieh, Lebanon | Phone:+961 76920892  | Email: aboualijomaa@gmail.com', { x: 40, y: footerYPosition, size: 13,  });
-
-
-    // Save PDF
     const pdfBytes = await pdfDoc.save();
     return pdfBytes;
   } catch (error) {
@@ -240,7 +306,6 @@ async function createAndDownloadInvoice(invoice, logoUrl) {
     return null;
   }
 }
-
 
   
 
@@ -265,7 +330,6 @@ const calculateProductProfit = async (products, discountAmmount) => {
   }
 
   const profitWithDiscount = totalProfit - discountAmmount;
-  console.log('Total Profit:', profitWithDiscount);
   return profitWithDiscount;
 }
 

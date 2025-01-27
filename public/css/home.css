@@ -473,3 +473,15 @@ body::-webkit-scrollbar-thumb {
       height: 40px;
     }
   }
+
+  .product-note {
+    font-size: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f8f8;
+  }
+  
+  .product-note:focus {
+    outline: none;
+    border-color: #17526B;
+  }
