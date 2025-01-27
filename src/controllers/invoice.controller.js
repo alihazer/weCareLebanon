@@ -217,7 +217,7 @@ async function createAndDownloadInvoice(invoice, logoUrl) {
     // Process products
     let totalPrice = 0;
     for (const product of allProducts) {
-      const productDetails = products.find((p) => p.productId.toString() === product._id.toString());
+      const productDetails = products.find((p) => p.productId._id.toString() === product._id.toString());
       const unitPrice = productDetails.isWholeSale ? product.wholeSalePrice : product.singlePrice;
       const productTotal = productDetails.quantity * unitPrice;
       totalPrice += productTotal;
@@ -417,6 +417,28 @@ const getAllInvoices = asyncHandler(async (req, res) => {
   }
 });
 
+const showInvoice = asyncHandler(async (req, res) => {
+  try {
+    const invoiceId = req.params.id;
+    const invoice = await Invoice.findById(invoiceId).populate({ path: "products.productId"});
+    if (!invoice) {
+      return res.status(404).json({ status: false, message: "Invoice not found" });
+    }
+    const logo =  "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg7k4y5SSYQvLYQkiXVjPHn4ueVgaICSkzRzPGqB7rb0XrQme9c_mN_JJy49nB7cfvVVLrOMnARiXsg4CPczlBIO1JM5pvC7gtJtzl8RhGxii9T8rimBr_4M7bHu5FADWP8NDYuxWqRPUHJOB1zRwmDpj8No6-tmrP0TSzuzZQcmw_CzeSB0RGrRq7x5S0/s400/Untitled-adad1.png"
+    const pdfBytes = await createAndDownloadInvoice(invoice, logo);
+    if (!pdfBytes) {
+      return res.status(500).json({ status: false, message: "Error creating invoice" });
+    }
+    const customer = await Customer.findById(invoice.customerId);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=invoice-${invoice.invoiceNumber}-${customer.name}.pdf`);
+    res.status(200).send(Buffer.from(pdfBytes));
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+});
 
 
-export {createInvoice, getCustomerInvoices, getAllInvoices};
+
+
+export {createInvoice, getCustomerInvoices, getAllInvoices, showInvoice};

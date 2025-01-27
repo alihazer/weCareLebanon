@@ -25,8 +25,8 @@ async function getallinvoices() {
                 <p class="columns">${inv.invoiceNumber}</p>
                 <p class="columns">${inv.discount}%</p>
                 <p class="columns">${inv.total}$</p>
-                <p class="columns">${inv.profit}$</p>
-                <div class="columns"><p class="showProductsBtn">Show Products</p></div>
+                <p class="columns">${inv.profit ? inv.profit.toFixed(2) : '0.00'}$</p>
+                <div class="columns"><p class="showProductsBtn">Show Products</p><br><a style="text-decoration: none" href="/api/invoice/invoice/${inv._id}" target=_blank class="showProductsBtn">Download</a></div>
             `;
         
             invContainer.appendChild(invsElement);
