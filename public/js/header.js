@@ -62,7 +62,7 @@ document.getElementById('logoutButton').addEventListener('click', async () => {
         });
         const result = await response.json();
         if (response.ok) {
-            window.location.href = '/login';
+            window.location.href = '/';
         } else {
             alert('Failed to logout');
         }

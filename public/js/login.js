@@ -1,5 +1,5 @@
 if (window.location.pathname=="/login") {
-
+    console.log('login page');
     document.getElementById('loginfrom').addEventListener('submit', async function (e) {
         e.preventDefault(); 
         document.getElementById('loginbutton').disabled = true;

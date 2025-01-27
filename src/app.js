@@ -61,12 +61,12 @@ app.use('/api/users', usersRoutes);
 app.use('/api/invoice', invoices);
 app.use('/api/statistics', statisticsRoutes);
 
-app.use('/', isLoggedIn, webRoutes);
+app.use('/', webRoutes);
 
 
 
 // Error handling middlewares
-app.use(isLoggedIn, notFoundHandler);
-app.use(isLoggedIn, globalErrorHandler);
+app.use(isLoggedIn ,notFoundHandler);
+app.use(isLoggedIn ,globalErrorHandler);
 
 export default app;
