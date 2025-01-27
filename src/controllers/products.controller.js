@@ -269,6 +269,7 @@ const getProductStats = asyncHandler(async (req, res) => {
         });
     }
 });
+
 const createQuotation = asyncHandler(async (req, res) => {
     let { selectedProducts, isWholeSale } = req.body;
 
@@ -299,7 +300,6 @@ const createQuotation = asyncHandler(async (req, res) => {
             height: logoDims.height,
         });
 
-       
         const currentDate = new Date().toLocaleDateString();
         const dateWidth = font.widthOfTextAtSize(currentDate, fontSize);
         page.drawText(currentDate, {
@@ -310,7 +310,6 @@ const createQuotation = asyncHandler(async (req, res) => {
             color: rgb(0, 0, 0),
         });
 
-        
         let y = height - 100 - logoDims.height; 
         page.drawText('Quotation', {
             x: 50,
@@ -321,11 +320,11 @@ const createQuotation = asyncHandler(async (req, res) => {
         });
         y -= lineHeight * 2; 
 
-        
+        // Define column headers and widths
         const headers = ['Image', 'Name', 'Details', 'Price'];
-        const columnWidths = [100, 150, 200, 100]; 
+        const columnWidths = [100, 150, 200]; 
 
-        
+        // Draw headers
         headers.forEach((header, index) => {
             page.drawText(header, {
                 x: 50 + columnWidths.slice(0, index).reduce((a, b) => a + b, 0),
@@ -335,20 +334,29 @@ const createQuotation = asyncHandler(async (req, res) => {
                 color: rgb(0, 0, 0),
             });
         });
+
+        // Add vertical lines between columns
+        let xPosition = 40;
+        columnWidths.forEach((width) => {
+            xPosition += width;
+            page.drawLine({
+                start: { x: xPosition, y: y + (lineHeight - 30) }, // Start from below the header
+                end: { x: xPosition, y: 50 }, // End at the footer margin
+                thickness: 1,
+                color: rgb(0, 0, 0),
+            });
+        });
+
         y -= lineHeight * 4; 
 
-        
         const imageWidth = 80; 
         const imageHeight = 80; 
 
-      
         for (const product of products) {
-        
             if (y < 150) { 
                 page = pdfDoc.addPage([600, 800]); 
                 y = height - 50; 
 
-               
                 headers.forEach((header, index) => {
                     page.drawText(header, {
                         x: 50 + columnWidths.slice(0, index).reduce((a, b) => a + b, 0),
@@ -358,16 +366,26 @@ const createQuotation = asyncHandler(async (req, res) => {
                         color: rgb(0, 0, 0),
                     });
                 });
+
+                xPosition = 40;
+                columnWidths.forEach((width) => {
+                    xPosition += width;
+                    page.drawLine({
+                        start: { x: xPosition, y: y + (lineHeight - 15) },
+                        end: { x: xPosition, y: 50 },
+                        thickness: 1,
+                        color: rgb(0, 0, 0),
+                    });
+                });
+
                 y -= lineHeight * 4; 
             }
 
-           
             if (product.image) {
                 try {
                     const imageResponse = await fetch(product.image);
                     const imageBuffer = await imageResponse.arrayBuffer();
 
-                    
                     const imageUrl = product.image.toLowerCase();
                     let image;
                     if (imageUrl.endsWith('.png')) {
@@ -379,10 +397,8 @@ const createQuotation = asyncHandler(async (req, res) => {
                         continue; 
                     }
 
-                    
                     const imageDims = image.scaleToFit(imageWidth, imageHeight);
 
-                    
                     page.drawImage(image, {
                         x: 50, 
                         y: y - imageHeight + 40,
@@ -394,7 +410,6 @@ const createQuotation = asyncHandler(async (req, res) => {
                 }
             }
 
-            
             page.drawText(product.name, {
                 x: 150, 
                 y,
@@ -419,7 +434,6 @@ const createQuotation = asyncHandler(async (req, res) => {
                 color: rgb(0, 0, 0),
             });
 
-            
             y -= Math.max(imageHeight, lineHeight * 2) - 40; 
             page.drawLine({
                 start: { x: 50, y },
@@ -430,12 +444,11 @@ const createQuotation = asyncHandler(async (req, res) => {
             y -= lineHeight * 4; 
         }
 
-        
         const footerText = `Ansar, Nabatieh, Lebanon | Phone:+961 76920892  | Email: aboualijomaa@gmail.com`;
         const footerY = 50; 
         page.drawText(footerText, {
             x: 70,
-            y: footerY,
+            y: footerY - 20,
             size: fontSize,
             font,
             color: rgb(0, 0, 0),
@@ -457,6 +470,7 @@ const createQuotation = asyncHandler(async (req, res) => {
         res.status(500).json({ success: false, error: 'Failed to create quotation' });
     }
 });
+
 
 
 const createTextQuotation = asyncHandler(async (req, res) => {
