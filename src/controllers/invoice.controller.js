@@ -188,27 +188,36 @@ async function createAndDownloadInvoice(invoice, logoUrl) {
       });
     }
 
-    // Process customer address
-    const reshapedAddress = ArabicReshaper.convertArabic(customer.address);
-    const embeddingLevels = bidi.getEmbeddingLevels(reshapedAddress);
-    const flips = bidi.getReorderSegments(reshapedAddress, embeddingLevels);
-    let reorderedText = '';
-    flips.forEach(([start, end]) => {
-      reorderedText += reshapedAddress.slice(start, end + 1).split('').reverse().join('');
-    });
+
 
     // Invoice Header
-    currentPage.drawText('INVOICE', { x: 250, y: currentY - 20, size: 24, color: rgb(0.2, 0.4, 0.6) });
+    currentPage.drawText('INVOICE', { x: 250, y: currentY - 20, size: 24, color: rgb(0.2, 0.4, 0.6), bold: true });
     currentPage.drawText(`#${invoiceNumber}`, { x: 280, y: currentY - 40, size: 15 });
     currentY -= 120;
 
     // Customer Details
-    currentPage.drawText(`Customer Name: ${customer.name}`, { x: 50, y: currentY, size: 12, font: arabicFont });
+    currentPage.drawText(`Customer Name:`, { x: 50, y: currentY, size: 12, font: arabicFont},);
+    currentPage.drawText(`Customer Name`, { x: 50, y: currentY, size: 12, font: arabicFont},);
+    currentPage.drawText(`Customer Name`, { x: 50, y: currentY, size: 12, font: arabicFont},);
+    currentPage.drawText(customer.name, { x: 135, y: currentY, size: 12, font: arabicFont},);
+
+    currentPage.drawText(`DATE: ${new Date().toLocaleDateString()}`, { x: 450, y: currentY, size: 12 });
+    currentPage.drawText(`DATE: ${new Date().toLocaleDateString()}`, { x: 450, y: currentY, size: 12 });
     currentPage.drawText(`DATE: ${new Date().toLocaleDateString()}`, { x: 450, y: currentY, size: 12 });
     currentY -= 20;
-    currentPage.drawText(`Phone Number: ${customer.phone}`, { x: 50, y: currentY, size: 12, font: arabicFont });
+    currentPage.drawText(`Phone Number:`, { x: 50, y: currentY, size: 12, font: arabicFont });
+    currentPage.drawText(`Phone Number:`, { x: 50, y: currentY, size: 12, font: arabicFont });
+    currentPage.drawText(`Phone Number:`, { x: 50, y: currentY, size: 12, font: arabicFont });
+
+    currentPage.drawText(customer.phone, { x: 135, y: currentY, size: 12, font: arabicFont });
     currentY -= 20;
-    currentPage.drawText(`Address: ${reorderedText}`, { x: 50, y: currentY, size: 12, font: arabicFont });
+    currentPage.drawText(`Address details:`, { x: 50, y: currentY, size: 12, font: arabicFont });
+    currentPage.drawText(`Address details:`, { x: 50, y: currentY, size: 12, font: arabicFont });
+    currentPage.drawText(`Address details:`, { x: 50, y: currentY, size: 12, font: arabicFont });
+
+    currentPage.drawText(customer.address, { x: 135, y: currentY, size: 12, font: arabicFont });
+
+
     currentY -= 40;
 
     // Draw initial table header
@@ -283,9 +292,16 @@ async function createAndDownloadInvoice(invoice, logoUrl) {
     const discountAmount = totalPrice * (discount / 100);
     currentY -= 40;
     currentPage.drawText(`Subtotal: $${totalPrice.toFixed(2)}`, { x: 350, y: currentY, size: 12 });
+    currentPage.drawText(`Subtotal: $${totalPrice.toFixed(2)}`, { x: 350, y: currentY, size: 12 });
+    currentPage.drawText(`Subtotal: $${totalPrice.toFixed(2)}`, { x: 350, y: currentY, size: 12 });
     currentY -= 20;
     currentPage.drawText(`Discount (${discount}%): -$${discountAmount.toFixed(2)}`, { x: 350, y: currentY, size: 12 });
-    currentY -= 20;
+    currentPage.drawText(`Discount (${discount}%): -$${discountAmount.toFixed(2)}`, { x: 350, y: currentY, size: 12 });
+    currentPage.drawText(`Discount (${discount}%): -$${discountAmount.toFixed(2)}`, { x: 350, y: currentY, size: 12 });
+
+    currentY -= 20; 
+    currentPage.drawText(`Total: $${total.toFixed(2)}`, { x: 350, y: currentY, size: 14, color: rgb(1, 0, 0) });
+    currentPage.drawText(`Total: $${total.toFixed(2)}`, { x: 350, y: currentY, size: 14, color: rgb(1, 0, 0) });
     currentPage.drawText(`Total: $${total.toFixed(2)}`, { x: 350, y: currentY, size: 14, color: rgb(1, 0, 0) });
     currentY -= 20;
 
