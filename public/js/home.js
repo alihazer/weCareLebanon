@@ -169,7 +169,7 @@ function AddToInvoice(product, isFromLocalStorage = false) {
               <input type="text" class="product-note" 
                      placeholder="Add note" 
                      value="${product.note || ''}" 
-                     style="margin-top: 5px; padding: 2px 5px; width: 100%">
+                    >
             </div>
                 <svg class="removepro" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="#17526B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -479,13 +479,11 @@ function calculateProfit(subtotal) {
     let totalProfit = 0;
 
     invoiceProductsArray.forEach(product => {
-        const unitProfit = product.isWholeSale ? 
-            (product.price - product.purchasePrice) : 
-            (product.price - product.purchasePrice);
+        const unitProfit = product.price - product.purchasePrice;
 
         totalProfit += unitProfit * product.quantity;
     });
 
     const profitWithDiscount = totalProfit - discount;
-    document.getElementById('profit').textContent = `${profitWithDiscount.toFixed(2)}$`;
+    document.getElementById('profit').textContent = `${(isNaN(profitWithDiscount) ? 0 : profitWithDiscount.toFixed(2))}$`;
 }
