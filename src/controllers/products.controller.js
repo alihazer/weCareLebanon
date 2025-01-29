@@ -444,7 +444,7 @@ const createQuotation = asyncHandler(async (req, res) => {
             y -= lineHeight * 4; 
         }
 
-        const footerText = `Ansar, Nabatieh, Lebanon | Phone:+961 76920892  | Email: aboualijomaa@gmail.com`;
+        const footerText = `Ansar, Nabatieh, Lebanon | Phone:+961 76920892  | Email: info@wecarelebanon.com`;
         const footerY = 50; 
         page.drawText(footerText, {
             x: 70,
@@ -561,7 +561,7 @@ const createTextQuotation = asyncHandler(async (req, res) => {
         }
 
         // Add footer (company address, phone number, and email)
-        const footerText = `Ansar, Nabatieh, Lebanon | Phone:+961 76920892  | Email: aboualijomaa@gmail.com`;
+        const footerText = `Ansar, Nabatieh, Lebanon | Phone:+961 76920892  | Email: info@wecarelebanon.com`;
         const footerY = 50; // Y position for the footer
         page.drawText(footerText, {
             x: 50,
