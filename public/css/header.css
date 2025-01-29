@@ -505,6 +505,7 @@ footer{
     height: 80px;
     width: 100%;
     color: var(--backgorund-color);
+    margin-top: 60px;
 }
 footer a{
     color: var(--second-back);
