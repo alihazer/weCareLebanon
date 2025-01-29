@@ -298,6 +298,12 @@ async function getinvoicesbyCus() {
     
         const response = await fetch(`/api/invoice/customer/${cusid}?${fromdate}${todate}`);
         const invoice = await response.json();
+
+    if(!response.ok){
+        document.querySelector(".loading").style.display="none"
+        document.querySelector('.NhaveProSup').style.display="block";
+        return;
+    }
         
     if (invoice.data.length === 0) {
         document.querySelector(".loading").style.display="none"
