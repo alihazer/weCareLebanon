@@ -208,12 +208,6 @@ if (window.location.pathname.startsWith("/suppliers/edit")) {
             warningText.textContent = 'phone must be 8 digits';
             return;
         }
-        else if (address.length<6) {
-            document.querySelector('.catcontainer').style.display = 'flex';
-            const warningText = document.getElementById('messagesup');
-            warningText.textContent = 'address must be at least 6 characters';
-            return;
-        }
 
         try {
             const response = await fetch(`/api/suppliers/edit/${supid}`, {
