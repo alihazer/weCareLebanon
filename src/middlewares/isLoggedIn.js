@@ -3,17 +3,17 @@ import jwt from 'jsonwebtoken';
 export const isLoggedIn = (req, res, next) => {
   try {
  
-  //   let token;
-  //   if (req.cookies && req.cookies.token) {
-  //       token = req.cookies.token;
-  //   }
+    let token;
+    if (req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
 
-  //   if (!token) {
-  //     return res.redirect('/login');
-  //   }
+    if (!token) {
+      return res.redirect('/login');
+    }
 
-  //   const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  //   req.user = decoded;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
     next(); 
   } catch (error) {
     console.error(error.message);
