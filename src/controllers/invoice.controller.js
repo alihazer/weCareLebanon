@@ -309,7 +309,7 @@ async function createAndDownloadInvoice(invoice, logoUrl) {
     if (currentY < BOTTOM_MARGIN) {
       addNewPage();
     }
-    currentPage.drawText('Ansar, Nabatieh, Lebanon | Phone:+961 76920892  | Email: info@wecarelebanon.com', {
+    currentPage.drawText('Ansar, Nabatieh, Lebanon | Phone:+961 76920892  | Email: info@wecare-lebanon.com', {
       x: 40,
       y: 50,
       size: 13,
