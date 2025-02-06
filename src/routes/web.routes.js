@@ -96,4 +96,8 @@ router.get('/statistics', isLoggedIn ,(req, res)=>{
     res.render('pages/statistics', { title: 'Statistics' });
 });
 
+router.get('/refund-invoice', isLoggedIn ,(req, res)=>{
+    res.render('pages/refund-invoice', { title: 'Refund Invoice' });
+});
+
 export default router;

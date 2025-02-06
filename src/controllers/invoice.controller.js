@@ -9,6 +9,7 @@ import fontkit from '@pdf-lib/fontkit';
 import ArabicReshaper from 'arabic-reshaper';
 import bidiFactory from 'bidi-js'
 import Profit from '../models/profit.model.js';
+import mongoose from 'mongoose';
 
 
 
@@ -454,7 +455,31 @@ const showInvoice = asyncHandler(async (req, res) => {
   }
 });
 
+const refundInvoice = asyncHandler(async (req, res)=>{
+  try {
+    const { invoice_nb } = req.body;
+  if(!invoice_nb){
+    return res.status(400).json({ status: false, message: "Invoice number is required" });
+  }
+  const invoice = await Invoice.findOne({ invoiceNumber: invoice_nb });
+  if(!invoice){
+    return res.status(404).json({ status: false, message: "Invoice not found" });
+  }
+  const products = invoice.products;
+  for(const product of products){
+    await Product.findByIdAndUpdate(product.productId, { $inc: { quantity: product.quantity } });
+  }
+  const invoiceProfit = await Profit.findByIdAndDelete(new mongoose.Types.ObjectId(invoice._id));
+  await Invoice.findByIdAndDelete(invoice._id);
+  return res.status(200).json({ status: true, message: "Invoice refunded successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: "Internal server Error" });
+  }
+
+})
 
 
 
-export {createInvoice, getCustomerInvoices, getAllInvoices, showInvoice};
+
+export {createInvoice, getCustomerInvoices, getAllInvoices, showInvoice, refundInvoice};

@@ -1,0 +1,35 @@
+<div class="Maindiv">
+     <h1 class="titleaddproducts">Refund an Invoice</h1>
+     <a href="/invoices" class="toaddProduct">Invoices</a>
+ </div>
+ 
+ 
+ <form class="infoProduct" id="refundInvoice" method="post">
+         
+          <label for="name" class="namelabel">Invoice Number</label>
+          <input type="number" min="0" name="invoice_nb" id="invoice_nb" class="inputname">
+ 
+     <button type="submit" class="add" id="catsubmit">Refund</button>
+ </form>
+
+ <div class="refundcontainer">
+     <div class="addAlerts" id="messagesadd" >
+         <p id="message"></p>
+         <button onclick="handleOkRefund()" class="ok" >ok</button>
+     </div>
+</div>
+ 
+<div id="customAlert" >
+     <p>Are you sure you want to refund this invoice?</p>
+     <div class="sure">
+         <button onclick="handleYesRefund()" class="yes">Yes</button>
+         <button onclick="handleNoRefund()" class="yes">No</button>
+     </div>
+</div>
+ 
+
+ <div id="loading">
+     <div class="loader">
+         <div class="justify-content-center jimu-primary-loading"></div>
+     </div>
+ </div>

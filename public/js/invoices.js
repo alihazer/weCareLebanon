@@ -67,3 +67,61 @@ if (window.location.pathname=="/invoices") {
         document.querySelector(".proAninv").style.display = "none";
     });
 }
+
+if(window.location.pathname=="/refund-invoice"){
+    const loading = document.getElementById('loading');
+    loading.style.display = 'none';
+    const form = document.getElementById('refundInvoice');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const invoice_nb = formData.get('invoice_nb');
+        const customAlert = document.getElementById('customAlert');
+        customAlert.style.display = 'flex';
+    });
+
+
+}
+const handleYesRefund = async () => {
+    const form = document.getElementById('refundInvoice');
+    const formData = new FormData(form);
+    const loading = document.getElementById('loading');
+    const invoice_nb = formData.get('invoice_nb');
+    const customAlert = document.getElementById('customAlert');
+    const message = document.getElementById('message');
+    const container = document.querySelector('.refundcontainer');
+    loading.style.display = 'flex';
+    customAlert.style.display = 'none';
+
+    const response = await fetch('/api/invoice/refund-invoice', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ invoice_nb }),
+    });
+    const data = await response.json();
+    if (response.ok) {
+        document.getElementById('customAlert').style.display = 'none';
+        const input = document.getElementById('invoice_nb');
+        container.style.display = 'flex';
+        console.log(container);
+        loading.style.display = 'none';
+        message.innerText = data.message;
+        input.value = '';
+    }
+    else {
+        loading.style.display = 'none';
+        document.querySelector('.refundcontainer').style.display = 'flex';
+        message.innerText = data.message;
+    }
+};
+
+const handleNoRefund = () => {
+    document.getElementById('customAlert').style.display = 'none';
+};
+
+const handleOkRefund = () => {
+    document.querySelector('.refundcontainer').style.display = 'none';
+}
+
