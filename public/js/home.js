@@ -262,35 +262,36 @@ function AddToInvoice(product, isFromLocalStorage = false) {
             invoiceProduct.querySelector('.quantitypronb').addEventListener('input', (e) => {
                 let inputValue = parseInt(e.target.value, 10) || 1;
             
-                const totalQuantityInInvoice = Array.from(invoiceProductsContainer.children)
-                    .filter(invoiceProduct => invoiceProduct.getAttribute('data-product-id') === product._id.toString())
-                    .reduce((sum, invoiceProduct) => {
-                        const quantityElement = invoiceProduct.querySelector('.quantitypronb');
-                        return sum + parseInt(quantityElement.value, 10);
-                    }, 0);
+                const previousValue = parseInt(e.target.getAttribute('data-prev-value')) || inputValue;
+            
+                const allEntries = Array.from(invoiceProductsContainer.children)
+                    .filter(invoiceProduct => invoiceProduct.getAttribute('data-product-id') === product._id.toString());
+                
+                const sumOtherEntries = allEntries.reduce((sum, entry) => {
+                    const qtyElement = entry.querySelector('.quantitypronb');
+                    return qtyElement === e.target ? sum : sum + parseInt(qtyElement.value, 10);
+                }, 0);
             
                 const maxQuantity = isFromLocalStorage ? product.instock : product.quantity;
+                const newTotal = sumOtherEntries + inputValue;
             
-                if (inputValue < 1) {
-                    inputValue = 1; 
-                    e.target.value = inputValue;
-                } else if (totalQuantityInInvoice > maxQuantity) {
-                    inputValue = maxQuantity;  
+                if (newTotal > maxQuantity) {
+                    inputValue = Math.max(1, maxQuantity - sumOtherEntries);
                     e.target.value = inputValue;
                     document.querySelector('.messageordercontainer').style.display = 'flex';
                     const warningText = document.getElementById('messageorder');
                     warningText.textContent = 'No more products to add';
-                    document.getElementById('BokeOrder').addEventListener('click', function () {
-                        handleokOrder();
-                    });
+                    document.getElementById('BokeOrder').addEventListener('click', () => handleokOrder());
                 }
 
+                e.target.setAttribute('data-prev-value', inputValue);
+            
                 const arrayProduct = invoiceProductsArray.find(p => p.key === productKey);
                 if (arrayProduct) {
-                    arrayProduct.quantity = inputValue;  
+                    arrayProduct.quantity = inputValue;
                 }
             
-                productQuantities[productKey] = inputValue;  
+                productQuantities[productKey] = inputValue;
                 calculateTotal();
                 saveToLocalStorage();
             });
