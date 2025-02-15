@@ -19,6 +19,10 @@ body{
 .titleaddproducts{
     font-size: 42px;
 }
+.titlerefund{
+    font-size: 39px;
+
+}
 .infoProduct{
     background: #A1CBDD;
     width: 70%;
@@ -246,6 +250,10 @@ body{
     .titleaddproducts{
         font-size: 38px;
     }
+    .titlerefund{
+        font-size: 33px;
+    }
+
     .infoProduct{
         width: 85%;
     }
@@ -267,6 +275,9 @@ body{
 @media screen and (max-width: 600px){
     .titleaddproducts{
         font-size: 33px;
+    }
+    .titlerefund{
+         font-size:30px;
     }
     .infoProduct{
         width: 90%;
@@ -303,6 +314,9 @@ body{
     .titleaddproducts{
         font-size: 30px;
     }
+    .titlerefund{
+        font-size:25px;
+   }
     .infoProduct{
         width: 91%;
         padding: 20px 12px;
@@ -324,6 +338,9 @@ body{
     .titleaddproducts{
         font-size: 27px;
     }
+    .titlerefund{
+        font-size:24px;
+   }
     .infoProduct{
         width: 91%;
         padding: 20px 10px;
@@ -355,6 +372,9 @@ body{
     .titleaddproducts{
         font-size: 25px;
     }
+    .titlerefund{
+        font-size:22px;
+   }
     .infoProduct{
         width: 90%;
         padding: 20px 10px;

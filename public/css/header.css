@@ -367,9 +367,13 @@ header{
 }
 .quantitypronb{
     margin: 0;
-    padding: 0 5px;
+    padding: 0 ;
+    border: none;
     border-left: 2px solid var(--text-color);
     border-right: 2px solid var(--text-color);
+}
+.quantitypronb:focus{
+    outline: none;
 }
 .removepro{
     position: absolute;
