@@ -1,0 +1,35 @@
+
+<div class="Maindiv">
+     <h1 class="titleaddproducts">Add Cost</h1>
+     <a href="/costs" class="toaddProduct">Costs</a>
+ </div>
+ 
+ <form class="infoProduct" id="addcost" method="post">
+         <div class="containerfields">
+             <label for="name" class="labels">Name</label>
+             <input type="text" name="name" id="name" class="inputs">
+         </div>
+ 
+         <div class="containerfields">
+             <label for="date" class="labels">Date</label>
+             <input type="date" name="date" id="date" class="inputs">
+         </div>
+ 
+         <div class="containerfields">
+             <label for="details" class="labels">Ammount</label>
+             <input type="number" min="0" step="0.00001" name="ammount" id="ammount" class="inputs">
+         </div>
+ 
+        <button type="submit" class="add" id="addCost">Add</button>
+ 
+ </form>
+ 
+ 
+ <div class="catcontainer">
+     <div class="addAlerts" id="messagesaddcus" >
+         <p id="messagecus"></p>
+         <button onclick="handlecostok()" class="ok" >ok</button>
+     </div>
+ </div>
+ <script src="/js/costs.js"></script>
+ 

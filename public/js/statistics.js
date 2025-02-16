@@ -1,5 +1,6 @@
 let profitChartInstance = null; 
 let invoiceChartInstance = null; 
+let costChartInstance = null; 
 
 document.addEventListener('DOMContentLoaded', async () => {
     populateYearDropdown();
@@ -44,7 +45,10 @@ async function fetchDataAndRenderCharts(year) {
         const topProductsResponse = await fetch(`/api/statistics/top-products?year=${year}`);
         const topProductsResult = await topProductsResponse.json();
 
-        if (profitResponse.ok && invoiceResponse.ok && topProductsResponse.ok) {
+        const costResponse = await fetch(`/api/statistics/costs?year=${year}`);
+        const costResult = await costResponse.json();
+
+        if (profitResponse.ok && invoiceResponse.ok && topProductsResponse.ok && costResponse.ok) {
          
             const profitData = profitResult.data;
             const profitChartData = prepareProfitChartData(profitData);
@@ -58,6 +62,10 @@ async function fetchDataAndRenderCharts(year) {
           
             const topProductsData = topProductsResult.data;
             renderTopProductsTable(topProductsData);
+
+            const costData = costResult.data;
+            const costChartData = prepareCostChartData(costData);
+            renderCostChart(costChartData);
         } else {
             console.error('Failed to fetch statistics:', profitResult.message || invoiceResult.message || topProductsResult.message);
         }
@@ -207,4 +215,53 @@ function renderTopProductsTable(data) {
 
         tableElement.appendChild(row);
     });
+}
+
+function prepareCostChartData(data) {
+    const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    return {
+        categories: months,
+        series: [{
+            name: 'Total Cost',
+            data: data.map(stat => stat.totalCost)
+        }]
+    };
+}
+
+function renderCostChart(data) {
+    const chartElement = document.querySelector("#costStatsChart");
+
+    if (costChartInstance) {
+        costChartInstance.destroy();
+    }
+
+    const options = {
+        chart: {
+            type: 'bar', 
+            height: 350,
+        },
+        series: data.series,
+        xaxis: {
+            categories: data.categories,
+        },
+        title: {
+            text: 'Monthly Cost Statistics',
+            align: 'center',
+            style: {
+                fontSize: '18px',
+                fontWeight: 'bold',
+            },
+        },
+        tooltip: {
+            enabled: true,
+        },
+        colors: ['#FF5733'], // Custom color for costs
+    };
+
+    costChartInstance = new ApexCharts(chartElement, options);
+    costChartInstance.render();
 }

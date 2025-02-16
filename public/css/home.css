@@ -518,3 +518,40 @@ body::-webkit-scrollbar-thumb {
     left: 0;
     z-index: 12000;
 }
+
+.costs{
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 80px;
+    max-height: 550px;
+    overflow: auto;
+}
+
+.costs::-webkit-scrollbar {
+    width: 10px; 
+    height: 10px;
+}
+.costs::-webkit-scrollbar-track {
+    background: #f0f0f0; 
+    border-radius: 5px;
+}
+.costs::-webkit-scrollbar-thumb {
+    background-color: var(--second-color);
+    border-radius: 5px;        
+    border: 2px solid #f0f0f0; 
+}
+
+.costs-titles{
+    border-bottom: 2px solid var(--second-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 900px;
+}
+/* #headoftable{
+    position: sticky;
+    background: var(--main-color);
+    top: -3px;
+    left: 0;
+} */

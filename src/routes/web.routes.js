@@ -100,4 +100,12 @@ router.get('/refund-invoice', isLoggedIn ,(req, res)=>{
     res.render('pages/refund-invoice', { title: 'Refund Invoice' });
 });
 
+router.get('/costs', isLoggedIn, (req, res)=>{
+    res.render('pages/costs', { title: 'Costs' });
+})
+
+router.get('/costs/add', isLoggedIn, (req, res)=>{
+    res.render('pages/addCost', { title: 'Add Cost' });
+})
+
 export default router;

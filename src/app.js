@@ -21,6 +21,7 @@ import invoices from './routes/invouce.routes.js';
 import webRoutes from './routes/web.routes.js';
 import { isLoggedIn } from './middlewares/isLoggedIn.js';
 import statisticsRoutes from './routes/statistics.routes.js';
+import costsRoutes from './routes/cost.routes.js';
 
 dotenv.config();
 
@@ -60,6 +61,7 @@ app.use('/api/customers', customerRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/invoice', invoices);
 app.use('/api/statistics', statisticsRoutes);
+app.use('/api/costs', costsRoutes);
 
 app.use('/', webRoutes);
 

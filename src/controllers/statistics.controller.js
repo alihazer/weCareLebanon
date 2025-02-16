@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import Invoice from '../models/invoice.model.js';
 import Profit from '../models/profit.model.js';
+import Cost from '../models/cost.model.js';
 
 
 // @desc get profit statistics
@@ -190,6 +191,56 @@ const getTopProductsByMonth = asyncHandler(async (req, res) => {
     }
 });
 
+const getCostStatistics = asyncHandler(async (req, res) => {
+    try {
+        const year = parseInt(req.query.year) || new Date().getFullYear();
+
+        // Aggregate total costs per month
+        const stats = await Cost.aggregate([
+            {
+                $match: {
+                    status: "active",
+                    date: {
+                        $gte: new Date(year, 0, 1),
+                        $lte: new Date(year, 11, 31, 23, 59, 59),
+                    },
+                },
+            },
+            {
+                $group: {
+                    _id: { $month: "$date" }, // Group by month
+                    totalCost: { $sum: "$amount" }, // Sum the amount field
+                },
+            },
+            { $sort: { "_id": 1 } }, // Sort by month
+        ]);
+
+        // Ensure all months are included
+        const allMonths = Array.from({ length: 12 }, (_, index) => ({
+            month: index + 1,
+            totalCost: 0,
+        }));
+
+        // Populate months with actual data
+        stats.forEach(stat => {
+            allMonths[stat._id - 1].totalCost = stat.totalCost;
+        });
+
+        res.status(200).json({
+            status: true,
+            data: allMonths,
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: "An error occurred while fetching cost statistics",
+            error: error.message,
+        });
+    }
+});
 
 
-export { getProfitStatistics, getInvoiceStatistics, getTopProductsByMonth };
+
+
+
+export { getProfitStatistics, getInvoiceStatistics, getTopProductsByMonth, getCostStatistics };
